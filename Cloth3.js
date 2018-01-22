@@ -1,8 +1,7 @@
-// The most sophisticated but doesn't differentiate between time steps for physics calculations and graphical presentation
 //________ Global Variables _________
 
-var physics_accuracy = 3;
-var physics_time_step = 4;          // (Milliseconds) Determines temporal resolution of mesh calculations
+var physics_accuracy = 1;
+var physics_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
 var canvas_refresh_time_step = 20;    // (Milliseconds) 
 var mouse_influence_distance = 10;
 var mouse_cutting_distance = 15;
@@ -11,7 +10,7 @@ var mesh_width_units = 100;
 var mesh_top_y = 20;
 var resting_link_length = 5;
 var link_tearing_length = 20 * resting_link_length;
-var elastic_stiffness = 0.14;   // Higher values can lead to unstability of the point position equation!
+var elastic_stiffness = 0.000002000;   // Higher values can lead to unstability of the point position equation!
 var nonleanier_elasticity = 1.1;  // 1 is linear elasticity
 var damping_factor = 0.99;    // 0 => highest loss , 1 => no loss
 var gravity_acceleration = 0;  // (m/S^2)
@@ -189,7 +188,7 @@ Point.prototype.update_position = function () {
 	}
 	else
 	{
-		this.speed_x = (this.x - this.previous_x);
+		this.speed_x = (this.x - this.previous_x);  // Simplified because t2-t1 = t1-t0 = physics_time_step!
 		this.speed_y = (this.y - this.previous_y);
 		
 		this.acceleration_x = this.force_x / point_mass;
@@ -198,8 +197,8 @@ Point.prototype.update_position = function () {
 		this.previous_x = this.x;
 		this.previous_y = this.y;
 
-		this.x = 0.5 * (this.acceleration_x) + this.speed_x * damping_factor + this.x ;  // from physics x2-x1 = (x1-x0)*(t2-t1)*damping_factor/(t1-t0) + a*(t2-t1)^2/2   but t2-t1 = t1-t0 = physics_time_step!
-		this.y = 0.5 * (this.acceleration_y) + this.speed_y * damping_factor + this.y ;
+		this.x = 0.5 * (this.acceleration_x * Math.pow(1000*physics_time_step,2)) + this.speed_x * damping_factor + this.x ;  // from physics x2-x1 = (x1-x0)*(t2-t1)*damping_factor/(t1-t0) + a*(t2-t1)^2/2   but t2-t1 = t1-t0 = physics_time_step!
+		this.y = 0.5 * (this.acceleration_y * Math.pow(1000*physics_time_step,2)) + this.speed_y * damping_factor + this.y ;
 		this.force_x = 0;
 		this.force_y = 0;
 	}
