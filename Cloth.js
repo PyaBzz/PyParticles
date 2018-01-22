@@ -1,6 +1,5 @@
 //________ Global Variables _________
 
-var physics_accuracy = 1;
 var physics_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
 var canvas_refresh_time_step = 20;    // (Milliseconds) 
 var mouse_influence_distance = 10;
@@ -108,17 +107,13 @@ var Mesh = function () {
 };
 
 Mesh.prototype.calculate_link_forces = function() {
-
-    var i = physics_accuracy;
-    while (i--) {
-		this.points.forEach
-		(
-			function(point)
-			{
-				point.links.forEach(function(link){link.calculate_forces()});
-			}
-		);
-    }
+	this.points.forEach
+	(
+		function(point)
+		{
+			point.links.forEach(function(link){link.calculate_forces()});
+		}
+	);
 };
 
 Mesh.prototype.update_point_positions = function() {
