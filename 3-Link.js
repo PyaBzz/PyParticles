@@ -16,8 +16,8 @@ link.prototype.calculate_forces = function () {
 	var twoD_cos = diff_x / twoD_length;
 	var twoD_sin = diff_y / twoD_length;
 	
-    // if (twoD_length > link_tearing_length) this.p1.remove_links(this);  // 2D
-    if (length > link_tearing_length) this.p1.remove_links(this);  // 3D
+    // if (tearable && twoD_length > link_tearing_length) this.p1.remove_links(this);  // 2D
+    if (tearable && length > link_tearing_length) this.p1.remove_links(this);  // 3D
 	
 	// var stretch_length = Math.max(length - resting_link_length, 0);  // A stretching cloth only reacts to stretch not to compression
 	var stretch_length = length;  // An elastic surface under tension doesn't like to be stretched at all!
@@ -51,6 +51,6 @@ link.prototype.calculate_forces = function () {
 };
 
 link.prototype.draw = function () {
-    ctx.moveTo(this.p1.x, this.p1.y);
-    ctx.lineTo(this.p2.x, this.p2.y);
+    ctx.moveTo(this.p1.x + 0.5, this.p1.y + 0.5);  // 0.5 pixels to properly apply odd numbers to line thickness
+    ctx.lineTo(this.p2.x + 0.5, this.p2.y + 0.5);  // 0.5 pixels to properly apply odd numbers to line thickness
 };

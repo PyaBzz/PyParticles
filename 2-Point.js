@@ -62,7 +62,7 @@ Point.prototype.update_position = function () {
 	}
 	else
 	{
-		this.speed_x = (this.x - this.previous_x);  // Simplified because t2-t1 = t1-t0 = physics_time_step!
+		this.speed_x = (this.x - this.previous_x);  // Simplified because t2-t1 = t1-t0 = calculation_time_step!
 		this.speed_y = (this.y - this.previous_y);
 		this.speed_z = (this.z - this.previous_z);
 		
@@ -74,9 +74,10 @@ Point.prototype.update_position = function () {
 		this.previous_y = this.y;
 		this.previous_z = this.z;
 
-		this.x = 0.5 * (this.acceleration_x * Math.pow(1000*physics_time_step,2)) + this.speed_x * damping_factor + this.x ;  // from physics x2-x1 = (x1-x0)*(t2-t1)*damping_factor/(t1-t0) + a*(t2-t1)^2/2   but t2-t1 = t1-t0 = physics_time_step!
-		this.y = 0.5 * (this.acceleration_y * Math.pow(1000*physics_time_step,2)) + this.speed_y * damping_factor + this.y ;
-		this.z = 0.5 * (this.acceleration_z * Math.pow(1000*physics_time_step,2)) + this.speed_z * damping_factor + this.z ;
+		this.x = 0.5 * (this.acceleration_x * Math.pow(1000*calculation_time_step,2)) + this.speed_x * damping_factor + this.x ;  // from physics x2-x1 = (x1-x0)*(t2-t1)*damping_factor/(t1-t0) + a*(t2-t1)^2/2   but t2-t1 = t1-t0 = calculation_time_step!
+		this.y = 0.5 * (this.acceleration_y * Math.pow(1000*calculation_time_step,2)) + this.speed_y * damping_factor + this.y ;
+		if (enable_3rd_dimension)
+			this.z = 0.5 * (this.acceleration_z * Math.pow(1000*calculation_time_step,2)) + this.speed_z * damping_factor + this.z ;
 		this.force_x = 0;
 		this.force_y = 0;
 		this.force_z = 0;

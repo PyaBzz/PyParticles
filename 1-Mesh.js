@@ -28,7 +28,7 @@ var Mesh = function () {
 
 Mesh.prototype.calculate_link_forces = function() {
 	this.points.forEach(function(point){
-			point.links.forEach(function(link){link.calculate_forces()});
+		point.links.forEach(function(link){link.calculate_forces()});
 	});
 };
 
