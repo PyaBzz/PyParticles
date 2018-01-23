@@ -16,15 +16,16 @@ link.prototype.calculate_forces = function () {
 	var twoD_cos = diff_x / twoD_length;
 	var twoD_sin = diff_y / twoD_length;
 	
-    if (twoD_length > link_tearing_length) this.p1.remove_links(this);  // 2D
-    // if (length > link_tearing_length) this.p1.remove_links(this);  // 3D
+    // if (twoD_length > link_tearing_length) this.p1.remove_links(this);  // 2D
+    if (length > link_tearing_length) this.p1.remove_links(this);  // 3D
 	
 	// var stretch_length = Math.max(length - resting_link_length, 0);  // A stretching cloth only reacts to stretch not to compression
 	var stretch_length = length;  // An elastic surface under tension doesn't like to be stretched at all!
 
-    var reaction_force_x = Math.pow(stretch_length, nonleanier_elasticity) * twoD_cos * elastic_stiffness;
-    var reaction_force_y = Math.pow(stretch_length, nonleanier_elasticity) * twoD_sin * elastic_stiffness;
-    var reaction_force_z = Math.pow(stretch_length, nonleanier_elasticity) * z_sin * elastic_stiffness;
+	var nonlinear_effective_stretch_length = Math.pow(stretch_length, nonlinear_elasticity);
+    var reaction_force_x = nonlinear_effective_stretch_length * twoD_cos * elastic_stiffness;
+    var reaction_force_y = nonlinear_effective_stretch_length * twoD_sin * elastic_stiffness;
+    var reaction_force_z = nonlinear_effective_stretch_length * z_sin * elastic_stiffness;
 
 	if((this.p1.is_pinned || this.p1.is_held_by_mouse) && (this.p2.is_pinned || this.p2.is_held_by_mouse)) return;
 	

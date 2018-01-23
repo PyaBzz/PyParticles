@@ -68,8 +68,8 @@ Point.prototype.update_position = function () {
 		
 		this.acceleration_x = this.force_x / point_mass;
 		this.acceleration_y = this.force_y / point_mass;
-		this.acceleration_z = this.force_z / point_mass - gravity_acceleration;  // Upward acceleration due to force_y acts against gravity
-		
+		this.acceleration_z = this.force_z / point_mass - gravity_acceleration;  // Upward acceleration due to force_z acts against gravity
+
 		this.previous_x = this.x;
 		this.previous_y = this.y;
 		this.previous_z = this.z;
@@ -84,7 +84,13 @@ Point.prototype.update_position = function () {
 };
 
 Point.prototype.draw = function () {
-    ctx.arc(this.x, this.y, 1, 0, 2*Math.PI);
+	ctx.strokeStyle = point_colour;
+	ctx.fillStyle = "#" + 30*this.z + 30*this.z + 30*this.z;
+	// ctx.fillStyle = "yellow";
+	ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, 2*Math.PI);
+    // ctx.stroke();
+    ctx.fill();
 };
 
 Point.prototype.drawLinks = function () {

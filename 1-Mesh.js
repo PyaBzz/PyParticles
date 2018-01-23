@@ -19,7 +19,6 @@ var Mesh = function () {
 			if (x == mesh_width_units) p.pin(p.x, p.y);   // Pin the right edge of the mesh
 			
             if (x != 0) p.attach(this.points[this.points.length - 1]);  // Horizontal link to previous point on the left
-			else console.log(x, y);
             if (y != 0) p.attach(this.points[x + (y - 1) * (mesh_width_units + 1)]);  // Number of points in each row is 1 more than the number of cells
 
             this.points.push(p);
@@ -38,10 +37,7 @@ Mesh.prototype.update_point_positions = function() {
 };
 
 Mesh.prototype.drawPoints = function () {
-	ctx.strokeStyle = point_colour;
-    ctx.beginPath();
 	this.points.forEach(function(p){p.draw()});
-    ctx.stroke();
 };
 
 Mesh.prototype.drawLinks = function () {
