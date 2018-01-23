@@ -4,16 +4,18 @@ var physics_time_step = 1;          // (Milliseconds) Determines temporal resolu
 var canvas_refresh_time_step = 20;    // (Milliseconds) 
 var mouse_influence_distance = 10;
 var mouse_cutting_distance = 15;
-var mesh_height_units = 60;
-var mesh_width_units = 100;
+var mesh_height_units = 4;
+var mesh_width_units = 4;
 var mesh_top_y = 20;
-var resting_link_length = 5;
+var resting_link_length = 20;
 var link_tearing_length = 20 * resting_link_length;
 var elastic_stiffness = 0.000002000;   // Higher values can lead to unstability of the point position equation!
 var nonleanier_elasticity = 1.1;  // 1 is linear elasticity
 var damping_factor = 0.99;    // 0 => highest loss , 1 => no loss
 var gravity_acceleration = 0;  // (m/S^2)
 var point_mass = 4; // (Kg)
+var link_colour = "#1F1F1F"; //'#F0F0F0'
+var point_colour = "aqua";
 
 var mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
 
@@ -58,7 +60,7 @@ window.onload = function () {
 
     boundsx = canvas.width - 1;
     boundsy = canvas.height - 1;
-    ctx.strokeStyle = "#1F1F1F"; //'#F0F0F0'
+    // ctx.strokeStyle = "#1F1F1F"; //'#F0F0F0'
     mesh = new Mesh();
 	canvas_refresh_loop_variable = 0;
 	mesh_refresh_loop();
@@ -74,7 +76,8 @@ function mesh_refresh_loop()
 
 function canvas_refresh_loop() {
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		mesh.draw();
+		mesh.drawPoints();
+		mesh.drawLinks();
 		setTimeout(canvas_refresh_loop, canvas_refresh_time_step);
 }
 
