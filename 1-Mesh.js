@@ -11,14 +11,14 @@ var Mesh = function () {
 
         for (var x = 0; x <= mesh_width_units; x++) {
 
-            var p = new Point(start_x + x * resting_link_length, mesh_top_y + y * resting_link_length);
+            var p = new Point(start_x + x * resting_link_length, mesh_top_y + y * resting_link_length, 0);
 
             if (y == 0) p.pin(p.x, p.y);                   // Pin the top edge of the mesh
 			if (y == mesh_height_units) p.pin(p.x, p.y);  // Pin the bottom edge of the mesh
 			if (x == 0) p.pin(p.x, p.y);                   // Pin the left edge of the mesh
 			if (x == mesh_width_units) p.pin(p.x, p.y);   // Pin the right edge of the mesh
 			
-            if (x != 0) p.attach(this.points[this.points.length - 1]);
+            if (x != 0) p.attach(this.points[this.points.length - 1]);  // Horizontal link to previous point on the left
             if (y != 0) p.attach(this.points[x + (y - 1) * (mesh_width_units + 1)]);  // Number of points in each row is 1 more than the number of cells
 
             this.points.push(p);

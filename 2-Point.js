@@ -1,23 +1,30 @@
 //###########################  Point  #############################################
 //#################################################################################
 
-var Point = function (x, y) {
+var Point = function (x, y, z) {
 
     this.x = x;
     this.y = y;
+    this.z = z;
     this.previous_x = x;
     this.previous_y = y;
+    this.previous_z = z;
 	this.position_at_click_x = x;
 	this.position_at_click_y = y;
+	this.position_at_click_z = z;
 	this.force_x = 0;
 	this.force_y = 0;
+	this.force_z = 0;
     this.acceleration_x = 0;
     this.acceleration_y = 0;
+    this.acceleration_z = 0;
 	this.speed_x = 0;
 	this.speed_y = 0;
+	this.speed_z = 0;
 	this.is_pinned = false;
     this.pin_x = null;
     this.pin_y = null;
+    this.pin_z = null;
 	this.is_held_by_mouse = false;
     this.links = [];
 };
@@ -65,8 +72,10 @@ Point.prototype.update_position = function () {
 
 		this.x = 0.5 * (this.acceleration_x * Math.pow(1000*physics_time_step,2)) + this.speed_x * damping_factor + this.x ;  // from physics x2-x1 = (x1-x0)*(t2-t1)*damping_factor/(t1-t0) + a*(t2-t1)^2/2   but t2-t1 = t1-t0 = physics_time_step!
 		this.y = 0.5 * (this.acceleration_y * Math.pow(1000*physics_time_step,2)) + this.speed_y * damping_factor + this.y ;
+		this.z = this.z ;
 		this.force_x = 0;
 		this.force_y = 0;
+		this.force_z = 0;
 	}
 };
 
