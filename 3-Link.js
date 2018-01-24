@@ -20,7 +20,8 @@ link.prototype.calculate_forces = function () {
     if (tearable && length > link_tearing_length) this.p1.remove_links(this);  // 3D
 	
 	// var stretch_length = Math.max(length - resting_link_length, 0);  // A stretching cloth only reacts to stretch not to compression
-	var stretch_length = length;  // An elastic surface under tension doesn't like to be stretched at all!
+	// var stretch_length = length - resting_link_length;  // An elastic surface at rest resists stretch but doesn't mind compression
+	var stretch_length = length;  // An already stretched elastic surface not only resists stretch but also tries to contract
 
 	var nonlinear_effective_stretch_length = Math.pow(stretch_length, nonlinear_elasticity);
     var reaction_force_x = nonlinear_effective_stretch_length * twoD_cos * elastic_stiffness;

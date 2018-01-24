@@ -1,25 +1,48 @@
 //________ Global Variables _________
 
-var calculation_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
-var canvas_refresh_time_step = 20;    // (Milliseconds) 
-var mouse_influence_distance = 10;
-var mouse_cutting_distance = 15;
-var mesh_height_units = 10;
-var mesh_width_units = 20;
-var mesh_top_y = 20;
-var resting_link_length = 20;
-var tearable = false;
-var link_tearing_length = 20 * resting_link_length;
-var elastic_stiffness = 0.000002000;   // Higher values can lead to unstability of the point position equation!
-var nonlinear_elasticity = 1.1;  // 1 is linear elasticity
-var damping_factor = 0.99;    // 0 => highest loss , 1 => no loss
-var gravity_acceleration = 0.000000010 // (m/S^2)
-var point_mass = 4; // (Kg)
-var enable_3rd_dimension = false;
-var link_colour = "red"; //'#1F1F1F'
-var point_colour = "aqua";
-var line_width = 1;  // pixels
-
+var physically_accurate_but_less_stable = true;
+if(physically_accurate_but_less_stable) {
+	var calculation_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
+	var time_factor_in_movement_equaitons = Math.pow(1000*calculation_time_step,2);
+	var canvas_refresh_time_step = 20;    // (Milliseconds) 
+	var mouse_influence_distance = 10;
+	var mouse_cutting_distance = 15;
+	var mesh_height_units = 10;
+	var mesh_width_units = 20;
+	var mesh_top_y = 20;
+	var resting_link_length = 5;  // (Metres) Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
+	var tearable = false;
+	var link_tearing_length = 20 * resting_link_length;
+	var elastic_stiffness = 0.000000250;   // Higher values can lead to unstability of the point position equation!
+	var nonlinear_elasticity = 1.00;  // 1 is linear elasticity
+	var damping_factor = 0.000;
+	var gravity_acceleration = 0.000000010 // (m/S^2)
+	var point_mass = 4; // (Kg)
+	var enable_3rd_dimension = false;
+	var link_colour = "red"; //'#1F1F1F'
+	var point_colour = "aqua";
+	var line_width = 1;  // pixels
+} else {
+	var calculation_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
+	var canvas_refresh_time_step = 20;    // (Milliseconds) 
+	var mouse_influence_distance = 10;
+	var mouse_cutting_distance = 15;
+	var mesh_height_units = 10;
+	var mesh_width_units = 10;
+	var mesh_top_y = 20;
+	var resting_link_length = 40;  // Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
+	var tearable = false;
+	var link_tearing_length = 20 * resting_link_length;
+	var elastic_stiffness = 2.440;   // Higher values can lead to unstability of the point position equation!
+	var nonlinear_elasticity = 1.1;  // 1 is linear elasticity
+	var damping_factor = 0.99;    // 0 => highest loss , 1 => no loss
+	var gravity_acceleration = 0.0010 // (m/S^2)
+	var point_mass = 4; // (Kg)
+	var enable_3rd_dimension = true;
+	var link_colour = "red"; //'#1F1F1F'
+	var point_colour = "aqua";
+	var line_width = 1;  // pixels
+}
 var mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
 
 //###########################  Window  ############################################
