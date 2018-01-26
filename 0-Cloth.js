@@ -1,48 +1,31 @@
+//#############################  Assumptions  #####################################
+//#################################################################################
+// Lengths are in metres for calculation but in pixels for representation.
+// Every time-step in calculation corresponds to ONE SECOND in physics model.
+//
 //________ Global Variables _________
 
-var physically_accurate_but_less_stable = true;
-if(physically_accurate_but_less_stable) {
-	var calculation_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
-	var time_factor_in_movement_equaitons = Math.pow(1000*calculation_time_step,2);
-	var canvas_refresh_time_step = 20;    // (Milliseconds) 
-	var mouse_influence_distance = 10;
-	var mouse_cutting_distance = 15;
-	var mesh_height_units = 10;
-	var mesh_width_units = 20;
-	var mesh_top_y = 20;
-	var resting_link_length = 5;  // (Metres) Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
-	var tearable = false;
-	var link_tearing_length = 20 * resting_link_length;
-	var elastic_stiffness = 0.000000250;   // Higher values can lead to unstability of the point position equation!
-	var nonlinear_elasticity = 1.00;  // 1 is linear elasticity
-	var damping_factor = 0.000;
-	var gravity_acceleration = 0.000000010 // (m/S^2)
-	var point_mass = 4; // (Kg)
-	var enable_3rd_dimension = false;
-	var link_colour = "red"; //'#1F1F1F'
-	var point_colour = "aqua";
-	var line_width = 1;  // pixels
-} else {
-	var calculation_time_step = 1;          // (Milliseconds) Determines temporal resolution of mesh calculations
-	var canvas_refresh_time_step = 20;    // (Milliseconds) 
-	var mouse_influence_distance = 10;
-	var mouse_cutting_distance = 15;
-	var mesh_height_units = 10;
-	var mesh_width_units = 10;
-	var mesh_top_y = 20;
-	var resting_link_length = 40;  // Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
-	var tearable = false;
-	var link_tearing_length = 20 * resting_link_length;
-	var elastic_stiffness = 2.440;   // Higher values can lead to unstability of the point position equation!
-	var nonlinear_elasticity = 1.1;  // 1 is linear elasticity
-	var damping_factor = 0.99;    // 0 => highest loss , 1 => no loss
-	var gravity_acceleration = 0.0010 // (m/S^2)
-	var point_mass = 4; // (Kg)
-	var enable_3rd_dimension = true;
-	var link_colour = "red"; //'#1F1F1F'
-	var point_colour = "aqua";
-	var line_width = 1;  // pixels
-}
+var calculation_time_step = 10; // (Milliseconds) Determines how often point positions are refreshed
+var drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
+var mouse_influence_distance = 10;
+var mouse_cutting_distance = 15;
+var mesh_height_cells = 10;
+var mesh_width_cells = 10;
+var mesh_top_y = 20;
+var resting_link_length = 40;  // Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
+var tearable = false;
+var link_tearing_length = 20 * resting_link_length;
+var point_mass = 14.40; // (Kg)
+var damping_factor = 0.00;    // Higher values => greater loss
+var elastic_stiffness = 0.450;   // Higher
+var nonlinear_elasticity = 1.0;  // 1 is linear elasticity. Has problems with lengths less than 1 !!
+var enable_3rd_dimension = true;
+var gravity_acceleration = 0.10 // (m/S^2)
+var link_colour = "grey"; //'#1F1F1F'
+var point_colour = "aqua";
+var line_width = 1;  // pixels
+var min_z = 0;
+
 var mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
 
 //###########################  Window  ############################################
@@ -50,9 +33,18 @@ var mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x
 
 window.onload = function () {
     canvas = document.getElementById('c');
+    display_for_characteristic = document.getElementById('characteristic');
+    display_for_period = document.getElementById('period');
+    display_for_exponent = document.getElementById('exponent');
+    display_for_z = document.getElementById('display_for_z');
     ctx = canvas.getContext('2d');
     canvas.width  = 1000;
     canvas.height = 550;
+	
+	calculate_oscillation_model();
+	display_for_characteristic.innerHTML = "characteristic: " + characteristic;
+	display_for_period.innerHTML = "period: " + period;
+	display_for_exponent.innerHTML = "exponent: " + envelope_exponent;
     
 	canvas.onmousedown = function (click_event) {
         mouse.button  = click_event.which;
@@ -85,19 +77,27 @@ window.onload = function () {
     };
 
     mesh = new Mesh();
-	setInterval(mesh_calculation_loop, calculation_time_step);
-    setInterval(canvas_refresh_loop, canvas_refresh_time_step);
+	setInterval(calculation_loop, calculation_time_step);
+    setInterval(drawing_loop, drawing_time_step);
 };
 
-function mesh_calculation_loop() {
+function calculation_loop() {
 	mesh.calculate_link_forces();
 	mesh.update_point_positions();
 };
 
-function canvas_refresh_loop() {
+function drawing_loop() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.lineWidth = line_width;
 	mesh.drawLinks();
 	mesh.drawPoints();
+	display_for_z.innerHTML = min_z.toFixed(2);
 };
 
+function calculate_oscillation_model() {
+	characteristic = Math.pow(damping_factor,2) - 4 * point_mass * elastic_stiffness;
+	angular_frequency = Math.sqrt(- characteristic) / (2 * point_mass);
+	frequency = angular_frequency / (2* Math.PI);
+	period = 1 / frequency;
+	envelope_exponent = - damping_factor / (2 * point_mass);
+};
