@@ -1,0 +1,6 @@
+
+Lengths are in metres for calculation but in pixels for graphical representation.
+Different link lengths scale all values accordingly
+therefore all of them behave similarly from the wave propagation perspective.
+Every time-step in calculation corresponds to ONE SECOND in physics model. This normalises the time in formulae. 
+Non-linear elasticity makes the system non-LTI and causes higher order harmonics.

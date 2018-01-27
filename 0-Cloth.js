@@ -1,37 +1,33 @@
-//#############################  Assumptions  #####################################
-//#################################################################################
-// Lengths are in metres for calculation but in pixels for representation.
-// Every time-step in calculation corresponds to ONE SECOND in physics model.
-//
-//________ Global Variables _________
-
-var calculation_time_step = 10; // (Milliseconds) Determines how often point positions are refreshed
-var drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
-var mouse_influence_distance = 10;
-var mouse_cutting_distance = 15;
-var mesh_height_cells = 10;
-var mesh_width_cells = 10;
-var mesh_top_y = 20;
-var resting_link_length = 40;  // Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
-var tearable = false;
-var link_tearing_length = 20 * resting_link_length;
-var point_mass = 14.40; // (Kg)
-var damping_factor = 0.00;    // Higher values => greater loss
-var elastic_stiffness = 0.450;   // Higher
-var nonlinear_elasticity = 1.0;  // 1 is linear elasticity. Has problems with lengths less than 1 !!
-var enable_3rd_dimension = true;
-var gravity_acceleration = 0.10 // (m/S^2)
-var link_colour = "grey"; //'#1F1F1F'
-var point_colour = "aqua";
-var line_width = 1;  // pixels
-var min_z = 0;
-
-var mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
-
-//###########################  Window  ############################################
+//#################################  Cloth  #######################################
 //#################################################################################
 
 window.onload = function () {
+
+	calculation_time_step = 10; // (Milliseconds) Determines how often point positions are refreshed
+	drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
+	mouse_influence_distance = 10;
+	mouse_cutting_distance = 15;
+	mesh_width_cells = 40;
+	mesh_height_cells = 20;
+	mesh_top_y = 20;
+	resting_link_length = 10;  // Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
+	tearable = false;
+	link_tearing_length = 20 * resting_link_length;
+	point_mass = 1.00; // (Kg)
+	damping_factor = 0.50;    // Higher values => greater loss
+	elastic_stiffness = 0.10;   // Higher
+	nonlinear_elasticity = 1.00;  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
+	enable_x = 1;
+	enable_y = 1;
+	enable_z = 0;
+	gravity_acceleration = 0.020 // (m/S^2)
+	link_colour = "grey"; //'#1F1F1F'
+	point_colour = "red";
+	line_width = 1;  // pixels
+	min_z = 0;
+
+	mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
+
     canvas = document.getElementById('c');
     display_for_characteristic = document.getElementById('characteristic');
     display_for_period = document.getElementById('period');
@@ -40,14 +36,13 @@ window.onload = function () {
     ctx = canvas.getContext('2d');
     canvas.width  = 1000;
     canvas.height = 550;
-	
 	calculate_oscillation_model();
 	display_for_characteristic.innerHTML = "characteristic: " + characteristic;
 	display_for_period.innerHTML = "period: " + period;
 	display_for_exponent.innerHTML = "exponent: " + envelope_exponent;
     
 	canvas.onmousedown = function (click_event) {
-        mouse.button  = click_event.which;
+        mouse.button = click_event.which;
 		mesh.points.forEach(function(p){p.position_at_click_x = p.x; p.position_at_click_y = p.y;});
 		rectangular_frame = canvas.getBoundingClientRect();
         mouse.click_x = click_event.x - rectangular_frame.left;
@@ -95,9 +90,20 @@ function drawing_loop() {
 };
 
 function calculate_oscillation_model() {
-	characteristic = Math.pow(damping_factor,2) - 4 * point_mass * elastic_stiffness;
+	surface_elastic_stiffness = 2 * elastic_stiffness;  // Because of the structure of the cloth two springs act on every point from opposite sides
+	characteristic = Math.pow(damping_factor,2) - 4 * point_mass * surface_elastic_stiffness;
 	angular_frequency = Math.sqrt(- characteristic) / (2 * point_mass);
 	frequency = angular_frequency / (2* Math.PI);
 	period = 1 / frequency;
 	envelope_exponent = - damping_factor / (2 * point_mass);
+};
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+};
+
+function componentToHex(c) {
+	// if(c == 0) return "00";
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
 };
