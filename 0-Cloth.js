@@ -22,7 +22,8 @@ window.onload = function () {
 	enable_z = 0;
 	gravity_acceleration = 0.020 // (m/S^2)
 	link_colour = "grey"; //'#1F1F1F'
-	point_colour = "red";
+	point_colour = "aqua";
+	pin_colour = "red";
 	line_width = 1;  // pixels
 	min_z = 0;
 

@@ -79,11 +79,16 @@ Point.prototype.update_position = function () {
 
 Point.prototype.draw = function () {
 	// ctx.fillStyle = "#" + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z)));
-	ctx.fillStyle = point_colour;
 	ctx.beginPath();
-    enable_z
-	? ctx.arc(this.x, this.y, 3*Math.abs(this.z), 0, 2*Math.PI)
-	: ctx.arc(this.x, this.y, 2, 0, 2*Math.PI);
+	if (this.is_pinned) {
+		ctx.fillStyle = pin_colour;
+		ctx.arc(this.x, this.y, 2, 0, 2*Math.PI)
+	} else {
+		ctx.fillStyle = point_colour;
+		enable_z
+		? ctx.arc(this.x, this.y, 3*Math.abs(this.z), 0, 2*Math.PI)
+		: ctx.arc(this.x, this.y, 2, 0, 2*Math.PI);
+	}
     ctx.fill();
 };
 
