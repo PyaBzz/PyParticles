@@ -8,20 +8,20 @@ var Point = function (x, y, z) {
 	this.position_at_click_x = x;
 	this.position_at_click_y = y;
 	this.position_at_click_z = z;
-	this.elastic_force_x = 0;
-	this.elastic_force_y = 0;
-	this.elastic_force_z = 0;
+	this.force_x = 0;
+	this.force_y = 0;
+	this.force_z = 0;
     this.acceleration_x = 0;
     this.acceleration_y = 0;
     this.acceleration_z = 0;
 	this.speed_x = 0;
 	this.speed_y = 0;
 	this.speed_z = 0;
-	this.is_pinned = false;
+	this.pinned = false;
     this.pin_x = null;
     this.pin_y = null;
     this.pin_z = null;
-	this.is_held_by_mouse = false;
+	this.held_by_mouse = false;
     this.links = [];
 };
 
@@ -34,7 +34,7 @@ Point.prototype.update_position = function () {
         switch(mouse.button)
 		{
 			case 1:
-            if (distance_from_click < mouse_influence_distance) this.is_held_by_mouse = true; break;
+            if (distance_from_click < mouse_influence_distance) this.held_by_mouse = true; break;
 			case 2:
 			if (distance_from_click < mouse_influence_distance) this.pin(this.position_at_click_x, this.position_at_click_y); break;
 			case 3:
@@ -43,11 +43,8 @@ Point.prototype.update_position = function () {
         }
     }
 
-	if (this.is_pinned)
-	{
-		return;
-	}
-    else if (this.is_held_by_mouse)
+	if (this.pinned) return;
+    else if (this.held_by_mouse)
 	{
 		this.x = this.position_at_click_x + mouse.x - mouse.click_x;
         this.y = this.position_at_click_y + mouse.y - mouse.click_y;
@@ -58,9 +55,9 @@ Point.prototype.update_position = function () {
 	}
 	else
 	{
-		this.acceleration_x = (- this.elastic_force_x) / point_mass;
-		this.acceleration_y = (- this.elastic_force_y) / point_mass;
-		this.acceleration_z = (- this.elastic_force_z) / point_mass - gravity_acceleration;  // Gravity acts in -z direction
+		this.acceleration_x = -this.force_x / point_mass;
+		this.acceleration_y = -this.force_y / point_mass;
+		this.acceleration_z = -this.force_z / point_mass - gravity_acceleration;  // Gravity acts in -z direction
 
 		if (enable_x) this.x = this.acceleration_x/2 + damping_factor * this.speed_x + this.x ;
 		if (enable_y) this.y = this.acceleration_y/2 + damping_factor * this.speed_y + this.y ;
@@ -71,16 +68,14 @@ Point.prototype.update_position = function () {
 		this.speed_y = this.speed_y + this.acceleration_y;
 		this.speed_z = this.speed_z + this.acceleration_z;
 		
-		this.elastic_force_x = 0;
-		this.elastic_force_y = 0;
-		this.elastic_force_z = 0;
+		this.force_x = 0; this.force_y = 0; this.force_z = 0;
 	}
 };
 
 Point.prototype.draw = function () {
 	// ctx.fillStyle = "#" + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z)));
 	ctx.beginPath();
-	if (this.is_pinned) {
+	if (this.pinned) {
 		ctx.fillStyle = pin_colour;
 		ctx.arc(this.x, this.y, 1.5, 0, 2*Math.PI)
 	} else {
@@ -108,9 +103,7 @@ Point.prototype.remove_links = function (link) {
 };
 
 Point.prototype.pin = function (pinx, piny, pinz) {
-	this.is_pinned = true;
-    this.pin_x = pinx;
-    this.pin_y = piny;
-    this.pin_z = pinz;
+	this.pinned = true;
+    this.pin_x = pinx; this.pin_y = piny; this.pin_z = pinz;
 };
 
