@@ -62,14 +62,14 @@ Point.prototype.update_position = function () {
 		this.acceleration_y = (- this.elastic_force_y - damping_factor * this.speed_y) / point_mass;
 		this.acceleration_z = (- this.elastic_force_z - damping_factor * this.speed_z) / point_mass - gravity_acceleration;  // Gravity acts in -z direction
 
-		if (enable_x) this.x = this.acceleration_x /2 + this.speed_x + this.x ;
-		if (enable_y) this.y = this.acceleration_y /2 + this.speed_y + this.y ;
-		if (enable_z) this.z = this.acceleration_z /2 + this.speed_z + this.z ;
+		if (enable_x) this.x = 0.5*this.acceleration_x*Math.pow(virtual_sampling_timestep,2) + this.speed_x*virtual_sampling_timestep + this.x ;
+		if (enable_y) this.y = 0.5*this.acceleration_y*Math.pow(virtual_sampling_timestep,2) + this.speed_y*virtual_sampling_timestep + this.y ;
+		if (enable_z) this.z = 0.5*this.acceleration_z*Math.pow(virtual_sampling_timestep,2) + this.speed_z*virtual_sampling_timestep + this.z ;
         min_z = Math.min(min_z, this.z);
 
-		this.speed_x = this.speed_x + this.acceleration_x;
-		this.speed_y = this.speed_y + this.acceleration_y;
-		this.speed_z = this.speed_z + this.acceleration_z;
+		this.speed_x = this.speed_x + this.acceleration_x*virtual_sampling_timestep;
+		this.speed_y = this.speed_y + this.acceleration_y*virtual_sampling_timestep;
+		this.speed_z = this.speed_z + this.acceleration_z*virtual_sampling_timestep;
 		
 		this.elastic_force_x = 0;
 		this.elastic_force_y = 0;
@@ -82,12 +82,12 @@ Point.prototype.draw = function () {
 	ctx.beginPath();
 	if (this.is_pinned) {
 		ctx.fillStyle = pin_colour;
-		ctx.arc(this.x, this.y, 2, 0, 2*Math.PI)
+		ctx.arc(this.x, this.y, 1.5, 0, 2*Math.PI)
 	} else {
 		ctx.fillStyle = point_colour;
 		enable_z
-		? ctx.arc(this.x, this.y, 3*Math.abs(this.z), 0, 2*Math.PI)
-		: ctx.arc(this.x, this.y, 2, 0, 2*Math.PI);
+		? ctx.arc(this.x, this.y, Math.abs(this.z), 0, 2*Math.PI)
+		: ctx.arc(this.x, this.y, 1.5, 0, 2*Math.PI);
 	}
     ctx.fill();
 };

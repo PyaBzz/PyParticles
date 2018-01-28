@@ -24,11 +24,11 @@ link.prototype.calculate_forces = function () {
 	// var stretch_length = length - resting_link_length;  // An elastic surface at rest resists stretch but doesn't mind compression
 	// var stretch_length = length;  // An already stretched elastic surface not only resists stretch but also tries to contract
 
-	// var nonlinear_effective_stretch_length = Math.pow(stretch_length, nonlinear_elasticity);
+	// var nonlinear_effective_stretch_length = Math.pow(stretch_length, nonlinearity);
 	// var twoD_nonlinear_effective_stretch_length = nonlinear_effective_stretch_length * z_cos;
 
-    var reaction_force_x = (diff_x - resting_link_length ) * elastic_stiffness;
-    var reaction_force_y = (diff_y - resting_link_length ) * elastic_stiffness;
+    var reaction_force_x = Math.sign(diff_x - resting_link_length)*Math.pow(Math.abs(diff_x - resting_link_length),nonlinearity) * elastic_stiffness;
+    var reaction_force_y = Math.sign(diff_y - resting_link_length)*Math.pow(Math.abs(diff_y - resting_link_length),nonlinearity) * elastic_stiffness;
     var reaction_force_z = diff_z * elastic_stiffness;
 
 	if((this.p1.is_pinned || this.p1.is_held_by_mouse) && (this.p2.is_pinned || this.p2.is_held_by_mouse)) return;

@@ -3,8 +3,8 @@
 
 window.onload = function () {
 
-	calculation_time_step = 10; // (Milliseconds) Determines how often point positions are refreshed
 	drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
+	virtual_sampling_timestep = 0.5 // (Seconds)
 	mouse_influence_distance = 10;
 	mouse_cutting_distance = 15;
 	mesh_width_cells = 40;
@@ -13,14 +13,14 @@ window.onload = function () {
 	resting_link_length = 10;  // Never try numbers near 1 because length of less than 1 to the power of nonlinearity causes instability
 	tearable = false;
 	link_tearing_length = 20 * resting_link_length;
-	point_mass = 1.00; // (Kg)
-	damping_factor = 0.50;    // Higher values => greater loss
-	elastic_stiffness = 0.10;   // Higher
-	nonlinear_elasticity = 1.00;  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
+	point_mass = 1.0; // (Kg)
+	damping_factor = 0.33;    // Higher values => greater loss
+	elastic_stiffness = 0.08;   // Higher
+	nonlinearity = 1.10;  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
 	enable_x = 1;
 	enable_y = 1;
-	enable_z = 0;
-	gravity_acceleration = 0.020 // (m/S^2)
+	enable_z = 1;
+	gravity_acceleration = 0.0020 // (m/S^2)
 	link_colour = "grey"; //'#1F1F1F'
 	point_colour = "aqua";
 	pin_colour = "red";
@@ -73,16 +73,12 @@ window.onload = function () {
     };
 
     mesh = new Mesh();
-	setInterval(calculation_loop, calculation_time_step);
     setInterval(drawing_loop, drawing_time_step);
 };
 
-function calculation_loop() {
+function drawing_loop() {
 	mesh.calculate_link_forces();
 	mesh.update_point_positions();
-};
-
-function drawing_loop() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.lineWidth = line_width;
 	mesh.drawLinks();
