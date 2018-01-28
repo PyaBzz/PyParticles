@@ -58,18 +58,18 @@ Point.prototype.update_position = function () {
 	}
 	else
 	{
-		this.acceleration_x = (- this.elastic_force_x - damping_factor * this.speed_x) / point_mass;
-		this.acceleration_y = (- this.elastic_force_y - damping_factor * this.speed_y) / point_mass;
-		this.acceleration_z = (- this.elastic_force_z - damping_factor * this.speed_z) / point_mass - gravity_acceleration;  // Gravity acts in -z direction
+		this.acceleration_x = (- this.elastic_force_x) / point_mass;
+		this.acceleration_y = (- this.elastic_force_y) / point_mass;
+		this.acceleration_z = (- this.elastic_force_z) / point_mass - gravity_acceleration;  // Gravity acts in -z direction
 
-		if (enable_x) this.x = 0.5*this.acceleration_x*Math.pow(virtual_sampling_timestep,2) + this.speed_x*virtual_sampling_timestep + this.x ;
-		if (enable_y) this.y = 0.5*this.acceleration_y*Math.pow(virtual_sampling_timestep,2) + this.speed_y*virtual_sampling_timestep + this.y ;
-		if (enable_z) this.z = 0.5*this.acceleration_z*Math.pow(virtual_sampling_timestep,2) + this.speed_z*virtual_sampling_timestep + this.z ;
+		if (enable_x) this.x = this.acceleration_x/2 + damping_factor * this.speed_x + this.x ;
+		if (enable_y) this.y = this.acceleration_y/2 + damping_factor * this.speed_y + this.y ;
+		if (enable_z) this.z = this.acceleration_z/2 + damping_factor * this.speed_z + this.z ;
         min_z = Math.min(min_z, this.z);
 
-		this.speed_x = this.speed_x + this.acceleration_x*virtual_sampling_timestep;
-		this.speed_y = this.speed_y + this.acceleration_y*virtual_sampling_timestep;
-		this.speed_z = this.speed_z + this.acceleration_z*virtual_sampling_timestep;
+		this.speed_x = this.speed_x + this.acceleration_x;
+		this.speed_y = this.speed_y + this.acceleration_y;
+		this.speed_z = this.speed_z + this.acceleration_z;
 		
 		this.elastic_force_x = 0;
 		this.elastic_force_y = 0;
