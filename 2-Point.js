@@ -27,24 +27,9 @@ var Point = function (x, y, z) {
 
 Point.prototype.update_position = function () {
 
-    if (mouse.down) {
+	if (mouse.button == 3 && this.distanceToMouse() < mouse.cutting_distance) this.links = [];
 
-        var distance_from_click = Math.sqrt(Math.pow(this.position_at_click_x - mouse.click_x,2) + Math.pow(this.position_at_click_y - mouse.click_y,2));
-
-        switch(mouse.button)
-		{
-			case 1:
-            if (distance_from_click < mouse_influence_distance) this.held_by_mouse = true; break;
-			case 2:
-			if (distance_from_click < mouse_influence_distance) this.pin(this.position_at_click_x, this.position_at_click_y); break;
-			case 3:
-			var distance_from_mouse = Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2));
-			if (distance_from_mouse < mouse_cutting_distance) this.links = []; break;
-        }
-    }
-
-	if (this.pinned) return;
-    else if (this.held_by_mouse)
+	else if (this.held_by_mouse)
 	{
 		this.x = this.position_at_click_x + mouse.x - mouse.click_x;
         this.y = this.position_at_click_y + mouse.y - mouse.click_y;
@@ -102,8 +87,16 @@ Point.prototype.remove_links = function (link) {
     this.links.splice(this.links.indexOf(link), 1);
 };
 
-Point.prototype.pin = function (pinx, piny, pinz) {
+Point.prototype.pin = function () {
 	this.pinned = true;
-    this.pin_x = pinx; this.pin_y = piny; this.pin_z = pinz;
+    // this.pin_x = pinx; this.pin_y = piny; this.pin_z = pinz;
+};
+
+Point.prototype.distanceToClick = function () {
+    return Math.sqrt(Math.pow(this.position_at_click_x - mouse.click_x,2) + Math.pow(this.position_at_click_y - mouse.click_y,2));
+};
+
+Point.prototype.distanceToMouse = function () {
+    return Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2));
 };
 

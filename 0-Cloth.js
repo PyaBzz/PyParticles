@@ -7,8 +7,6 @@ window.onload = function () {
 	mesh_width_cells = 30;
 	mesh_height_cells = 20;
 	resting_link_length = 10;
-	mouse_influence_distance = 2 * resting_link_length;
-	mouse_cutting_distance = 2 * resting_link_length;
 	mesh_top_y = 20;
 	tearable = false;
 	link_tearing_length = 20 * resting_link_length;
@@ -27,36 +25,55 @@ window.onload = function () {
 	line_width = 1;  // pixels
 	min_z = 0;
 
-	mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
-
     canvas = document.getElementById('c');
     ctx = canvas.getContext('2d');
     canvas.width  = 1000;
     canvas.height = 550;
     
+	mouse = {
+		//-----Options------
+		influence_distance: 2 * resting_link_length,
+		cutting_distance: 2 * resting_link_length,
+		//------------------
+		x: 0,
+		y: 0,
+		click_x: 0,
+		click_y: 0,
+		drag_x: 0,
+		drag_y: 0,
+		button: 0,
+		held_points: [],
+		reference_frame: canvas.getBoundingClientRect()
+	};
+
 	canvas.onmousedown = function (click_event) {
         mouse.button = click_event.which;
 		mesh.points.forEach(function(p){p.position_at_click_x = p.x; p.position_at_click_y = p.y;});
-		rectangular_frame = canvas.getBoundingClientRect();
-        mouse.click_x = click_event.x - rectangular_frame.left;
-        mouse.click_y = click_event.y - rectangular_frame.top;
-        mouse.down = true;
+        mouse.click_x = click_event.x - mouse.reference_frame.left;
+        mouse.click_y = click_event.y - mouse.reference_frame.top;
+		if (mouse.button == 1) mesh.points.forEach(function(p){
+			if (p.distanceToClick() < mouse.influence_distance) p.held_by_mouse = true;
+			mouse.held_points.push(p);
+		});
+		if (mouse.button == 2) mesh.points.forEach(function(p){
+			if (p.distanceToClick() < mouse.influence_distance) p.pin();
+		});
         click_event.preventDefault();
     };
 
     canvas.onmousemove = function (move_event) {
-		rectangular_frame = canvas.getBoundingClientRect();
-        mouse.x = move_event.pageX - rectangular_frame.left;
-        mouse.y = move_event.pageY - rectangular_frame.top;
+		/// update previous and current position of affected points
+        mouse.x = move_event.pageX - mouse.reference_frame.left;
+        mouse.y = move_event.pageY - mouse.reference_frame.top;
         move_event.preventDefault();
     };
 
     canvas.onmouseup = function (release_event) {
 		mesh.points.forEach(function(p){p.held_by_mouse = false});
-		rectangular_frame = canvas.getBoundingClientRect();
-		mouse.drag_x = release_event.x - rectangular_frame.left - mouse.click_x;
-		mouse.drag_y = release_event.y - rectangular_frame.top - mouse.click_y;
-        mouse.down = false;
+		mouse.drag_x = release_event.x - mouse.reference_frame.left - mouse.click_x;
+		mouse.drag_y = release_event.y - mouse.reference_frame.top - mouse.click_y;
+		mouse.button = 0;
+		mouse.held_points = [];
         release_event.preventDefault();
     };
 
