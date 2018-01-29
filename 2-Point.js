@@ -34,12 +34,12 @@ Point.prototype.update_position = function () {
         switch(mouse.button)
 		{
 			case 1:
-            if (distance_from_click < mouse_influence_distance) this.held_by_mouse = true; break;
+            if (distance_from_click < mouse.influence_distance) this.held_by_mouse = true; break;
 			case 2:
-			if (distance_from_click < mouse_influence_distance) this.pin(this.position_at_click_x, this.position_at_click_y); break;
+			if (distance_from_click < mouse.influence_distance) this.pin(this.position_at_click_x, this.position_at_click_y); break;
 			case 3:
 			var distance_from_mouse = Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2));
-			if (distance_from_mouse < mouse_cutting_distance) this.links = []; break;
+			if (distance_from_mouse < mouse.cutting_distance) this.links = []; break;
         }
     }
 

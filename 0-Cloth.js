@@ -7,8 +7,6 @@ window.onload = function () {
 	mesh_width_cells = 30;
 	mesh_height_cells = 20;
 	resting_link_length = 10;
-	mouse_influence_distance = 2 * resting_link_length;
-	mouse_cutting_distance = 2 * resting_link_length;
 	mesh_top_y = 20;
 	tearable = false;
 	link_tearing_length = 20 * resting_link_length;
@@ -27,7 +25,19 @@ window.onload = function () {
 	line_width = 1;  // pixels
 	min_z = 0;
 
-	mouse = { down: false, button: 1, x: 0, y: 0, click_x: 0, click_y: 0, drag_x:0, drag_y:0 };
+	mouse = {
+		influence_distance: 2 * resting_link_length,
+		cutting_distance: 2 * resting_link_length,
+		//------------------
+		x: 0,
+		y: 0,
+		click_x: 0,
+		click_y: 0,
+		drag_x:0,
+		drag_y:0,
+		down: false,
+		button: 1
+	};
 
     canvas = document.getElementById('c');
     ctx = canvas.getContext('2d');
