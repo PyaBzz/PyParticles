@@ -24,7 +24,7 @@ var Point = function (x, y, z) {
 
 Point.prototype.update_position = function () {
 
-	if (mouse.button == 3 && this.distanceToMouse < mouse.cutting_distance) this.links = [];
+	if (mouse.key == 3 && this.distanceToMouse < mouse.cutting_distance) this.links = [];
 
 	this.acceleration_x = -this.force_x / point_mass;
 	this.acceleration_y = -this.force_y / point_mass;
