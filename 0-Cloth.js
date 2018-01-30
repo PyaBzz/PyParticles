@@ -3,11 +3,13 @@
 
 window.onload = function () {
 
+	container = document.getElementById('container');
+	container_width = container.clientWidth;
+	container_height = container.clientHeight;
 	drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
-	mesh_width_cells = 30;
-	mesh_height_cells = 20;
-	resting_link_length = 10;
-	mesh_top_y = 20;
+	mesh_width_cells = 20;
+	resting_link_length = container_width / mesh_width_cells;
+	mesh_height_cells = Math.ceil(container_height / resting_link_length);
 	tearable = false;
 	link_tearing_length = 20 * resting_link_length;
 	point_mass = 2.0; // (Kg)
@@ -24,11 +26,12 @@ window.onload = function () {
 	pin_colour = "red";
 	line_width = 1;  // pixels
 	min_z = 0;
-
-    canvas = document.getElementById('c');
+	
+    canvas = document.createElement('canvas');
+	canvas.width = container_width;
+	canvas.height = container_height;
+	container.appendChild(canvas);
     ctx = canvas.getContext('2d');
-    canvas.width  = 1000;
-    canvas.height = 550;
 	mouse = new Mouse(2 * resting_link_length, 2 * resting_link_length, true, 0.4);
     
 	canvas.onmousedown = function (click_event) {

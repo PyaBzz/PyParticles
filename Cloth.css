@@ -29,8 +29,18 @@ p {
 	width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
 	display: inline-block;
 }
-#c {
+#container {
+	position: relative;
+	width: 1000px;
+	height: 550px;
 	display: block;
 	margin: 20px auto 0 auto;
-	border:1px solid lightgrey;
+	border:1px solid green;
+}
+.box{
+	position: absolute;
+	background-color: blue;
+	width: 100px;
+	height: 100px;
+	border-radius: 6px;
 }

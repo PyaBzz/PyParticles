@@ -37,6 +37,6 @@ link.prototype.apply_forces = function () {
 };
 
 link.prototype.draw = function () {
-    ctx.moveTo(this.p1.x + 0.5, this.p1.y + 0.5);  // 0.5 pixels to properly apply odd numbers to line thickness
-    ctx.lineTo(this.p2.x + 0.5, this.p2.y + 0.5);  // 0.5 pixels to properly apply odd numbers to line thickness
+    ctx.moveTo(this.p1.x , this.p1.y );  // 0.5 pixels to properly apply odd numbers to line thickness
+    ctx.lineTo(this.p2.x , this.p2.y );  // 0.5 pixels to properly apply odd numbers to line thickness
 };

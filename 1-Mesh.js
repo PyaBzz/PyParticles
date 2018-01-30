@@ -5,11 +5,9 @@ Mesh = function () {
 
     this.points = [];
 
-    var start_x = canvas.width / 2 - mesh_width_cells * resting_link_length / 2;
-
     for (var y = 0; y <= mesh_height_cells; y++) {
         for (var x = 0; x <= mesh_width_cells; x++) {
-            var p = new Point(start_x + x * resting_link_length, mesh_top_y + y * resting_link_length, 0);
+            var p = new Point(x * resting_link_length, y * resting_link_length, 0);
 
             // if (y == 0) p.pin();                   // Pin the top edge of the mesh
 			// if (y == mesh_height_cells) p.pin();  // Pin the bottom edge of the mesh
