@@ -48,12 +48,15 @@ window.onload = function () {
 
 	canvas.onmousedown = function (click_event) {
         mouse.button = click_event.which;
-		mesh.points.forEach(function(p){p.position_at_click_x = p.x; p.position_at_click_y = p.y;});
         mouse.click_x = click_event.x - mouse.reference_frame.left;
         mouse.click_y = click_event.y - mouse.reference_frame.top;
 		if (mouse.button == 1) mesh.points.forEach(function(p){
-			if (p.distanceToClick() < mouse.influence_distance) p.held_by_mouse = true;
-			mouse.held_points.push(p);
+			if (p.distanceToClick() < mouse.influence_distance) {
+				p.held_by_mouse = true;
+				p.position_at_click_x = p.x;
+				p.position_at_click_y = p.y;
+				mouse.held_points.push(p);
+			}
 		});
 		if (mouse.button == 2) mesh.points.forEach(function(p){
 			if (p.distanceToClick() < mouse.influence_distance) p.pin();
@@ -62,9 +65,16 @@ window.onload = function () {
     };
 
     canvas.onmousemove = function (move_event) {
-		/// update previous and current position of affected points
         mouse.x = move_event.pageX - mouse.reference_frame.left;
         mouse.y = move_event.pageY - mouse.reference_frame.top;
+		mouse.held_points.forEach(function(p){
+			p.x = p.position_at_click_x + mouse.x - mouse.click_x;
+			p.y = p.position_at_click_y + mouse.y - mouse.click_y;
+			// this.previous_z = this.z;  // Currently the mouse doesn't affect z
+			p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
+			p.speed_y = 0;
+			p.speed_z = 0;
+		});
         move_event.preventDefault();
     };
 
