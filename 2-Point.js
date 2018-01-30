@@ -24,7 +24,7 @@ var Point = function (x, y, z) {
 
 Point.prototype.update_position = function () {
 
-	if (mouse.button == 3 && this.distanceToMouse() < mouse.cutting_distance) this.links = [];
+	if (mouse.button == 3 && this.distanceToMouse < mouse.cutting_distance) this.links = [];
 
 	this.acceleration_x = -this.force_x / point_mass;
 	this.acceleration_y = -this.force_y / point_mass;
@@ -76,11 +76,7 @@ Point.prototype.pin = function () {
 	this.pinned = true;
 };
 
-Point.prototype.distanceToClick = function () {
-    return Math.sqrt(Math.pow(this.x - mouse.click_x,2) + Math.pow(this.y - mouse.click_y,2));
-};
-
-Point.prototype.distanceToMouse = function () {
-    return Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2));
-};
-
+Object.defineProperties(Point.prototype,{
+	distanceToClick: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.click_x,2) + Math.pow(this.y - mouse.click_y,2))}},
+	distanceToMouse: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2))}}
+});

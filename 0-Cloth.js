@@ -51,7 +51,7 @@ window.onload = function () {
         mouse.click_x = click_event.x - mouse.reference_frame.left;
         mouse.click_y = click_event.y - mouse.reference_frame.top;
 		if (mouse.button == 1) mesh.points.forEach(function(p){
-			if (p.distanceToClick() < mouse.influence_distance) {
+			if (p.distanceToClick < mouse.influence_distance) {
 				p.held_by_mouse = true;
 				p.position_at_click_x = p.x;
 				p.position_at_click_y = p.y;
@@ -59,7 +59,7 @@ window.onload = function () {
 			}
 		});
 		if (mouse.button == 2) mesh.points.forEach(function(p){
-			if (p.distanceToClick() < mouse.influence_distance) p.pin();
+			if (p.distanceToClick < mouse.influence_distance) p.pin();
 		});
         click_event.preventDefault();
     };
