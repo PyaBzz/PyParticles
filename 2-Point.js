@@ -77,6 +77,7 @@ Point.prototype.pin = function () {
 };
 
 Object.defineProperties(Point.prototype,{
+	isFree: { get: function () {return !this.pinned && !this.held_by_mouse;}},
 	distanceToClick: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.click_x,2) + Math.pow(this.y - mouse.click_y,2))}},
 	distanceToMouse: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2))}}
 });

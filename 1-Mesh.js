@@ -30,7 +30,7 @@ Mesh.prototype.calculate_link_forces = function() {
 
 Mesh.prototype.update_point_positions = function() {
 	this.points.forEach(function(p){
-		if (!p.pinned && !p.held_by_mouse) p.update_position();
+		if (p.isFree) p.update_position();
 	});
 };
 

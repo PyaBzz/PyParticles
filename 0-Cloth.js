@@ -43,7 +43,7 @@ window.onload = function () {
 		drag_y: 0,
 		button: 0,
 		held_points: [],
-		reference_frame: canvas.getBoundingClientRect()
+		reference_frame: canvas.getBoundingClientRect()  // Required for comparison against point positions
 	};
 
 	canvas.onmousedown = function (click_event) {
@@ -51,7 +51,7 @@ window.onload = function () {
         mouse.click_x = click_event.x - mouse.reference_frame.left;
         mouse.click_y = click_event.y - mouse.reference_frame.top;
 		if (mouse.button == 1) mesh.points.forEach(function(p){
-			if (p.distanceToClick < mouse.influence_distance) {
+			if (p.isFree && p.distanceToClick < mouse.influence_distance) {
 				p.held_by_mouse = true;
 				p.position_at_click_x = p.x;
 				p.position_at_click_y = p.y;
@@ -79,7 +79,7 @@ window.onload = function () {
     };
 
     canvas.onmouseup = function (release_event) {
-		mesh.points.forEach(function(p){p.held_by_mouse = false});
+		mouse.held_points.forEach(function(p){p.held_by_mouse = false});
 		mouse.drag_x = release_event.x - mouse.reference_frame.left - mouse.click_x;
 		mouse.drag_y = release_event.y - mouse.reference_frame.top - mouse.click_y;
 		mouse.button = 0;
