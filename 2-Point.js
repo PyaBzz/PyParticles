@@ -59,7 +59,8 @@ Point.prototype.draw = function () {
 
 Point.prototype.drawLinks = function () {
     if (!this.links.length) return;
-	this.links.forEach(function(link){link.draw()});
+	// this.links.forEach(function(link){link.draw()});
+	this.links[0].draw();
 };
 
 Point.prototype.attach = function (point) {

@@ -10,7 +10,7 @@ window.onload = function () {
 	mesh_top_y = 20;
 	tearable = false;
 	link_tearing_length = 20 * resting_link_length;
-	point_mass = 10.0; // (Kg)
+	point_mass = 2.0; // (Kg)
 	damping_factor = 0.30;    // 0 = greatest loss, 1 = no loss (potentially unstable)
 	elastic_stiffness = 0.26;
 	nonlinearity = 1.20;  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
