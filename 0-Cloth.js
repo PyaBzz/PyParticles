@@ -29,20 +29,26 @@ window.onload = function () {
     ctx = canvas.getContext('2d');
     canvas.width  = 1000;
     canvas.height = 550;
-	mouse = new Mouse(2 * resting_link_length, 2 * resting_link_length);
+	mouse = new Mouse(2 * resting_link_length, 2 * resting_link_length, true, 0.4);
     
 	canvas.onmousedown = function (click_event) {
         mouse.key = click_event.which;
-        mouse.click_x = click_event.x - mouse.reference_frame.left;
+        mouse.click_x = click_event.x - mouse.reference_frame.left;  // Mouse coordinates within the canvas!
         mouse.click_y = click_event.y - mouse.reference_frame.top;
-		if (mouse.key == 1) mesh.points.forEach(function(p){
-			if (p.isFree && p.distanceToClick < mouse.influence_distance) {
-				p.held_by_mouse = true;
-				p.position_at_click_x = p.x;
-				p.position_at_click_y = p.y;
-				mouse.held_points.push(p);
+		if (mouse.key == 1) {
+			if (mouse.slippy) {
+				
+			} else {
+				mesh.points.forEach(function(p){
+					if (p.isFree && p.distanceToClick < mouse.influence_distance) {
+						p.held_by_mouse = true;
+						p.position_at_click_x = p.x;
+						p.position_at_click_y = p.y;
+						mouse.held_points.push(p);
+					}
+				});
 			}
-		});
+		}
 		if (mouse.key == 2) mesh.points.forEach(function(p){
 			if (p.distanceToClick < mouse.influence_distance) p.pin();
 		});
@@ -50,16 +56,33 @@ window.onload = function () {
     };
 
     canvas.onmousemove = function (move_event) {
+		var current_drag_start_x = mouse.x;
+		var current_drag_start_y = mouse.y;
         mouse.x = move_event.pageX - mouse.reference_frame.left;  // Mouse coordinates within the canvas!
         mouse.y = move_event.pageY - mouse.reference_frame.top;
-		mouse.held_points.forEach(function(p){
-			p.x = p.position_at_click_x + mouse.x - mouse.click_x;
-			p.y = p.position_at_click_y + mouse.y - mouse.click_y;
-			// this.previous_z = this.z;  // Currently the mouse doesn't affect z
-			p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
-			p.speed_y = 0;
-			p.speed_z = 0;
-		});
+		mouse.current_drag_x = mouse.x - current_drag_start_x;
+		mouse.current_drag_y = mouse.y - current_drag_start_y;
+
+		if (mouse.key == 1) {
+			if (mouse.slippy) {
+				mesh.points.forEach(function(p){
+					if (p.isFree && p.distanceToMouse < mouse.influence_distance) {
+						p.x += mouse.current_drag_x * mouse.slip_factor;
+						p.y += mouse.current_drag_y * mouse.slip_factor;
+					}
+				});
+			} else {
+				mouse.held_points.forEach(function(p){
+					p.x = p.position_at_click_x + mouse.x - mouse.click_x;
+					p.y = p.position_at_click_y + mouse.y - mouse.click_y;
+					// this.previous_z = this.z;  // Currently the mouse doesn't affect z
+					p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
+					p.speed_y = 0;
+					p.speed_z = 0;
+				});
+			}
+		}
+		
         move_event.preventDefault();
     };
 
@@ -99,11 +122,15 @@ function componentToHex(c) {
     return hex.length == 1 ? "0" + hex : hex;
 };
 
-var Mouse = function (inf_dist, cut_dist) {
+var Mouse = function (inf_dist, cut_dist, slpy, slp_ftr) {
 	this.influence_distance = inf_dist;
 	this.cutting_distance = cut_dist;
+	this.slippy = slpy;
+	this.slip_factor = slp_ftr;
 	this.x = 0;
 	this.y = 0;
+	this.current_drag_x = 0;
+	this.current_drag_y = 0;
 	this.click_x = 0;
 	this.click_y = 0;
 	this.drag_x = 0;
