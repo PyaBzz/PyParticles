@@ -59,8 +59,8 @@ Point.prototype.draw = function () {
 
 Point.prototype.drawLinks = function () {
     if (!this.links.length) return;
-	// this.links.forEach(function(link){link.draw()});
-	this.links[0].draw();
+	this.links.forEach(function(link){link.draw()});
+	// this.links[0].draw();
 };
 
 Point.prototype.attach = function (point) {
@@ -75,6 +75,10 @@ Point.prototype.remove_links = function (link) {
 
 Point.prototype.pin = function () {
 	this.pinned = true;
+};
+
+Point.prototype.isInBox = function (x1, x2, y1, y2) {
+	return this.x > x1 && this.x < x2 && this.y > y1 && this.y < y2;
 };
 
 Object.defineProperties(Point.prototype,{
