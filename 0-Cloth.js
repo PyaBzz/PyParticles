@@ -37,8 +37,8 @@ window.onload = function () {
 	
 	container.onmousedown = function (click_event) {
         mouse.key = click_event.which;
-        mouse.click_x = click_event.x - mouse.canvas_reference_frame.left;  // Mouse coordinates within the canvas!
-        mouse.click_y = click_event.y - mouse.canvas_reference_frame.top;
+        mouse.click_x = click_event.x;
+        mouse.click_y = click_event.y;
 		if (click_event.target == canvas) {
 			if (mouse.key == 1) {
 				if (mouse.slippy) {
@@ -71,8 +71,8 @@ window.onload = function () {
     container.onmousemove = function (move_event) {
 		var current_drag_start_x = mouse.x;
 		var current_drag_start_y = mouse.y;
-        mouse.x = move_event.pageX - mouse.canvas_reference_frame.left;  // Mouse coordinates within the canvas!
-        mouse.y = move_event.pageY - mouse.canvas_reference_frame.top;
+        mouse.x = move_event.pageX;
+        mouse.y = move_event.pageY;
 		mouse.current_drag_x = mouse.x - current_drag_start_x;
 		mouse.current_drag_y = mouse.y - current_drag_start_y;
 		if (mouse.clicked_a_box) {
@@ -103,8 +103,8 @@ window.onload = function () {
 					});
 				} else {
 					mouse.held_points.forEach(function(p){
-						p.x = p.position_at_click_x + mouse.x - mouse.click_x;
-						p.y = p.position_at_click_y + mouse.y - mouse.click_y;
+						p.x += mouse.current_drag_x;
+						p.y += mouse.current_drag_y;
 						// this.previous_z = this.z;  // Currently the mouse doesn't affect z
 						p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
 						p.speed_y = 0;
@@ -118,8 +118,8 @@ window.onload = function () {
 
     container.onmouseup = function (release_event) {
 		mouse.held_points.forEach(function(p){p.held_by_mouse = false});
-		mouse.drag_x = release_event.x - mouse.canvas_reference_frame.left - mouse.click_x;
-		mouse.drag_y = release_event.y - mouse.canvas_reference_frame.top - mouse.click_y;
+		mouse.drag_x = release_event.x - mouse.click_x;
+		mouse.drag_y = release_event.y - mouse.click_y;
 		mouse.key = 0;
 		mouse.held_points = [];
 		mouse.clicked_a_box = false;

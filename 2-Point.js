@@ -5,9 +5,7 @@ var Point = function (x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
-	this.position_at_click_x = 0;  // Required to accurately track mouse movements
-	this.position_at_click_y = 0;  // Required to accurately track mouse movements
-	this.position_at_click_z = 0;  // Required to accurately track mouse movements
+
 	this.force_x = 0;
 	this.force_y = 0;
 	this.force_z = 0;
@@ -88,6 +86,8 @@ Point.prototype.isInBox = function (x1, x2, y1, y2) {
 
 Object.defineProperties(Point.prototype,{
 	isFree: { get: function () {return !this.pinned && !this.held_by_mouse;}},
-	distanceToClick: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.click_x,2) + Math.pow(this.y - mouse.click_y,2))}},
-	distanceToMouse: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2))}}
+	clientX: { get: function () {return this.x + mouse.canvas_reference_frame.left;}},  // Coordinates within the canvas!
+	clientY: { get: function () {return this.y + mouse.canvas_reference_frame.top;}},  // Coordinates within the canvas!
+	distanceToClick: { get: function () {return Math.sqrt(Math.pow(this.clientX - mouse.clickX,2) + Math.pow(this.clientY - mouse.clickY,2))}},
+    distanceToMouse: { get: function () {return Math.sqrt(Math.pow(this.clientX - mouse.x,2) + Math.pow(this.clientY - mouse.y,2))}},
 });
