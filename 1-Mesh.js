@@ -30,6 +30,20 @@ Mesh.prototype.calculate_link_forces = function() {
 	});
 };
 
+Mesh.prototype.updatePointBounds = function() {
+	this.points.forEach(function(p){
+		Array.prototype.forEach.call(boxes, function(b){
+			if (p.isInBox(b.offsetLeft, b.offsetLeft + b.offsetWidth, b.offsetTop, b.offsetTop + b.offsetHeight)) {
+				p.held_by_box = 1;
+				p.containingBox = b;
+			} else {
+				p.held_by_box = 0;
+				p.containingBox = null;
+			}
+		});
+	});
+};
+
 Mesh.prototype.update_point_positions = function() {
 	this.points.forEach(function(p){
 		if (p.isFree) p.update_position();

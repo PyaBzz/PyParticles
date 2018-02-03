@@ -4,15 +4,16 @@
 window.onload = function () {
 
 	container = document.getElementById('container');
+	boxes = document.getElementsByClassName('box');
 	container_width = container.clientWidth;
 	container_height = container.clientHeight;
 	drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
-	mesh_width_cells = 40;
+	mesh_width_cells = 60;
 	resting_link_length = container_width / mesh_width_cells;
 	mesh_height_cells = Math.ceil(container_height / resting_link_length);
 	tearable = false;
 	link_tearing_length = 20 * resting_link_length;
-	point_mass = 4.0; // (Kg)
+	point_mass = 10.0; // (Kg)
 	damping_factor = 0.30;    // 0 = greatest loss, 1 = no loss (potentially unstable)
 	elastic_stiffness = 0.26;
 	nonlinearity = 1.20;  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
@@ -33,7 +34,7 @@ window.onload = function () {
 	container.appendChild(canvas);
     ctx = canvas.getContext('2d');
 	mouse = new Mouse(2 * resting_link_length, 2 * resting_link_length, true, 0.6);
-    
+	
 	container.onmousedown = function (click_event) {
         mouse.key = click_event.which;
         mouse.click_x = click_event.x - mouse.canvas_reference_frame.left;  // Mouse coordinates within the canvas!
@@ -74,7 +75,24 @@ window.onload = function () {
         mouse.y = move_event.pageY - mouse.canvas_reference_frame.top;
 		mouse.current_drag_x = mouse.x - current_drag_start_x;
 		mouse.current_drag_y = mouse.y - current_drag_start_y;
-		if (!mouse.clicked_a_box) {
+		if (mouse.clicked_a_box) {
+			mesh.points.forEach(function(p){
+				if (p.isFree && p.isInBox(mouse.target_box_boundaries.left, mouse.target_box_boundaries.right, mouse.target_box_boundaries.top, mouse.target_box_boundaries.buttom)) {
+					p.x += mouse.current_drag_x * mouse.slip_factor;
+					p.y += mouse.current_drag_y * mouse.slip_factor;
+					p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
+					p.speed_y = 0;
+					p.speed_z = 0;
+
+				}
+			});
+			mouse.target_box.style.left = mouse.target_box.offsetLeft + mouse.current_drag_x + "px";
+			mouse.target_box.style.top = mouse.target_box.offsetTop + mouse.current_drag_y + "px";
+			mouse.target_box_boundaries.left = mouse.target_box.offsetLeft;
+			mouse.target_box_boundaries.right = mouse.target_box.offsetLeft + mouse.target_box.offsetWidth;
+			mouse.target_box_boundaries.top = mouse.target_box.offsetTop;
+			mouse.target_box_boundaries.buttom = mouse.target_box.offsetTop +  mouse.target_box.offsetHeight;
+		} else {
 			if (mouse.key == 1) {
 				if (mouse.slippy) {
 					mesh.points.forEach(function(p){
@@ -94,19 +112,6 @@ window.onload = function () {
 					});
 				}
 			}
-		} else {
-			mesh.points.forEach(function(p){
-				if (p.isFree && p.isInBox(mouse.target_box_boundaries.left, mouse.target_box_boundaries.right, mouse.target_box_boundaries.top, mouse.target_box_boundaries.buttom)) {
-					p.x += mouse.current_drag_x * mouse.slip_factor;
-					p.y += mouse.current_drag_y * mouse.slip_factor;
-				}
-			});
-			mouse.target_box.style.left = mouse.target_box.offsetLeft + mouse.current_drag_x + "px";
-			mouse.target_box.style.top = mouse.target_box.offsetTop + mouse.current_drag_y + "px";
-			mouse.target_box_boundaries.left = mouse.target_box.offsetLeft;
-			mouse.target_box_boundaries.right = mouse.target_box.offsetLeft + mouse.target_box.offsetWidth;
-			mouse.target_box_boundaries.top = mouse.target_box.offsetTop;
-			mouse.target_box_boundaries.buttom = mouse.target_box.offsetTop +  mouse.target_box.offsetHeight;
 		}
         move_event.preventDefault();
     };
@@ -131,6 +136,7 @@ window.onload = function () {
 
 function drawing_loop() {
 	mesh.calculate_link_forces();
+	mesh.updatePointBounds();
 	mesh.update_point_positions();
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	ctx.lineWidth = line_width;

@@ -19,7 +19,9 @@ var Point = function (x, y, z) {
 	this.speed_z = 0;
 	this.pinned = false;
 	this.held_by_mouse = false;
+	this.held_by_box = false;
     this.links = [];
+	this.containingBox = null;
 };
 
 Point.prototype.update_position = function () {
@@ -30,9 +32,12 @@ Point.prototype.update_position = function () {
 	this.acceleration_y = -this.force_y / point_mass;
 	this.acceleration_z = -this.force_z / point_mass - gravity_acceleration;  // Gravity acts in -z direction
     
-	if (enable_x) this.x = this.acceleration_x/2 + damping_factor * this.speed_x + this.x ;
-	if (enable_y) this.y = this.acceleration_y/2 + damping_factor * this.speed_y + this.y ;
-	if (enable_z) this.z = this.acceleration_z/2 + damping_factor * this.speed_z + this.z ;
+	if (enable_x) this.x = (this.acceleration_x/2 + damping_factor * this.speed_x)*(1 - this.held_by_box * 0.4) + this.x ;
+	if (enable_y) this.y = (this.acceleration_y/2 + damping_factor * this.speed_y)*(1 - this.held_by_box * 0.4) + this.y ;
+	if (enable_z) this.z = (this.acceleration_z/2 + damping_factor * this.speed_z)*(1 - this.held_by_box * 0.4) + this.z ;
+	// if (enable_x) this.x = (this.acceleration_x/2 + damping_factor * this.speed_x) + this.x ;
+	// if (enable_y) this.y = (this.acceleration_y/2 + damping_factor * this.speed_y) + this.y ;
+	// if (enable_z) this.z = (this.acceleration_z/2 + damping_factor * this.speed_z) + this.z ;
        min_z = Math.min(min_z, this.z);
     
 	this.speed_x = this.speed_x + this.acceleration_x;
