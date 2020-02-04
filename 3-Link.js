@@ -12,8 +12,8 @@ link.prototype.apply_forces = function () {
 	var diff_z = this.p1.z - this.p2.z;
 	var twoD_length = Math.sqrt(Math.pow(diff_x,2) + Math.pow(diff_y,2));
 	
-    if (tearable && twoD_length > link_tearing_length) this.p1.remove_links(this);  // 2D
-    // if (tearable && length > link_tearing_length) this.p1.remove_links(this);  // 3D
+    if (tearable && twoD_length > linkTearingLength) this.p1.remove_links(this);  // 2D
+    // if (tearable && length > linkTearingLength) this.p1.remove_links(this);  // 3D
 	
     var force_x = Math.sign(diff_x)*Math.pow(Math.abs(diff_x),nonlinearity) * elastic_stiffness;
     var force_y = Math.sign(diff_y)*Math.pow(Math.abs(diff_y),nonlinearity) * elastic_stiffness;

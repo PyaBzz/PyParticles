@@ -26,9 +26,9 @@ Point.prototype.update_position = function () {
 
 	if (mouse.key == 3 && this.distanceToMouse < mouse.cutting_distance) this.links = [];
 
-	this.acceleration_x = -this.force_x / point_mass;
-	this.acceleration_y = -this.force_y / point_mass;
-	this.acceleration_z = -this.force_z / point_mass - gravity_acceleration;  // Gravity acts in -z direction
+	this.acceleration_x = -this.force_x / pointMass;
+	this.acceleration_y = -this.force_y / pointMass;
+	this.acceleration_z = -this.force_z / pointMass - gravity_acceleration;  // Gravity acts in -z direction
     
 	if (enable_x) this.x = (this.acceleration_x/2 + damping_factor * this.speed_x)*(1 - this.held_by_box * 0.4) + this.x ;
 	if (enable_y) this.y = (this.acceleration_y/2 + damping_factor * this.speed_y)*(1 - this.held_by_box * 0.4) + this.y ;

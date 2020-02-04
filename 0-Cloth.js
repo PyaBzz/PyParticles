@@ -5,15 +5,15 @@ window.onload = function () {
 
 	container = document.getElementById('container');
 	boxes = document.getElementsByClassName('box');
-	container_width = container.clientWidth;
-	container_height = container.clientHeight;
-	drawing_time_step = 20;    // (Milliseconds) Determines how often the graphics are refreshed
-	mesh_width_cells = 60;
-	resting_link_length = container_width / mesh_width_cells;
-	mesh_height_cells = Math.ceil(container_height / resting_link_length);
+	containerWidth = container.clientWidth;
+	containerHeight = container.clientHeight;
+	drawingTimeStep = 20;    // (Milliseconds) Determines how often the graphics are refreshed
+	meshWidthCells = 60;
+	restingLinkLength = containerWidth / meshWidthCells;
+	meshHeightCells = Math.ceil(containerHeight / restingLinkLength);
 	tearable = false;
-	link_tearing_length = 20 * resting_link_length;
-	point_mass = 10.0; // (Kg)
+	linkTearingLength = 20 * restingLinkLength;
+	pointMass = 10.0; // (Kg)
 	damping_factor = 0.30;    // 0 = greatest loss, 1 = no loss (potentially unstable)
 	elastic_stiffness = 0.26;
 	nonlinearity = 1.20;  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
@@ -29,11 +29,11 @@ window.onload = function () {
 	min_z = 0;
 	
     canvas = document.createElement('canvas');
-	canvas.width = container_width;
-	canvas.height = container_height;
+	canvas.width = containerWidth;
+	canvas.height = containerHeight;
 	container.appendChild(canvas);
     ctx = canvas.getContext('2d');
-	mouse = new Mouse(2 * resting_link_length, 2 * resting_link_length, true, 0.6);
+	mouse = new Mouse(2 * restingLinkLength, 2 * restingLinkLength, true, 0.6);
 	
 	container.onmousedown = function (click_event) {
         mouse.key = click_event.which;
@@ -131,7 +131,7 @@ window.onload = function () {
     };
 
     mesh = new Mesh();
-    setInterval(drawing_loop, drawing_time_step);
+    setInterval(drawing_loop, drawingTimeStep);
 };
 
 function drawing_loop() {
