@@ -1,8 +1,8 @@
 waterConfig = {
     drawingCycleTime: 20,    // (Milliseconds) Determines how often the graphics are refreshed
-    horizontalCellCount: 40,
-    tearable: false,
-    linkTearingLengthFactor: 20, // Stretch to how many times rest length before tearing
+    horizontalCellCount: 60,
+    tearable: true,
+    linkTearingLengthFactor: 6, // Stretch to how many times rest length before tearing
     nodeMass: 10.0, // (Kg)
     damping: 0.30,    // 0 = greatest loss, 1 = no loss (potentially unstable)
     elasticStiffness: 0.26,
@@ -14,12 +14,12 @@ waterConfig = {
     gravity: 0.0020, // (m/S^2)
     linkColour: "aqua",
     linkWidth: 1,  // pixels
-    drawNodes: true,
+    drawNodes: false,
     nodeColour: "blue",
     nodeRadius: 4,
     pinColour: "red",
     mouseImpactCellCount: 2, // diameter of mouse impact
-    mouseCuttingCellCount: 2, // diameter of mouse tearing
+    mouseCuttingCellCount: 2, // diameter of mouse cutting
 };
 
 clothConfig = {
