@@ -1,13 +1,13 @@
-//###########################  Mesh  ##############################################
+//###########################  mesh  ##############################################
 //#################################################################################
 
-Mesh = function () {
+mesh = function () {
 
 	this.points = [];
 
 	for (var row = 0; row <= pyGrid.verticalCellCount; row++) {
 		for (var col = 0; col <= pyGrid.horizontalCellCount; col++) {
-			var p = new Point(col * pyGrid.restingLinkLength, row * pyGrid.restingLinkLength, 0);
+			var p = new point(col * pyGrid.restingLinkLength, row * pyGrid.restingLinkLength, 0);
 
 			if (row == 0) p.pin();                   // Pin the top edge of the mesh
 			if (row == pyGrid.verticalCellCount) p.pin();  // Pin the bottom edge of the mesh
@@ -25,13 +25,13 @@ Mesh = function () {
 	}
 };
 
-Mesh.prototype.calculateForces = function () {
+mesh.prototype.calculateForces = function () {
 	this.points.forEach(function (point) {
 		point.links.forEach(function (link) { link.apply_forces() });
 	});
 };
 
-Mesh.prototype.updateNodeBounds = function () {
+mesh.prototype.updateNodeBounds = function () {
 	this.points.forEach(function (p) {
 		Array.prototype.forEach.call(dragBoxes, function (b) {
 			if (p.isInBox(b.offsetLeft, b.offsetLeft + b.offsetWidth, b.offsetTop, b.offsetTop + b.offsetHeight)) {
@@ -45,17 +45,17 @@ Mesh.prototype.updateNodeBounds = function () {
 	});
 };
 
-Mesh.prototype.updateNodePositions = function () {
+mesh.prototype.updateNodePositions = function () {
 	this.points.forEach(function (p) {
 		if (p.isFree) p.update_position();
 	});
 };
 
-Mesh.prototype.drawPoints = function () {
+mesh.prototype.drawpoints = function () {
 	this.points.forEach(function (p) { p.draw() });
 };
 
-Mesh.prototype.drawLinks = function () {
+mesh.prototype.drawLinks = function () {
 	pyGrid.canvasCtx.strokeStyle = pyGrid.linkColour;
 	pyGrid.canvasCtx.beginPath();
 	this.points.forEach(function (p) { p.drawLinks() });

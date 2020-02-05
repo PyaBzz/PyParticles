@@ -1,4 +1,9 @@
-function bindCanvasHandlers() {
+function bindMouseHandlers() {
+
+    pyGrid.canvas.oncontextmenu = function (contextEvent) {
+        contextEvent.preventDefault();
+    };
+
     pyGrid.onmousedown = function (mouseDownEvent) {
         mouse.key = mouseDownEvent.which;
         mouse.clickX = mouseDownEvent.x;
@@ -13,7 +18,7 @@ function bindCanvasHandlers() {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
                             p.positionAtClickY = p.y;
-                            mouse.heldPoints.push(p);
+                            mouse.heldpoints.push(p);
                         }
                     });
                 }
@@ -47,7 +52,6 @@ function bindCanvasHandlers() {
                     p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
                     p.speed_y = 0;
                     p.speed_z = 0;
-
                 }
             });
             mouse.targetBox.style.left = mouse.targetBox.offsetLeft + mouse.currentDragX + "px";
@@ -66,7 +70,7 @@ function bindCanvasHandlers() {
                         }
                     });
                 } else {
-                    mouse.heldPoints.forEach(function (p) {
+                    mouse.heldpoints.forEach(function (p) {
                         p.x += mouse.currentDragX;
                         p.y += mouse.currentDragY;
                         // this.previous_z = this.z;  // Currently the mouse doesn't affect z
@@ -81,11 +85,11 @@ function bindCanvasHandlers() {
     };
 
     pyGrid.onmouseup = function (releaseEvent) {
-        mouse.heldPoints.forEach(function (p) { p.heldByMouse = false });
+        mouse.heldpoints.forEach(function (p) { p.heldByMouse = false });
         mouse.dragX = releaseEvent.x - mouse.clickX;
         mouse.dragY = releaseEvent.y - mouse.clickY;
         mouse.key = 0;
-        mouse.heldPoints = [];
+        mouse.heldpoints = [];
         mouse.clickedABox = false;
         releaseEvent.preventDefault();
     };

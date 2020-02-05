@@ -4,8 +4,9 @@ onload = function () {
 	container.createPyGrid(waterConfig, dragBoxes);
 };
 
-HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) { //TODO: This function will create the grid and physics and everything with no change to window properties.
+HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) {
 	pyGrid = this;
+
 	for (var key in config)
 		this[key] = config[key];
 
@@ -14,21 +15,17 @@ HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) { //TODO: T
 	this.linkTearingLength = this.linkTearingLengthFactor * this.restingLinkLength;
 	this.dragBoxes = dragBoxes;
 
-	pyGrid.canvas = document.createElement('canvas');
-	pyGrid.canvas.width = this.clientWidth;
-	pyGrid.canvas.height = this.clientHeight;
-	this.appendChild(pyGrid.canvas);
-	pyGrid.canvasCtx = pyGrid.canvas.getContext('2d');
+	this.canvas = document.createElement('canvas');
+	this.canvas.width = this.clientWidth;
+	this.canvas.height = this.clientHeight;
+	this.appendChild(this.canvas);
+	this.canvasCtx = this.canvas.getContext('2d');
 
-	bindCanvasHandlers();
 	mouse = new mouse(this.mouseImpactCellCount * this.restingLinkLength, this.mouseCuttingCellCount * this.restingLinkLength, true, 0.6);
+	mesh = new mesh();
 
-	pyGrid.canvas.oncontextmenu = function (contextEvent) {
-		contextEvent.preventDefault();
-	};
-
-	mesh = new Mesh();
-	setInterval(drawingLoop, pyGrid.drawingTimeStep);
+	bindMouseHandlers();
+	setInterval(drawingLoop, this.drawingTimeStep);
 };
 
 function drawingLoop() {
@@ -38,7 +35,7 @@ function drawingLoop() {
 	pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
 	pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
 	mesh.drawLinks();
-	if (pyGrid.drawNodes) mesh.drawPoints();
+	if (pyGrid.drawNodes) mesh.drawpoints();
 };
 
 function rgbToHex(r, g, b) {
@@ -65,7 +62,7 @@ function mouse(impactDistance, cutDistance, slpy, slp_ftr) {
 	this.dragX = 0;
 	this.dragY = 0;
 	this.key = 0;
-	this.heldPoints = [];
+	this.heldpoints = [];
 	this.referenceFrame = pyGrid.canvas.getBoundingClientRect();  // Required for comparison against point positions
 	this.clickedABox = false;
 	this.targetBox = {};

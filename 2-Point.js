@@ -1,7 +1,7 @@
-//###########################  Point  #############################################
+//###########################  point  #############################################
 //#################################################################################
 
-var Point = function (x, y, z) {
+var point = function (x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -22,7 +22,7 @@ var Point = function (x, y, z) {
 	this.containingBox = null;
 };
 
-Point.prototype.update_position = function () {
+point.prototype.update_position = function () {
 
 	if (mouse.key == 3 && this.distanceToMouse < mouse.cuttingDistance) this.links = [];
 
@@ -45,7 +45,7 @@ Point.prototype.update_position = function () {
 	this.force_x = 0; this.force_y = 0; this.force_z = 0;
 };
 
-Point.prototype.draw = function () {
+point.prototype.draw = function () {
 	// pyGrid.canvasCtx.fillStyle = "#" + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z)));
 	pyGrid.canvasCtx.beginPath();
 	if (this.pinned) {
@@ -60,31 +60,31 @@ Point.prototype.draw = function () {
 	pyGrid.canvasCtx.fill();
 };
 
-Point.prototype.drawLinks = function () {
+point.prototype.drawLinks = function () {
 	if (!this.links.length) return;
 	this.links.forEach(function (link) { link.draw() });
 	// this.links[0].draw();
 };
 
-Point.prototype.attach = function (point) {
+point.prototype.attach = function (point) {
 	this.links.push(
 		new link(this, point)
 	);
 };
 
-Point.prototype.remove_links = function (link) {
+point.prototype.remove_links = function (link) {
 	this.links.splice(this.links.indexOf(link), 1);
 };
 
-Point.prototype.pin = function () {
+point.prototype.pin = function () {
 	this.pinned = true;
 };
 
-Point.prototype.isInBox = function (x1, x2, y1, y2) {
+point.prototype.isInBox = function (x1, x2, y1, y2) {
 	return this.x > x1 && this.x < x2 && this.y > y1 && this.y < y2;
 };
 
-Object.defineProperties(Point.prototype, {
+Object.defineProperties(point.prototype, {
 	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
 	clientX: { get: function () { return this.x + mouse.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + mouse.referenceFrame.top; } },  // Coordinates within the canvas!
