@@ -31,8 +31,8 @@ p {
 }
 #container {
 	position: relative;
-	width: 1000px;
-	height: 550px;
+	width: 60vw;
+	height: 60vh;
 	display: block;
 	margin: 20px auto 0 auto;
 	border:1px solid green;
@@ -40,10 +40,10 @@ p {
 .dragbox{
 	position: absolute;
 	background-color: skyblue;
-	width: 100px;
-	height: 100px;
+	width: 10vw;
+	height: 10vw;
 	border: 1px solid blue;
-	line-height: 100px;
+	line-height: 10vw;
 	text-align: center;
 	border-radius: 6px;
 }

@@ -14,7 +14,7 @@ waterConfig = {
     gravity: 0.0020, // (m/S^2)
     linkColour: "aqua",
     linkWidth: 1,  // pixels
-    drawNodes: true,
+    drawNodes: false,
     nodeColour: "blue",
     nodeRadius: 4,
     pinColour: "red",
