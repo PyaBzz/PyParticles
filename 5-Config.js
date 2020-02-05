@@ -1,8 +1,7 @@
 waterConfig = {
     drawingCycleTime: 20,    // (Milliseconds) Determines how often the graphics are refreshed
     horizontalCellCount: 60,
-    tearable: true,
-    linkTearingLengthFactor: 6, // Stretch to how many times rest length before tearing
+    linkTearingLengthFactor: 0, // Stretch to how many times rest length before tearing. 0 to disable tearing.
     nodeMass: 10.0, // (Kg)
     damping: 0.30,    // 0 = greatest loss, 1 = no loss (potentially unstable)
     elasticStiffness: 0.26,
