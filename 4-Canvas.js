@@ -1,4 +1,4 @@
-function bindMouseHandlers() {
+bindMouseHandlers = function () {
 
     pyGrid.canvas.oncontextmenu = function (contextEvent) {
         contextEvent.preventDefault();

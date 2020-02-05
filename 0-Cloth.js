@@ -28,7 +28,7 @@ HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) {
 	setInterval(drawingLoop, this.drawingTimeStep);
 };
 
-function drawingLoop() {
+drawingLoop = function () {
 	mesh.calculateForces();
 	mesh.updateNodeBounds();
 	mesh.updateNodePositions();
@@ -38,17 +38,17 @@ function drawingLoop() {
 	if (pyGrid.drawNodes) mesh.drawpoints();
 };
 
-function rgbToHex(r, g, b) {
+rgbToHex = function (r, g, b) {
 	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 };
 
-function componentToHex(c) {
+componentToHex = function (c) {
 	// if(c == 0) return "00";
 	var hex = c.toString(16);
 	return hex.length == 1 ? "0" + hex : hex;
 };
 
-function mouse(impactDistance, cutDistance, slpy, slp_ftr) {
+mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
 	this.influenceDistance = impactDistance;
 	this.cuttingDistance = cutDistance;
 	this.slippy = slpy;
