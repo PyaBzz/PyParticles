@@ -20,7 +20,7 @@ mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
 mouse.prototype.touches = function (node) {
     if (node.pinned)
         return false;
-    if (this.clickedABox)
+    if (this.hasDragBox)
         return node.isInBox(this.targetBoxBoundaries.left, this.targetBoxBoundaries.right, this.targetBoxBoundaries.top, this.targetBoxBoundaries.buttom)
     else
         return this.cursorDistanceTo(node) <= this.influenceDistance;
@@ -44,7 +44,7 @@ mouse.prototype.clickDistanceTo = function (node) {
 
 Object.defineProperties(mouse.prototype, {
     isUp: { get: function () { return this.key === 0 } },
-    clickedABox: { get: function () { return this.targetBox !== null } },
+    hasDragBox: { get: function () { return this.targetBox !== null } },
 });
 
 bindMouseHandlers = function () {
@@ -93,7 +93,7 @@ bindMouseHandlers = function () {
         pyGrid.mouse.currentDrag.x = pyGrid.mouse.x - currentDragStartX;
         pyGrid.mouse.currentDrag.y = pyGrid.mouse.y - currentDragStartY;
         if (pyGrid.mouse.key == 1) {
-            if (pyGrid.mouse.clickedABox) {
+            if (pyGrid.mouse.hasDragBox) {
                 pyGrid.mouse.targetBox.style.left = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.currentDrag.x + "px";
                 pyGrid.mouse.targetBox.style.top = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.currentDrag.y + "px";
                 pyGrid.mouse.targetBoxBoundaries.left = pyGrid.mouse.targetBox.offsetLeft;
