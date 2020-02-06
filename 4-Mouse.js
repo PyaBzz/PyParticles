@@ -1,3 +1,24 @@
+mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
+    this.influenceDistance = impactDistance;
+    this.cuttingDistance = cutDistance;
+    this.slippy = slpy;
+    this.slipFactor = slp_ftr;
+    this.x = 0;
+    this.y = 0;
+    this.currentDragX = 0;
+    this.currentDragY = 0;
+    this.clickX = 0;
+    this.clickY = 0;
+    this.dragX = 0;
+    this.dragY = 0;
+    this.key = 0;
+    this.heldpoints = [];
+    this.referenceFrame = pyGrid.canvas.getBoundingClientRect();  // Required for comparison against point positions
+    this.clickedABox = false;
+    this.targetBox = {};
+    this.targetBoxBoundaries = { left: 0, right: 0, top: 0, buttom: 0 };
+};
+
 bindMouseHandlers = function () {
 
     pyGrid.canvas.oncontextmenu = function (contextEvent) {
