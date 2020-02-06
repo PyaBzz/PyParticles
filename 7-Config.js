@@ -19,6 +19,7 @@ waterConfig = {
     pinColour: "red",
     mouseImpactRadius: 2, // diameter of mouse impact in number of cells
     mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
+    mouseSlipFactor: 0.6, // [0-1] 0 = maximum slip, 1 = no slip
 };
 
 clothConfig = {

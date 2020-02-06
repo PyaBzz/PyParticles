@@ -1,8 +1,7 @@
-mouse = function (impactRadius, cuttingRadius, slpy, slp_ftr) {
+mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.impactRadius = impactRadius;
     this.cuttingRadius = cuttingRadius;
-    this.slippy = slpy;
-    this.slipFactor = slp_ftr;
+    this.slipFactor = slipFactor;
     this.x = 0;
     this.y = 0;
     this.currentDrag = { x: 0, y: 0 };
@@ -42,6 +41,7 @@ mouse.prototype.clickDistanceTo = function (node) {
 
 Object.defineProperties(mouse.prototype, {
     isUp: { get: function () { return this.key === 0 } },
+    isSlippy: { get: function () { return this.slipFactor !== 1 } },
     hasDragBox: { get: function () { return this.dragBox !== null } },
 });
 
@@ -50,14 +50,13 @@ bindMouseHandlers = function () {
     pyGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
 
     pyGrid.onmousedown = function (mouseDownEvent) {
+        mouseDownEvent.preventDefault();
         pyGrid.mouse.key = mouseDownEvent.which;
         pyGrid.mouse.clickX = mouseDownEvent.x;
         pyGrid.mouse.clickY = mouseDownEvent.y;
         if (mouseDownEvent.target == pyGrid.canvas) {
             if (pyGrid.mouse.key == 1) {
-                if (pyGrid.mouse.slippy) {
-
-                } else {
+                if (pyGrid.mouse.isSlippy === false) {
                     graph.nodes.forEach(function (p) {
                         if (pyGrid.mouse.grabs(p)) {
                             p.heldByMouse = true;
@@ -75,47 +74,37 @@ bindMouseHandlers = function () {
             var dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
             pyGrid.mouse.dragBox = pyGrid.dragBoxes[dragBoxIndex];
         }
-        mouseDownEvent.preventDefault();
     };
 
     pyGrid.onmousemove = function (moveEvent) {
+        moveEvent.preventDefault();
         var currentDragStartX = pyGrid.mouse.x;
         var currentDragStartY = pyGrid.mouse.y;
         pyGrid.mouse.x = moveEvent.pageX;
         pyGrid.mouse.y = moveEvent.pageY;
         pyGrid.mouse.currentDrag.x = pyGrid.mouse.x - currentDragStartX;
         pyGrid.mouse.currentDrag.y = pyGrid.mouse.y - currentDragStartY;
-        if (pyGrid.mouse.key == 1) {
-            if (pyGrid.mouse.hasDragBox) {
-                pyGrid.mouse.dragBox.move(pyGrid.mouse.currentDrag.x, pyGrid.mouse.currentDrag.y);
-            }
-            // var affectedNodes = pyGrid.mouse.slippy ? graph.nodes : pyGrid.mouse.heldnodes;
-            if (pyGrid.mouse.slippy) {
-                graph.nodes.forEach(function (p) {
-                    if (pyGrid.mouse.touches(p)) {
-                        p.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
-                        p.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
-                    }
-                });
-            } else {
-                pyGrid.mouse.heldnodes.forEach(function (p) {
-                    p.x += pyGrid.mouse.currentDrag.x;
-                    p.y += pyGrid.mouse.currentDrag.y;
-                    p.speed.x = { x: 0, y: 0, z: 0 };   // For nodes affected by mouse, there's no inertia nor previous speed!
-                });
-            }
+        if (pyGrid.mouse.hasDragBox) {
+            pyGrid.mouse.dragBox.move(pyGrid.mouse.currentDrag.x, pyGrid.mouse.currentDrag.y);
         }
-
-        moveEvent.preventDefault();
+        if (pyGrid.mouse.key !== 1)
+            return;
+        var affectedNodes = pyGrid.mouse.isSlippy
+            ? graph.nodes.filter(function (n) { return pyGrid.mouse.touches(n) })
+            : pyGrid.mouse.heldnodes; // For performance reasons!
+        affectedNodes.forEach(function (n) {
+            n.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
+            n.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
+        });
     };
 
     pyGrid.onmouseup = function (releaseEvent) {
+        releaseEvent.preventDefault();
         pyGrid.mouse.heldnodes.forEach(function (p) { p.heldByMouse = false });
         pyGrid.mouse.dragX = releaseEvent.x - pyGrid.mouse.clickX;
         pyGrid.mouse.dragY = releaseEvent.y - pyGrid.mouse.clickY;
         pyGrid.mouse.key = 0;
         pyGrid.mouse.heldnodes = [];
         pyGrid.mouse.dragBox = null;
-        releaseEvent.preventDefault();
     };
 }
