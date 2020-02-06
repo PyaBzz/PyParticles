@@ -22,12 +22,9 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 
 	this.dragBoxes = [];
 	for (var i = 0; i < pyGrid.dragBoxCount; i++) {
-		var dragBox = document.createElement('div');
-		dragBox.classList.add('dragbox');
-		dragBox.textContent = 'Drag Me!';
-		dragBox.style.top = 0;
-		this.dragBoxes.push(dragBox);
-		this.appendChild(dragBox);
+		var box = new dragBox(i);
+		this.dragBoxes.push(box);
+		this.appendChild(box.element);
 	}
 
 	this.mouse = new mouse(this.mouseImpactCellCount * this.restingLinkLength, this.mouseCuttingCellCount * this.restingLinkLength, true, 0.6);
