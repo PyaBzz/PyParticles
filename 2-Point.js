@@ -21,7 +21,7 @@ point = function (x, y, z) {
 
 point.prototype.update_position = function () {
 
-	if (mouse.key == 3 && this.distanceToMouse < mouse.cuttingDistance) this.links = [];
+	if (pyGrid.mouse.key == 3 && this.distanceToMouse < pyGrid.mouse.cuttingDistance) this.links = [];
 
 	this.acceleration_x = -this.force_x / pyGrid.nodeMass;
 	this.acceleration_y = -this.force_y / pyGrid.nodeMass;
@@ -83,8 +83,8 @@ point.prototype.isInBox = function (x1, x2, y1, y2) {
 
 Object.defineProperties(point.prototype, {
 	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
-	clientX: { get: function () { return this.x + mouse.referenceFrame.left; } },  // Coordinates within the canvas!
-	clientY: { get: function () { return this.y + mouse.referenceFrame.top; } },  // Coordinates within the canvas!
-	distanceToClick: { get: function () { return Math.sqrt(Math.pow(this.clientX - mouse.clickX, 2) + Math.pow(this.clientY - mouse.clickY, 2)) } },
-	distanceToMouse: { get: function () { return Math.sqrt(Math.pow(this.clientX - mouse.x, 2) + Math.pow(this.clientY - mouse.y, 2)) } },
+	clientX: { get: function () { return this.x + pyGrid.mouse.referenceFrame.left; } },  // Coordinates within the canvas!
+	clientY: { get: function () { return this.y + pyGrid.mouse.referenceFrame.top; } },  // Coordinates within the canvas!
+	distanceToClick: { get: function () { return Math.sqrt(Math.pow(this.clientX - pyGrid.mouse.clickX, 2) + Math.pow(this.clientY - pyGrid.mouse.clickY, 2)) } },
+	distanceToMouse: { get: function () { return Math.sqrt(Math.pow(this.clientX - pyGrid.mouse.x, 2) + Math.pow(this.clientY - pyGrid.mouse.y, 2)) } },
 });

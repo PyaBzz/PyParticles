@@ -21,7 +21,7 @@ HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) {
 	this.appendChild(this.canvas);
 	this.canvasCtx = this.canvas.getContext('2d');
 
-	mouse = new mouse(this.mouseImpactCellCount * this.restingLinkLength, this.mouseCuttingCellCount * this.restingLinkLength, true, 0.6);
+	this.mouse = new mouse(this.mouseImpactCellCount * this.restingLinkLength, this.mouseCuttingCellCount * this.restingLinkLength, true, 0.6);
 	mesh = new mesh();
 
 	bindMouseHandlers();
