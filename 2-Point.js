@@ -2,16 +2,9 @@ point = function (x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
-
-	this.force_x = 0;
-	this.force_y = 0;
-	this.force_z = 0;
-	this.acceleration_x = 0;
-	this.acceleration_y = 0;
-	this.acceleration_z = 0;
-	this.speed_x = 0;
-	this.speed_y = 0;
-	this.speed_z = 0;
+	this.force = { x: 0, y: 0, z: 0 };
+	this.speed = { x: 0, y: 0, z: 0 };
+	this.acceleration = { x: 0, y: 0, z: 0 };
 	this.pinned = false;
 	this.heldByMouse = false;
 	this.heldByBox = false;
@@ -23,23 +16,23 @@ point.prototype.update_position = function () {
 
 	if (pyGrid.mouse.key == 3 && this.distanceToMouse < pyGrid.mouse.cuttingDistance) this.links = [];
 
-	this.acceleration_x = -this.force_x / pyGrid.nodeMass;
-	this.acceleration_y = -this.force_y / pyGrid.nodeMass;
-	this.acceleration_z = -this.force_z / pyGrid.nodeMass - pyGrid.gravity;  // Gravity acts in -z direction
+	this.acceleration.x = -this.force.x / pyGrid.nodeMass;
+	this.acceleration.y = -this.force.y / pyGrid.nodeMass;
+	this.acceleration.z = -this.force.z / pyGrid.nodeMass - pyGrid.gravity;  // Gravity acts in -z direction
 
-	if (pyGrid.enableXAxis) this.x += (this.acceleration_x / 2 + pyGrid.damping * this.speed_x) * (1 - this.heldByBox * 0.4);
-	if (pyGrid.enableYAxis) this.y += (this.acceleration_y / 2 + pyGrid.damping * this.speed_y) * (1 - this.heldByBox * 0.4);
-	if (pyGrid.enableZAxis) this.z += (this.acceleration_z / 2 + pyGrid.damping * this.speed_z) * (1 - this.heldByBox * 0.4);
-	// if (enable_x) this.x = (this.acceleration_x/2 + damping_factor * this.speed_x) + this.x ;
-	// if (enable_y) this.y = (this.acceleration_y/2 + damping_factor * this.speed_y) + this.y ;
-	// if (enable_z) this.z = (this.acceleration_z/2 + damping_factor * this.speed_z) + this.z ;
+	if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x) * (1 - this.heldByBox * 0.4);
+	if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y) * (1 - this.heldByBox * 0.4);
+	if (pyGrid.enableZAxis) this.z += (this.acceleration.z / 2 + pyGrid.damping * this.speed.z) * (1 - this.heldByBox * 0.4);
+	// if (enable_x) this.x = (this.acceleration.x/2 + damping_factor * this.speed.x) + this.x ;
+	// if (enable_y) this.y = (this.acceleration.y/2 + damping_factor * this.speed.y) + this.y ;
+	// if (enable_z) this.z = (this.acceleration.z/2 + damping_factor * this.speed.z) + this.z ;
 	pyGrid.minZ = Math.min(pyGrid.minZ, this.z);
 
-	this.speed_x += this.acceleration_x;
-	this.speed_y += this.acceleration_y;
-	this.speed_z += this.acceleration_z;
+	this.speed.x += this.acceleration.x;
+	this.speed.y += this.acceleration.y;
+	this.speed.z += this.acceleration.z;
 
-	this.force_x = 0; this.force_y = 0; this.force_z = 0;
+	this.force.x = 0; this.force.y = 0; this.force.z = 0;
 };
 
 point.prototype.draw = function () {

@@ -49,9 +49,9 @@ bindMouseHandlers = function () {
                 if (p.isFree && p.isInBox(pyGrid.mouse.targetBoxBoundaries.left, pyGrid.mouse.targetBoxBoundaries.right, pyGrid.mouse.targetBoxBoundaries.top, pyGrid.mouse.targetBoxBoundaries.buttom)) {
                     p.x += pyGrid.mouse.currentDragX * pyGrid.mouse.slipFactor;
                     p.y += pyGrid.mouse.currentDragY * pyGrid.mouse.slipFactor;
-                    p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
-                    p.speed_y = 0;
-                    p.speed_z = 0;
+                    p.speed.x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
+                    p.speed.y = 0;
+                    p.speed.z = 0;
                 }
             });
             pyGrid.mouse.targetBox.style.left = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.currentDragX + "px";
@@ -74,9 +74,9 @@ bindMouseHandlers = function () {
                         p.x += pyGrid.mouse.currentDragX;
                         p.y += pyGrid.mouse.currentDragY;
                         // this.previous_z = this.z;  // Currently the mouse doesn't affect z
-                        p.speed_x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
-                        p.speed_y = 0;
-                        p.speed_z = 0;
+                        p.speed.x = 0;   // For points affected by mouse, there's no inertia nor previous speed!
+                        p.speed.y = 0;
+                        p.speed.z = 0;
                     });
                 }
             }
