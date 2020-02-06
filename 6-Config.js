@@ -1,4 +1,5 @@
 waterConfig = {
+    dragBoxCount: 2,
     drawingCycleTime: 20,    // (Milliseconds) Determines how often the graphics are refreshed
     horizontalCellCount: 60,
     linkTearingLengthFactor: 0, // Stretch to how many times rest length before tearing. 0 to disable tearing.

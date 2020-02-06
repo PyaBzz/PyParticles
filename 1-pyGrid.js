@@ -1,10 +1,9 @@
 onload = function () {
 	container = document.getElementById('container');
-	dragBoxes = document.getElementsByClassName('dragbox');
-	container.createPyGrid(waterConfig, dragBoxes);
+	container.createPyGrid(waterConfig);
 };
 
-HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) {
+HTMLDivElement.prototype.createPyGrid = function (config) {
 	pyGrid = this;
 
 	for (var key in config)
@@ -13,13 +12,22 @@ HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) {
 	this.restingLinkLength = this.clientWidth / this.horizontalCellCount;
 	this.verticalCellCount = Math.ceil(this.clientHeight / this.restingLinkLength);
 	this.linkTearingLength = this.linkTearingLengthFactor * this.restingLinkLength;
-	this.dragBoxes = dragBoxes;
 
 	this.canvas = document.createElement('canvas');
 	this.canvas.width = this.clientWidth;
 	this.canvas.height = this.clientHeight;
 	this.appendChild(this.canvas);
 	this.canvasCtx = this.canvas.getContext('2d');
+
+	this.dragBoxes = [];
+	for (var i = 0; i < pyGrid.dragBoxCount; i++) {
+		var dragBox = document.createElement('div');
+		dragBox.classList.add('dragbox');
+		dragBox.textContent = 'Drag Me!';
+		dragBox.style.top = 0;
+		this.dragBoxes.push(dragBox);
+		this.appendChild(dragBox);
+	}
 
 	this.mouse = new mouse(this.mouseImpactCellCount * this.restingLinkLength, this.mouseCuttingCellCount * this.restingLinkLength, true, 0.6);
 	graph = new graph();
@@ -30,7 +38,7 @@ HTMLDivElement.prototype.createPyGrid = function (config, dragBoxes) {
 
 drawingLoop = function () {
 	graph.calculateForces();
-	graph.updateNodeBounds();
+	// graph.updateNodeBounds();  // Has huge performance penalty!
 	graph.updateNodePositions();
 	pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
 	if (pyGrid.linkWidth) {

@@ -28,7 +28,7 @@ graph.prototype.calculateForces = function () {
 
 graph.prototype.updateNodeBounds = function () {
 	this.nodes.forEach(function (p) {
-		Array.prototype.forEach.call(dragBoxes, function (b) {
+		Array.prototype.forEach.call(pyGrid.dragBoxes, function (b) {
 			if (p.isInBox(b.offsetLeft, b.offsetLeft + b.offsetWidth, b.offsetTop, b.offsetTop + b.offsetHeight)) {
 				p.heldByBox = 1;
 				p.containingBox = b;

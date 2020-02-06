@@ -13,8 +13,7 @@ mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
     this.key = 0;
     this.heldnodes = [];
     this.referenceFrame = pyGrid.canvas.getBoundingClientRect();  // Required for comparison against node positions
-    this.clickedABox = false;
-    this.targetBox = {};
+    this.targetBox = null;
     this.targetBoxBoundaries = { left: 0, right: 0, top: 0, buttom: 0 };
 };
 
@@ -40,6 +39,7 @@ mouse.prototype.clickDistanceTo = function (node) {
 
 Object.defineProperties(mouse.prototype, {
     isUp: { get: function () { return this.key === 0 } },
+    clickedABox: { get: function () { return this.targetBox !== null } },
 });
 
 bindMouseHandlers = function () {
@@ -71,7 +71,6 @@ bindMouseHandlers = function () {
                 if (pyGrid.mouse.grabs(p)) p.pin();
             });
         } else if (mouseDownEvent.target.className == 'dragbox') {
-            pyGrid.mouse.clickedABox = true;
             pyGrid.mouse.targetBox = mouseDownEvent.target;
             pyGrid.mouse.targetBoxBoundaries.left = pyGrid.mouse.targetBox.offsetLeft;
             pyGrid.mouse.targetBoxBoundaries.right = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.targetBox.offsetWidth;
@@ -130,7 +129,7 @@ bindMouseHandlers = function () {
         pyGrid.mouse.dragY = releaseEvent.y - pyGrid.mouse.clickY;
         pyGrid.mouse.key = 0;
         pyGrid.mouse.heldnodes = [];
-        pyGrid.mouse.clickedABox = false;
+        pyGrid.mouse.targetBox = null;
         releaseEvent.preventDefault();
     };
 }
