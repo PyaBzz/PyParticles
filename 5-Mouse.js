@@ -12,15 +12,15 @@ mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
     this.dragY = 0;
     this.key = 0;
     this.heldnodes = [];
-    this.targetBox = null;
-    this.targetBoxBoundaries = { left: 0, right: 0, top: 0, buttom: 0 };
+    this.dragBox = null;
+    this.dragBoxBoundaries = { left: 0, right: 0, top: 0, buttom: 0 };
 };
 
 mouse.prototype.touches = function (node) {
     if (node.pinned)
         return false;
     if (this.hasDragBox)
-        return node.isInBox(this.targetBoxBoundaries.left, this.targetBoxBoundaries.right, this.targetBoxBoundaries.top, this.targetBoxBoundaries.buttom)
+        return node.isInBox(this.dragBoxBoundaries.left, this.dragBoxBoundaries.right, this.dragBoxBoundaries.top, this.dragBoxBoundaries.buttom)
     else
         return this.cursorDistanceTo(node) <= this.influenceDistance;
 };
@@ -41,16 +41,21 @@ mouse.prototype.clickDistanceTo = function (node) {
     return Math.sqrt(Math.pow(node.clientX - this.clickX, 2) + Math.pow(node.clientY - this.clickY, 2));
 };
 
+mouse.prototype.updateDragBoxBoundaries = function () {
+    this.dragBoxBoundaries.left = this.dragBox.offsetLeft;
+    this.dragBoxBoundaries.right = this.dragBox.offsetLeft + this.dragBox.offsetWidth;
+    this.dragBoxBoundaries.top = this.dragBox.offsetTop;
+    this.dragBoxBoundaries.buttom = this.dragBox.offsetTop + this.dragBox.offsetHeight;
+};
+
 Object.defineProperties(mouse.prototype, {
     isUp: { get: function () { return this.key === 0 } },
-    hasDragBox: { get: function () { return this.targetBox !== null } },
+    hasDragBox: { get: function () { return this.dragBox !== null } },
 });
 
 bindMouseHandlers = function () {
 
-    pyGrid.canvas.oncontextmenu = function (contextEvent) {
-        contextEvent.preventDefault();
-    };
+    pyGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
 
     pyGrid.onmousedown = function (mouseDownEvent) {
         pyGrid.mouse.key = mouseDownEvent.which;
@@ -75,11 +80,8 @@ bindMouseHandlers = function () {
                 if (pyGrid.mouse.grabs(p)) p.pin();
             });
         } else if (mouseDownEvent.target.className == 'dragbox') {
-            pyGrid.mouse.targetBox = mouseDownEvent.target;
-            pyGrid.mouse.targetBoxBoundaries.left = pyGrid.mouse.targetBox.offsetLeft;
-            pyGrid.mouse.targetBoxBoundaries.right = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.targetBox.offsetWidth;
-            pyGrid.mouse.targetBoxBoundaries.top = pyGrid.mouse.targetBox.offsetTop;
-            pyGrid.mouse.targetBoxBoundaries.buttom = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.targetBox.offsetHeight;
+            pyGrid.mouse.dragBox = mouseDownEvent.target;
+            pyGrid.mouse.updateDragBoxBoundaries();  // Caching for performance reasons!
         }
         mouseDownEvent.preventDefault();
     };
@@ -93,12 +95,9 @@ bindMouseHandlers = function () {
         pyGrid.mouse.currentDrag.y = pyGrid.mouse.y - currentDragStartY;
         if (pyGrid.mouse.key == 1) {
             if (pyGrid.mouse.hasDragBox) {
-                pyGrid.mouse.targetBox.style.left = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.currentDrag.x + "px";
-                pyGrid.mouse.targetBox.style.top = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.currentDrag.y + "px";
-                pyGrid.mouse.targetBoxBoundaries.left = pyGrid.mouse.targetBox.offsetLeft;
-                pyGrid.mouse.targetBoxBoundaries.right = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.targetBox.offsetWidth;
-                pyGrid.mouse.targetBoxBoundaries.top = pyGrid.mouse.targetBox.offsetTop;
-                pyGrid.mouse.targetBoxBoundaries.buttom = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.targetBox.offsetHeight;
+                pyGrid.mouse.dragBox.style.left = pyGrid.mouse.dragBox.offsetLeft + pyGrid.mouse.currentDrag.x + "px";
+                pyGrid.mouse.dragBox.style.top = pyGrid.mouse.dragBox.offsetTop + pyGrid.mouse.currentDrag.y + "px";
+                pyGrid.mouse.updateDragBoxBoundaries();  // Caching for performance reasons!
             }
             // var affectedNodes = pyGrid.mouse.slippy ? graph.nodes : pyGrid.mouse.heldnodes;
             if (pyGrid.mouse.slippy) {
@@ -126,7 +125,7 @@ bindMouseHandlers = function () {
         pyGrid.mouse.dragY = releaseEvent.y - pyGrid.mouse.clickY;
         pyGrid.mouse.key = 0;
         pyGrid.mouse.heldnodes = [];
-        pyGrid.mouse.targetBox = null;
+        pyGrid.mouse.dragBox = null;
         releaseEvent.preventDefault();
     };
 }
