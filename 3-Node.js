@@ -71,6 +71,6 @@ node.prototype.isInBox = function (x1, x2, y1, y2) {
 
 Object.defineProperties(node.prototype, {
 	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
-	clientX: { get: function () { return this.x + pyGrid.mouse.referenceFrame.left; } },  // Coordinates within the canvas!
-	clientY: { get: function () { return this.y + pyGrid.mouse.referenceFrame.top; } },  // Coordinates within the canvas!
+	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
+	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
 });

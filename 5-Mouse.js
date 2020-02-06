@@ -12,7 +12,6 @@ mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
     this.dragY = 0;
     this.key = 0;
     this.heldnodes = [];
-    this.referenceFrame = pyGrid.canvas.getBoundingClientRect();  // Required for comparison against node positions
     this.targetBox = null;
     this.targetBoxBoundaries = { left: 0, right: 0, top: 0, buttom: 0 };
 };

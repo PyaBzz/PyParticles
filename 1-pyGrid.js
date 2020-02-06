@@ -18,6 +18,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.canvas.height = this.clientHeight;
 	this.appendChild(this.canvas);
 	this.canvasCtx = this.canvas.getContext('2d');
+	this.referenceFrame = this.canvas.getBoundingClientRect();  // Required for comparison against node positions
 
 	this.dragBoxes = [];
 	for (var i = 0; i < pyGrid.dragBoxCount; i++) {
