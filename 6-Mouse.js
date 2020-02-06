@@ -10,7 +10,7 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.dragX = 0;
     this.dragY = 0;
     this.key = 0;
-    this.heldnodes = [];
+    this.heldNodes = [];
     this.dragBox = null;
 };
 
@@ -62,7 +62,7 @@ bindMouseHandlers = function () {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
                             p.positionAtClickY = p.y;
-                            pyGrid.mouse.heldnodes.push(p);
+                            pyGrid.mouse.heldNodes.push(p);
                         }
                     });
                 }
@@ -91,7 +91,7 @@ bindMouseHandlers = function () {
             return;
         var affectedNodes = pyGrid.mouse.isSlippy
             ? graph.nodes.filter(function (n) { return pyGrid.mouse.touches(n) })
-            : pyGrid.mouse.heldnodes; // For performance reasons!
+            : pyGrid.mouse.heldNodes; // For performance reasons!
         affectedNodes.forEach(function (n) {
             n.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
             n.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
@@ -100,11 +100,11 @@ bindMouseHandlers = function () {
 
     pyGrid.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
-        pyGrid.mouse.heldnodes.forEach(function (p) { p.heldByMouse = false });
+        pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false });
         pyGrid.mouse.dragX = releaseEvent.x - pyGrid.mouse.clickX;
         pyGrid.mouse.dragY = releaseEvent.y - pyGrid.mouse.clickY;
         pyGrid.mouse.key = 0;
-        pyGrid.mouse.heldnodes = [];
+        pyGrid.mouse.heldNodes = [];
         pyGrid.mouse.dragBox = null;
     };
 }
