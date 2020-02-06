@@ -35,7 +35,7 @@ bindMouseHandlers = function () {
 
                 } else {
                     mesh.points.forEach(function (p) {
-                        if (p.isFree && p.distanceToClick < pyGrid.mouse.influenceDistance) {
+                        if (p.isFree && pyGrid.mouse.grabs(p)) {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
                             p.positionAtClickY = p.y;
@@ -45,7 +45,7 @@ bindMouseHandlers = function () {
                 }
             }
             if (pyGrid.mouse.key == 2) mesh.points.forEach(function (p) {
-                if (p.distanceToClick < pyGrid.mouse.influenceDistance) p.pin();
+                if (pyGrid.mouse.grabs(p)) p.pin();
             });
         } else if (mouseDownEvent.target.className == 'dragbox') {
             pyGrid.mouse.clickedABox = true;
@@ -85,7 +85,7 @@ bindMouseHandlers = function () {
             if (pyGrid.mouse.key == 1) {
                 if (pyGrid.mouse.slippy) {
                     mesh.points.forEach(function (p) {
-                        if (p.isFree && p.distanceToMouse < pyGrid.mouse.influenceDistance) {
+                        if (p.isFree && pyGrid.mouse.touches(p)) {
                             p.x += pyGrid.mouse.currentDragX * pyGrid.mouse.slipFactor;
                             p.y += pyGrid.mouse.currentDragY * pyGrid.mouse.slipFactor;
                         }
@@ -115,3 +115,23 @@ bindMouseHandlers = function () {
         releaseEvent.preventDefault();
     };
 }
+
+mouse.prototype.touches = function (point) {
+    return this.cursorDistanceTo(point) <= this.influenceDistance;
+};
+
+mouse.prototype.grabs = function (point) {
+    return this.clickDistanceTo(point) <= this.influenceDistance;
+};
+
+mouse.prototype.cuts = function (point) {
+    return this.cursorDistanceTo(point) <= this.influenceDistance;
+};
+
+mouse.prototype.cursorDistanceTo = function (point) {
+    return Math.sqrt(Math.pow(point.clientX - this.x, 2) + Math.pow(point.clientY - this.y, 2));
+};
+
+mouse.prototype.clickDistanceTo = function (point) {
+    return Math.sqrt(Math.pow(point.clientX - this.clickX, 2) + Math.pow(point.clientY - this.clickY, 2));
+};
