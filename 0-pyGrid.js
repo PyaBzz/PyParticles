@@ -37,7 +37,7 @@ drawingLoop = function () {
 		pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
 		mesh.drawLinks();
 	}
-	if (pyGrid.nodeRadius) mesh.drawpoints();
+	if (pyGrid.nodeRadius) mesh.drawNodes();
 };
 
 rgbToHex = function (r, g, b) {

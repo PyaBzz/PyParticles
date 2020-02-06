@@ -1,4 +1,4 @@
-point = function (x, y, z) {
+node = function (x, y, z) {
 	this.x = x;
 	this.y = y;
 	this.z = z;
@@ -12,7 +12,7 @@ point = function (x, y, z) {
 	this.containingBox = null;
 };
 
-point.prototype.updatePosition = function () {
+node.prototype.updatePosition = function () {
 
 	if (pyGrid.mouse.key == 3 && pyGrid.mouse.cuts(this)) this.links = [];
 
@@ -32,7 +32,7 @@ point.prototype.updatePosition = function () {
 	this.force = { x: 0, y: 0, z: 0 };
 };
 
-point.prototype.draw = function () {
+node.prototype.draw = function () {
 	pyGrid.canvasCtx.beginPath();
 	if (this.pinned) {
 		pyGrid.canvasCtx.fillStyle = pyGrid.pinColour;
@@ -46,30 +46,30 @@ point.prototype.draw = function () {
 	pyGrid.canvasCtx.fill();
 };
 
-point.prototype.drawLinks = function () {
+node.prototype.drawLinks = function () {
 	if (!this.links.length) return;
 	this.links.forEach(function (link) { link.draw() });
 };
 
-point.prototype.attach = function (point) {
+node.prototype.attach = function (node) {
 	this.links.push(
-		new link(this, point)
+		new link(this, node)
 	);
 };
 
-point.prototype.removeLinks = function (link) {
+node.prototype.removeLinks = function (link) {
 	this.links.splice(this.links.indexOf(link), 1);
 };
 
-point.prototype.pin = function () {
+node.prototype.pin = function () {
 	this.pinned = true;
 };
 
-point.prototype.isInBox = function (x1, x2, y1, y2) {
+node.prototype.isInBox = function (x1, x2, y1, y2) {
 	return this.x > x1 && this.x < x2 && this.y > y1 && this.y < y2;
 };
 
-Object.defineProperties(point.prototype, {
+Object.defineProperties(node.prototype, {
 	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
 	clientX: { get: function () { return this.x + pyGrid.mouse.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.mouse.referenceFrame.top; } },  // Coordinates within the canvas!
