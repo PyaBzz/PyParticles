@@ -57,7 +57,7 @@ bindMouseHandlers = function () {
                 if (pyGrid.mouse.slippy) {
 
                 } else {
-                    mesh.nodes.forEach(function (p) {
+                    graph.nodes.forEach(function (p) {
                         if (p.isFree && pyGrid.mouse.grabs(p)) {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
@@ -67,7 +67,7 @@ bindMouseHandlers = function () {
                     });
                 }
             }
-            if (pyGrid.mouse.key == 2) mesh.nodes.forEach(function (p) {
+            if (pyGrid.mouse.key == 2) graph.nodes.forEach(function (p) {
                 if (pyGrid.mouse.grabs(p)) p.pin();
             });
         } else if (mouseDownEvent.target.className == 'dragbox') {
@@ -89,7 +89,7 @@ bindMouseHandlers = function () {
         pyGrid.mouse.currentDrag.x = pyGrid.mouse.x - currentDragStartX;
         pyGrid.mouse.currentDrag.y = pyGrid.mouse.y - currentDragStartY;
         if (pyGrid.mouse.clickedABox) {
-            mesh.nodes.forEach(function (p) {
+            graph.nodes.forEach(function (p) {
                 if (p.isFree && p.isInBox(pyGrid.mouse.targetBoxBoundaries.left, pyGrid.mouse.targetBoxBoundaries.right, pyGrid.mouse.targetBoxBoundaries.top, pyGrid.mouse.targetBoxBoundaries.buttom)) {
                     p.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
                     p.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
@@ -105,7 +105,7 @@ bindMouseHandlers = function () {
         } else {
             if (pyGrid.mouse.key == 1) {
                 if (pyGrid.mouse.slippy) {
-                    mesh.nodes.forEach(function (p) {
+                    graph.nodes.forEach(function (p) {
                         if (p.isFree && pyGrid.mouse.touches(p)) {
                             p.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
                             p.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
