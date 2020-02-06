@@ -29,7 +29,7 @@ point.prototype.updatePosition = function () {
 	this.speed.y += this.acceleration.y;
 	this.speed.z += this.acceleration.z;
 
-	this.force.x = 0; this.force.y = 0; this.force.z = 0;
+	this.force = { x: 0, y: 0, z: 0 };
 };
 
 point.prototype.draw = function () {
