@@ -12,8 +12,6 @@ mesh = function () {
 			if (col == 0) p.pin();                   // Pin the left edge of the mesh
 			if (col == pyGrid.horizontalCellCount) p.pin();   // Pin the right edge of the mesh
 
-			// if (x > horizontalCellCount/2 && y > verticalCellCount/2) p.pin();   // Pin the right edge of the mesh
-
 			if (col != 0) p.attach(this.points[this.points.length - 1]);  // Horizontal link to previous point on the left
 			if (row != 0) p.attach(this.points[(row - 1) * (pyGrid.horizontalCellCount + 1) + col]);  // Number of points in each row is 1 more than the number of cells
 

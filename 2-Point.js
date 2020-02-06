@@ -23,9 +23,6 @@ point.prototype.update_position = function () {
 	if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x) * (1 - this.heldByBox * 0.4);
 	if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y) * (1 - this.heldByBox * 0.4);
 	if (pyGrid.enableZAxis) this.z += (this.acceleration.z / 2 + pyGrid.damping * this.speed.z) * (1 - this.heldByBox * 0.4);
-	// if (enable_x) this.x = (this.acceleration.x/2 + damping_factor * this.speed.x) + this.x ;
-	// if (enable_y) this.y = (this.acceleration.y/2 + damping_factor * this.speed.y) + this.y ;
-	// if (enable_z) this.z = (this.acceleration.z/2 + damping_factor * this.speed.z) + this.z ;
 	pyGrid.minZ = Math.min(pyGrid.minZ, this.z);
 
 	this.speed.x += this.acceleration.x;
@@ -36,7 +33,6 @@ point.prototype.update_position = function () {
 };
 
 point.prototype.draw = function () {
-	// pyGrid.canvasCtx.fillStyle = "#" + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z))) + rgbToHex(250*Math.abs(Math.round(this.z)));
 	pyGrid.canvasCtx.beginPath();
 	if (this.pinned) {
 		pyGrid.canvasCtx.fillStyle = pyGrid.pinColour;
@@ -53,7 +49,6 @@ point.prototype.draw = function () {
 point.prototype.drawLinks = function () {
 	if (!this.links.length) return;
 	this.links.forEach(function (link) { link.draw() });
-	// this.links[0].draw();
 };
 
 point.prototype.attach = function (point) {

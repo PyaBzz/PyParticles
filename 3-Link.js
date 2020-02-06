@@ -8,7 +8,6 @@ link.prototype.apply_forces = function () {
 	var twoD_length = Math.sqrt(Math.pow(diff.x, 2) + Math.pow(diff.y, 2));
 
 	if (pyGrid.linkTearingLength && twoD_length > pyGrid.linkTearingLength) this.p1.remove_links(this);  // 2D
-	// if (tearable && length > linkTearingLength) this.p1.remove_links(this);  // 3D
 
 	var force_x = Math.sign(diff.x) * Math.pow(Math.abs(diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
 	var force_y = Math.sign(diff.y) * Math.pow(Math.abs(diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;

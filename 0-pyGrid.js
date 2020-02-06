@@ -40,16 +40,6 @@ drawingLoop = function () {
 	if (pyGrid.nodeRadius) mesh.drawpoints();
 };
 
-rgbToHex = function (r, g, b) {
-	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-};
-
-componentToHex = function (c) {
-	// if(c == 0) return "00";
-	var hex = c.toString(16);
-	return hex.length == 1 ? "0" + hex : hex;
-};
-
 mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
 	this.influenceDistance = impactDistance;
 	this.cuttingDistance = cutDistance;
@@ -71,8 +61,11 @@ mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
 	this.targetBoxBoundaries = { left: 0, right: 0, top: 0, buttom: 0 };
 };
 
-// Object.defineProperties(Mouse.targetBoxBoundaries.prototype,{
-	// left: { get: function () {return !this.pinned && !this.heldByMouse;}},
-	// right: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.clickX,2) + Math.pow(this.y - mouse.clickY,2))}},
-	// top: { get: function () {return Math.sqrt(Math.pow(this.x - mouse.x,2) + Math.pow(this.y - mouse.y,2))}}
-// });
+rgbToHex = function (r, g, b) {
+	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+};
+
+componentToHex = function (c) {
+	var hex = c.toString(16);
+	return hex.length == 1 ? "0" + hex : hex;
+};
