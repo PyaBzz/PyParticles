@@ -18,7 +18,12 @@ mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
 };
 
 mouse.prototype.touches = function (node) {
-    return this.cursorDistanceTo(node) <= this.influenceDistance;
+    if (node.pinned)
+        return false;
+    if (this.clickedABox)
+        return node.isInBox(this.targetBoxBoundaries.left, this.targetBoxBoundaries.right, this.targetBoxBoundaries.top, this.targetBoxBoundaries.buttom)
+    else
+        return this.cursorDistanceTo(node) <= this.influenceDistance;
 };
 
 mouse.prototype.grabs = function (node) {
@@ -58,7 +63,7 @@ bindMouseHandlers = function () {
 
                 } else {
                     graph.nodes.forEach(function (p) {
-                        if (p.isFree && pyGrid.mouse.grabs(p)) {
+                        if (pyGrid.mouse.grabs(p)) {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
                             p.positionAtClickY = p.y;
@@ -87,39 +92,32 @@ bindMouseHandlers = function () {
         pyGrid.mouse.y = moveEvent.pageY;
         pyGrid.mouse.currentDrag.x = pyGrid.mouse.x - currentDragStartX;
         pyGrid.mouse.currentDrag.y = pyGrid.mouse.y - currentDragStartY;
-        if (pyGrid.mouse.clickedABox) {
-            graph.nodes.forEach(function (p) {
-                if (p.isFree && p.isInBox(pyGrid.mouse.targetBoxBoundaries.left, pyGrid.mouse.targetBoxBoundaries.right, pyGrid.mouse.targetBoxBoundaries.top, pyGrid.mouse.targetBoxBoundaries.buttom)) {
-                    p.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
-                    p.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
-                    p.speed = { x: 0, y: 0, z: 0 };   // For nodes affected by mouse, there's no inertia nor previous speed!
-                }
-            });
-            pyGrid.mouse.targetBox.style.left = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.currentDrag.x + "px";
-            pyGrid.mouse.targetBox.style.top = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.currentDrag.y + "px";
-            pyGrid.mouse.targetBoxBoundaries.left = pyGrid.mouse.targetBox.offsetLeft;
-            pyGrid.mouse.targetBoxBoundaries.right = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.targetBox.offsetWidth;
-            pyGrid.mouse.targetBoxBoundaries.top = pyGrid.mouse.targetBox.offsetTop;
-            pyGrid.mouse.targetBoxBoundaries.buttom = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.targetBox.offsetHeight;
-        } else {
-            if (pyGrid.mouse.key == 1) {
-                if (pyGrid.mouse.slippy) {
-                    graph.nodes.forEach(function (p) {
-                        if (p.isFree && pyGrid.mouse.touches(p)) {
-                            p.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
-                            p.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
-                        }
-                    });
-                } else {
-                    pyGrid.mouse.heldnodes.forEach(function (p) {
-                        p.x += pyGrid.mouse.currentDrag.x;
-                        p.y += pyGrid.mouse.currentDrag.y;
-                        // this.previous_z = this.z;  // Currently the mouse doesn't affect z
-                        p.speed.x = { x: 0, y: 0, z: 0 };   // For nodes affected by mouse, there's no inertia nor previous speed!
-                    });
-                }
+        if (pyGrid.mouse.key == 1) {
+            if (pyGrid.mouse.clickedABox) {
+                pyGrid.mouse.targetBox.style.left = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.currentDrag.x + "px";
+                pyGrid.mouse.targetBox.style.top = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.currentDrag.y + "px";
+                pyGrid.mouse.targetBoxBoundaries.left = pyGrid.mouse.targetBox.offsetLeft;
+                pyGrid.mouse.targetBoxBoundaries.right = pyGrid.mouse.targetBox.offsetLeft + pyGrid.mouse.targetBox.offsetWidth;
+                pyGrid.mouse.targetBoxBoundaries.top = pyGrid.mouse.targetBox.offsetTop;
+                pyGrid.mouse.targetBoxBoundaries.buttom = pyGrid.mouse.targetBox.offsetTop + pyGrid.mouse.targetBox.offsetHeight;
+            }
+            // var affectedNodes = pyGrid.mouse.slippy ? graph.nodes : pyGrid.mouse.heldnodes;
+            if (pyGrid.mouse.slippy) {
+                graph.nodes.forEach(function (p) {
+                    if (pyGrid.mouse.touches(p)) {
+                        p.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
+                        p.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
+                    }
+                });
+            } else {
+                pyGrid.mouse.heldnodes.forEach(function (p) {
+                    p.x += pyGrid.mouse.currentDrag.x;
+                    p.y += pyGrid.mouse.currentDrag.y;
+                    p.speed.x = { x: 0, y: 0, z: 0 };   // For nodes affected by mouse, there's no inertia nor previous speed!
+                });
             }
         }
+
         moveEvent.preventDefault();
     };
 
