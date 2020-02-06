@@ -12,7 +12,7 @@ point = function (x, y, z) {
 	this.containingBox = null;
 };
 
-point.prototype.update_position = function () {
+point.prototype.updatePosition = function () {
 
 	if (pyGrid.mouse.key == 3 && pyGrid.mouse.cuts(this)) this.links = [];
 
@@ -57,7 +57,7 @@ point.prototype.attach = function (point) {
 	);
 };
 
-point.prototype.remove_links = function (link) {
+point.prototype.removeLinks = function (link) {
 	this.links.splice(this.links.indexOf(link), 1);
 };
 

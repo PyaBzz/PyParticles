@@ -22,7 +22,7 @@ mesh = function () {
 
 mesh.prototype.calculateForces = function () {
 	this.points.forEach(function (point) {
-		point.links.forEach(function (link) { link.apply_forces() });
+		point.links.forEach(function (link) { link.applyForces() });
 	});
 };
 
@@ -42,7 +42,7 @@ mesh.prototype.updateNodeBounds = function () {
 
 mesh.prototype.updateNodePositions = function () {
 	this.points.forEach(function (p) {
-		if (p.isFree) p.update_position();
+		if (p.isFree) p.updatePosition();
 	});
 };
 

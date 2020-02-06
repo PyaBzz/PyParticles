@@ -3,15 +3,13 @@ link = function (p1, p2) {
 	this.p2 = p2;
 };
 
-link.prototype.apply_forces = function () {
-	var diff = { x: this.p1.x - this.p2.x, y: this.p1.y - this.p2.y, z: this.p1.z - this.p2.z };
-	var twoD_length = Math.sqrt(Math.pow(diff.x, 2) + Math.pow(diff.y, 2));
+link.prototype.applyForces = function () {
 
-	if (pyGrid.linkTearingLength && twoD_length > pyGrid.linkTearingLength) this.p1.remove_links(this);  // 2D
+	if (this.hastStretchedToTear) this.p1.removeLinks(this);  // 2D
 
-	var force_x = Math.sign(diff.x) * Math.pow(Math.abs(diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
-	var force_y = Math.sign(diff.y) * Math.pow(Math.abs(diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
-	var force_z = Math.sign(diff.z) * Math.pow(Math.abs(diff.z), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	var force_x = Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	var force_y = Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	var force_z = Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
 
 	if ((this.p1.pinned || this.p1.heldByMouse) && (this.p2.pinned || this.p2.heldByMouse)) return;
 
@@ -32,3 +30,10 @@ link.prototype.draw = function () {
 	pyGrid.canvasCtx.moveTo(this.p1.x, this.p1.y);  // 0.5 pixels to properly apply odd numbers to line thickness
 	pyGrid.canvasCtx.lineTo(this.p2.x, this.p2.y);  // 0.5 pixels to properly apply odd numbers to line thickness
 };
+
+Object.defineProperties(link.prototype, {
+	diff: { get: function () { return { x: this.p1.x - this.p2.x, y: this.p1.y - this.p2.y, z: this.p1.z - this.p2.z } } },
+	hastStretchedToTear: { get: function () { return pyGrid.linkTearingLength && this.length2D > pyGrid.linkTearingLength } },
+	length2D: { get: function () { return Math.sqrt(Math.pow(this.diff.x, 2) + Math.pow(this.diff.y, 2)) } },
+	length3D: { get: function () { return Math.sqrt(Math.pow(this.diff.x, 2) + Math.pow(this.diff.y, 2) + Math.pow(this.diff.z, 2)) } },
+});
