@@ -17,8 +17,8 @@ waterConfig = {
     nodeColour: "blue",
     nodeRadius: 0,  // in pixels. 0 to disable node drawing
     pinColour: "red",
-    mouseImpactCellCount: 2, // diameter of mouse impact
-    mouseCuttingCellCount: 2, // diameter of mouse cutting
+    mouseImpactRadius: 2, // diameter of mouse impact in number of cells
+    mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
 };
 
 clothConfig = {

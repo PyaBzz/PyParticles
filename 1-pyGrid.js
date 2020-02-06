@@ -27,7 +27,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 		this.appendChild(box.element);
 	}
 
-	this.mouse = new mouse(this.mouseImpactCellCount * this.restingLinkLength, this.mouseCuttingCellCount * this.restingLinkLength, true, 0.6);
+	this.mouse = new mouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, true, 0.6);
 	graph = new graph();
 
 	bindMouseHandlers();

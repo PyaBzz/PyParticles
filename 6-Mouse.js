@@ -1,6 +1,6 @@
-mouse = function (impactDistance, cutDistance, slpy, slp_ftr) {
-    this.influenceDistance = impactDistance;
-    this.cuttingDistance = cutDistance;
+mouse = function (impactRadius, cuttingRadius, slpy, slp_ftr) {
+    this.impactRadius = impactRadius;
+    this.cuttingRadius = cuttingRadius;
     this.slippy = slpy;
     this.slipFactor = slp_ftr;
     this.x = 0;
@@ -21,15 +21,15 @@ mouse.prototype.touches = function (node) {
     if (this.hasDragBox)
         return node.isInBox(this.dragBox.left, this.dragBox.right, this.dragBox.top, this.dragBox.buttom)
     else
-        return this.cursorDistanceTo(node) <= this.influenceDistance;
+        return this.cursorDistanceTo(node) <= this.impactRadius;
 };
 
 mouse.prototype.grabs = function (node) {
-    return this.clickDistanceTo(node) <= this.influenceDistance;
+    return this.clickDistanceTo(node) <= this.impactRadius;
 };
 
 mouse.prototype.cuts = function (node) {
-    return this.cursorDistanceTo(node) <= this.cuttingDistance;
+    return this.cursorDistanceTo(node) <= this.cuttingRadius;
 };
 
 mouse.prototype.cursorDistanceTo = function (node) {
