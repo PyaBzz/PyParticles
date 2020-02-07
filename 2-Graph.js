@@ -3,6 +3,7 @@ graph = function () {
 	this.nodes = [];
 
 	for (var row = 0; row <= pyGrid.verticalCellCount; row++) {
+		this.nodes[row] = [];
 		for (var col = 0; col <= pyGrid.horizontalCellCount; col++) {
 			var p = new node(col * pyGrid.restingLinkLength, row * pyGrid.restingLinkLength, 0);
 
@@ -12,22 +13,24 @@ graph = function () {
 			if (col == 0) p.pin();                   // Pin the left edge of the graph
 			if (col == pyGrid.horizontalCellCount) p.pin();   // Pin the right edge of the graph
 
-			if (col != 0) p.attach(this.nodes[this.nodes.length - 1]);  // Horizontal link to previous node on the left
-			if (row != 0) p.attach(this.nodes[(row - 1) * (pyGrid.horizontalCellCount + 1) + col]);  // Number of nodes in each row is 1 more than the number of cells
+			if (col != 0) p.attach(this.nodes[row][col - 1]);  // Horizontal link to the left neighbour
+			if (row != 0) p.attach(this.nodes[row - 1][col]);  // Vertical link to the right neighbour
 
-			this.nodes.push(p);
+			this.nodes[row].push(p);
 		}
 	}
 };
 
 graph.prototype.calculateForces = function () {
-	this.nodes.forEach(function (node) {
-		node.links.forEach(function (link) { link.applyForces() });
+	this.doToAllNodes(function (n) {
+		n.links.forEach(function (link) {
+			link.applyForces();
+		});
 	});
 };
 
 graph.prototype.updateNodeBounds = function () {
-	this.nodes.forEach(function (p) {
+	this.doToAllNodes(function (p) {
 		Array.prototype.forEach.call(pyGrid.dragBoxes, function (b) {
 			if (p.isInBox(b.offsetLeft, b.offsetLeft + b.offsetWidth, b.offsetTop, b.offsetTop + b.offsetHeight)) {
 				p.heldByBox = 1;
@@ -41,18 +44,39 @@ graph.prototype.updateNodeBounds = function () {
 };
 
 graph.prototype.updateNodePositions = function () {
-	this.nodes.forEach(function (p) {
+	this.doToAllNodes(function (p) {
 		if (p.isFree) p.updatePosition();
 	});
 };
 
 graph.prototype.drawNodes = function () {
-	this.nodes.forEach(function (p) { p.draw() });
+	this.doToAllNodes(function (p) { p.draw() });
 };
 
 graph.prototype.drawLinks = function () {
 	pyGrid.canvasCtx.strokeStyle = pyGrid.linkColour;
 	pyGrid.canvasCtx.beginPath();
-	this.nodes.forEach(function (p) { p.drawLinks() });
+	this.doToAllNodes(function (p) { p.drawLinks() });
 	pyGrid.canvasCtx.stroke();
 };
+
+graph.prototype.doToAllNodes = function (func) {
+	for (var row = 0; row < this.nodes.length; row++) {
+		for (var col = 0; col < this.nodes[0].length; col++) {
+			func(this.nodes[row][col]);
+		};
+	}
+};
+
+graph.prototype.getNodesWhere = function (func) {
+	var compliantNodes = [];
+	for (var row = 0; row < this.nodes.length; row++) {
+		for (var col = 0; col < this.nodes[0].length; col++) {
+			n = this.nodes[row][col];
+			if (func(n) != false)
+				compliantNodes.push(n);
+		}
+	}
+	return compliantNodes;
+};
+

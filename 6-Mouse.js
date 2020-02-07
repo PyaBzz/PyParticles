@@ -57,7 +57,7 @@ bindMouseHandlers = function () {
         if (mouseDownEvent.target == pyGrid.canvas) {
             if (pyGrid.mouse.key == 1) {
                 if (pyGrid.mouse.isSlippy === false) {
-                    graph.nodes.forEach(function (p) {
+                    graph.doToAllNodes(function (p) {
                         if (pyGrid.mouse.grabs(p)) {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
@@ -67,7 +67,7 @@ bindMouseHandlers = function () {
                     });
                 }
             }
-            if (pyGrid.mouse.key == 2) graph.nodes.forEach(function (p) {
+            if (pyGrid.mouse.key == 2) graph.doToAllNodes(function (p) {
                 if (pyGrid.mouse.grabs(p)) p.pin();
             });
         } else if (mouseDownEvent.target.className == 'dragbox') {
@@ -90,7 +90,7 @@ bindMouseHandlers = function () {
         if (pyGrid.mouse.key !== 1)
             return;
         var affectedNodes = pyGrid.mouse.isSlippy
-            ? graph.nodes.filter(function (n) { return pyGrid.mouse.touches(n) })
+            ? graph.getNodesWhere(function (n) { return pyGrid.mouse.touches(n) })
             : pyGrid.mouse.heldNodes; // For performance reasons!
         affectedNodes.forEach(function (n) {
             n.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
