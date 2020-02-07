@@ -5,7 +5,7 @@ graph = function () {
 	for (var row = 0; row <= pyGrid.verticalCellCount; row++) {
 		this.nodes[row] = [];
 		for (var col = 0; col <= pyGrid.horizontalCellCount; col++) {
-			var p = new node(col * pyGrid.restingLinkLength, row * pyGrid.restingLinkLength, 0);
+			var p = new node(col, row, 0);
 
 			if (row == 0) p.pin();                   // Pin the top edge of the graph
 			if (row == pyGrid.verticalCellCount) p.pin();  // Pin the bottom edge of the graph

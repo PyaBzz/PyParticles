@@ -1,7 +1,10 @@
-node = function (x, y, z) {
-	this.x = x;
-	this.y = y;
-	this.z = z;
+node = function (col, row, zUnits) {
+	this.col = col;
+	this.row = row;
+	this.zUnits = zUnits;
+	this.x = col * pyGrid.restingLinkLength;
+	this.y = row * pyGrid.restingLinkLength;
+	this.z = zUnits * pyGrid.restingLinkLength;
 	this.force = { x: 0, y: 0, z: 0 };
 	this.speed = { x: 0, y: 0, z: 0 };
 	this.acceleration = { x: 0, y: 0, z: 0 };
