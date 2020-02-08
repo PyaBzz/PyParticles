@@ -2,6 +2,7 @@ node = function (col, row, zUnits) {
 	this.col = col;
 	this.row = row;
 	this.zUnits = zUnits;
+
 	this.upNeighbour = null;
 	this.upRightNeighbour = null;
 	this.rightNeighbour = null;
@@ -10,6 +11,7 @@ node = function (col, row, zUnits) {
 	this.downLeftNeighbour = null;
 	this.leftNeighbour = null;
 	this.upLeftNeighbour = null;
+
 	this.x = col * pyGrid.restingLinkLength;
 	this.y = row * pyGrid.restingLinkLength;
 	this.z = zUnits * pyGrid.restingLinkLength;
@@ -40,7 +42,7 @@ node.prototype.updatePosition = function () {
 	this.speed.y += this.acceleration.y;
 	this.speed.z += this.acceleration.z;
 
-	this.force = { x: 0, y: 0, z: 0 };
+	this.clearForce();
 };
 
 node.prototype.draw = function () {
@@ -83,6 +85,14 @@ node.prototype.pin = function () {
 
 node.prototype.isInBox = function (x1, x2, y1, y2) {
 	return this.x > x1 && this.x < x2 && this.y > y1 && this.y < y2;
+};
+
+node.prototype.clearForce = function () {
+	this.force = { x: 0, y: 0, z: 0 };
+};
+
+node.prototype.applyForce = function (x, y, z) {
+	this.force.x += x; this.force.y += y; this.force.z += z;
 };
 
 Object.defineProperties(node.prototype, {

@@ -6,24 +6,23 @@ link = function (p1, p2) {
 link.prototype.applyForces = function () {
 
 	if (this.hastStretchedToTear) this.p1.removeLinks(this);  // 2D
-
-	var force_x = Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
-	var force_y = Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
-	var force_z = Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	var force = {};
+	force.x = Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	force.y = Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	force.z = Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
 
 	if ((this.p1.pinned || this.p1.heldByMouse) && (this.p2.pinned || this.p2.heldByMouse)) return;
 
 	if (this.p2.pinned || this.p2.heldByMouse) {
-		this.p1.force.x += force_x; this.p1.force.y += force_y; this.p1.force.z += force_z;
+		this.p1.force.x += force.x; this.p1.force.y += force.y; this.p1.force.z += force.z;
 		return;
 	}
 	if (this.p1.pinned || this.p1.heldByMouse) {
-		this.p2.force.x -= force_x; this.p2.force.y -= force_y; this.p2.force.z -= force_z;
+		this.p2.force.x -= force.x; this.p2.force.y -= force.y; this.p2.force.z -= force.z;
 		return;
 	}
-
-	this.p1.force.x += force_x; this.p1.force.y += force_y; this.p1.force.z += force_z;
-	this.p2.force.x -= force_x; this.p2.force.y -= force_y; this.p2.force.z -= force_z;
+	this.p1.applyForce(force.x, force.y, force.z);
+	this.p2.applyForce(-force.x, -force.y, -force.z);
 };
 
 link.prototype.draw = function () {
