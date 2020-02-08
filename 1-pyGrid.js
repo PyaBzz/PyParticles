@@ -30,7 +30,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.mouse = new mouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
 	this.graph = new graph();
 
-	bindMouseHandlers();
+	this.mouse.bindMouseHandlers();
 	setInterval(drawingLoop, this.drawingTimeStep);
 };
 

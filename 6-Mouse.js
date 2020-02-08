@@ -50,7 +50,7 @@ Object.defineProperties(mouse.prototype, {
     hasDragBox: { get: function () { return this.dragBox !== null } },
 });
 
-bindMouseHandlers = function () {
+mouse.prototype.bindMouseHandlers = function () {
 
     pyGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
 
