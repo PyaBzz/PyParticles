@@ -54,3 +54,18 @@ componentToHex = function (c) {
 	var hex = c.toString(16);
 	return hex.length == 1 ? "0" + hex : hex;
 };
+
+convertCoordinate = {
+	fromWindowToPyGrid: function (horizontal, vertical) {
+		return {
+			hor: horizontal - pyGrid.referenceFrame.left,
+			ver: vertical - pyGrid.referenceFrame.top
+		};
+	},
+	fromPyGridToWindow: function (horizontal, vertical) {
+		return {
+			hor: horizontal + pyGrid.referenceFrame.left,
+			ver: vertical + pyGrid.referenceFrame.top
+		};
+	},
+}
