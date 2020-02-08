@@ -49,8 +49,8 @@ Object.defineProperties(mouse.prototype, {
 });
 
 mouse.prototype.bindMouseHandlers = function () {
-
     pyGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
+    pyGrid.dragBoxes.forEach(function (d) { d.element.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); }; });
 
     pyGrid.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
