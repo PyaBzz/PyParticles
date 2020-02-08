@@ -70,7 +70,7 @@ graph.prototype.updateNodeBounds = function () {
 
 graph.prototype.updateNodePositions = function () {
 	this.doToAllNodes(function (p) {
-		if (p.isFree) p.updatePosition();
+		p.updatePosition();
 	});
 };
 

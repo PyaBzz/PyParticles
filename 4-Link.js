@@ -5,7 +5,7 @@ link = function (p1, p2) {
 
 link.prototype.applyForces = function () {
 
-	if (this.hastStretchedToTear) this.p1.removeLinks(this);  // 2D
+	if (this.hastStretchedToTear) this.p1.removeLink(this);  // 2D
 	var force = {};
 	force.x = Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
 	force.y = Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;

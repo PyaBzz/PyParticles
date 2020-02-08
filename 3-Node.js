@@ -26,8 +26,23 @@ node = function (col, row, zUnits) {
 };
 
 node.prototype.updatePosition = function () {
-	// TODO: Bring other mouse related stuff here. Or take this one there.
-	if (pyGrid.mouse.key == 3 && pyGrid.mouse.cuts(this)) this.links = [];
+	if (this.pinned) return;
+
+	if (pyGrid.mouse.key == 3 && pyGrid.mouse.cuts(this)) {
+		this.removeLinks();
+		return;
+	}
+	else if (pyGrid.mouse.key == 2 && pyGrid.mouse.touches(this)) {
+		this.pin();
+		return;
+	}
+	else if (pyGrid.mouse.key == 1) {
+		if (this.heldByMouse) {
+			return;
+		}
+		else if (pyGrid.mouse.touches(this))
+			this.move({ x: pyGrid.mouse.drag.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.drag.y * pyGrid.mouse.slipFactor });
+	}
 
 	this.acceleration.x = -this.force.x / pyGrid.nodeMass;
 	this.acceleration.y = -this.force.y / pyGrid.nodeMass;
@@ -75,8 +90,12 @@ node.prototype.move = function (vector) {
 	this.y += vector.y;
 };
 
-node.prototype.removeLinks = function (link) {
+node.prototype.removeLink = function (link) {
 	this.links.splice(this.links.indexOf(link), 1);
+};
+
+node.prototype.removeLinks = function () {
+	this.links = [];
 };
 
 node.prototype.pin = function () {
@@ -97,7 +116,6 @@ node.prototype.applyForce = function (x, y, z) {
 
 Object.defineProperties(node.prototype, {
 	neighbours: { get: function () { return [this.upNeighbour, this.upRightNeighbour, this.rightNeighbour, this.downRightNeighbour, this.downNeighbour, this.downLeftNeighbour, this.leftNeighbour, this.upLeftNeighbour] } },
-	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
 	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
 });
