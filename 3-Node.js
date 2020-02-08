@@ -2,6 +2,14 @@ node = function (col, row, zUnits) {
 	this.col = col;
 	this.row = row;
 	this.zUnits = zUnits;
+	this.upNeighbour = null;
+	this.upRightNeighbour = null;
+	this.rightNeighbour = null;
+	this.downRightNeighbour = null;
+	this.downNeighbour = null;
+	this.downLeftNeighbour = null;
+	this.leftNeighbour = null;
+	this.upLeftNeighbour = null;
 	this.x = col * pyGrid.restingLinkLength;
 	this.y = row * pyGrid.restingLinkLength;
 	this.z = zUnits * pyGrid.restingLinkLength;
@@ -73,6 +81,7 @@ node.prototype.isInBox = function (x1, x2, y1, y2) {
 };
 
 Object.defineProperties(node.prototype, {
+	neighbours: { get: function () { return [this.upNeighbour, this.upRightNeighbour, this.rightNeighbour, this.downRightNeighbour, this.downNeighbour, this.downLeftNeighbour, this.leftNeighbour, this.upLeftNeighbour] } },
 	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
 	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!

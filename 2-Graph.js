@@ -7,14 +7,37 @@ graph = function () {
 		for (var col = 0; col <= pyGrid.horizontalCellCount; col++) {
 			var p = new node(col, row, 0);
 
-			if (row == 0) p.pin();                   // Pin the top edge of the graph
-			if (row == pyGrid.verticalCellCount) p.pin();  // Pin the bottom edge of the graph
+			if (row == 0)
+				p.pin();                   // Pin the top edge of the graph
+			else {  // Link upNeighbour
+				p.upNeighbour = this.nodes[row - 1][col];
+				p.attach(p.upNeighbour);
+				p.upNeighbour.downNeighbour = p;
+			}
 
-			if (col == 0) p.pin();                   // Pin the left edge of the graph
-			if (col == pyGrid.horizontalCellCount) p.pin();   // Pin the right edge of the graph
+			if (col == 0)
+				p.pin();                   // Pin the left edge of the graph
+			else {  // Link leftNeighbour
+				p.leftNeighbour = this.nodes[row][col - 1];
+				p.attach(p.leftNeighbour);
+				p.leftNeighbour.rightNeighbour = p;
+			}
 
-			if (col != 0) p.attach(this.nodes[row][col - 1]);  // Horizontal link to the left neighbour
-			if (row != 0) p.attach(this.nodes[row - 1][col]);  // Vertical link to the right neighbour
+			if (row != 0 && col != 0) {
+				p.upLeftNeighbour = this.nodes[row - 1][col - 1];
+				p.upLeftNeighbour.downRightNeighbour = p;
+			}
+
+			if (row != 0 && col != pyGrid.horizontalCellCount) {
+				p.upRightNeighbour = this.nodes[row - 1][col + 1];
+				p.upRightNeighbour.downLeftNeighbour = p;
+			}
+
+			if (col == pyGrid.horizontalCellCount)
+				p.pin();   // Pin the right edge of the graph
+
+			if (row == pyGrid.verticalCellCount)
+				p.pin();  // Pin the bottom edge of the graph
 
 			this.nodes[row].push(p);
 		}
