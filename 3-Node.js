@@ -68,6 +68,11 @@ node.prototype.attach = function (node) {
 	);
 };
 
+node.prototype.move = function (vector) {
+	this.x += vector.x;
+	this.y += vector.y;
+};
+
 node.prototype.removeLinks = function (link) {
 	this.links.splice(this.links.indexOf(link), 1);
 };

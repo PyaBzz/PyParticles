@@ -23,8 +23,13 @@ mouse.prototype.touches = function (node) {
         return this.cursorDistanceTo(node) <= this.impactRadius;
 };
 
-mouse.prototype.grabs = function (node) {
-    return this.clickDistanceTo(node) <= this.impactRadius;
+mouse.prototype.drag = function () {
+    var affectedNodes = pyGrid.mouse.isSlippy
+        ? graph.getNodesWhere(function (n) { return pyGrid.mouse.touches(n) })
+        : pyGrid.mouse.heldNodes; // For performance reasons!
+    affectedNodes.forEach(function (n) {
+        n.move({ x: pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor });
+    });
 };
 
 mouse.prototype.cuts = function (node) {
@@ -91,13 +96,7 @@ bindMouseHandlers = function () {
         }
         if (pyGrid.mouse.key !== 1)
             return;
-        var affectedNodes = pyGrid.mouse.isSlippy
-            ? graph.getNodesWhere(function (n) { return pyGrid.mouse.touches(n) })
-            : pyGrid.mouse.heldNodes; // For performance reasons!
-        affectedNodes.forEach(function (n) {
-            n.x += pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor;
-            n.y += pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor;
-        });
+        pyGrid.mouse.drag();
     };
 
     pyGrid.onmouseup = function (releaseEvent) {
