@@ -103,3 +103,29 @@ graph.prototype.getNodesWhere = function (func) {
 	return compliantNodes;
 };
 
+graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
+	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
+	var runnerNodeDistance = pyGrid.mouse.clickDistanceTo(runnerNode);
+	var iterationLimit = Math.max(graph.nodes.length, graph.nodes[0].length);
+	for (var i = 0; i < iterationLimit; i++) {
+		var minDistance = Number.MAX_VALUE;
+		var bestNeighbour = null;
+		runnerNode.neighbours.forEach(function (neighbour) {
+			neighbourToMouse = pyGrid.mouse.clickDistanceTo(neighbour);
+			if (neighbour != null && neighbourToMouse < minDistance) {
+				bestNeighbour = neighbour;
+				minDistance = neighbourToMouse;
+			}
+		});
+		if (minDistance < runnerNodeDistance)
+			runnerNode = bestNeighbour;
+	}
+	return runnerNode;
+};
+
+graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
+	var coordinatesInGrid = convertCoordinate.fromWindowToPyGrid(hor, ver);
+	var row = Math.round(coordinatesInGrid.ver / pyGrid.restingLinkLength);
+	var col = Math.round(coordinatesInGrid.hor / pyGrid.restingLinkLength);
+	return this.nodes[row][col];
+};
