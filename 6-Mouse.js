@@ -25,7 +25,7 @@ mouse.prototype.touches = function (node) {
 
 mouse.prototype.drag = function () {
     var affectedNodes = pyGrid.mouse.isSlippy
-        ? graph.getNodesWhere(function (n) { return pyGrid.mouse.touches(n) })
+        ? pyGrid.graph.getNodesWhere(function (n) { return pyGrid.mouse.touches(n) })
         : pyGrid.mouse.heldNodes; // For performance reasons!
     affectedNodes.forEach(function (n) {
         n.move({ x: pyGrid.mouse.currentDrag.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.currentDrag.y * pyGrid.mouse.slipFactor });
@@ -62,7 +62,7 @@ bindMouseHandlers = function () {
         if (mouseDownEvent.target == pyGrid.canvas) {
             if (pyGrid.mouse.key == 1) {
                 if (pyGrid.mouse.isSlippy === false) {
-                    graph.doToAllNodes(function (p) {
+                    pyGrid.graph.doToAllNodes(function (p) {
                         if (pyGrid.mouse.grabs(p)) {
                             p.heldByMouse = true;
                             p.positionAtClickX = p.x;
@@ -73,7 +73,7 @@ bindMouseHandlers = function () {
                 }
             }
             if (pyGrid.mouse.key == 2) {
-                var targetNode = graph.getClosestNodeToCoordinates(pyGrid.mouse.clickX, pyGrid.mouse.clickY);
+                var targetNode = pyGrid.graph.getClosestNodeToCoordinates(pyGrid.mouse.clickX, pyGrid.mouse.clickY);
                 if (pyGrid.mouse.touches(targetNode))
                     targetNode.pin();
             }

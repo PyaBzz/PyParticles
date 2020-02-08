@@ -28,22 +28,22 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	}
 
 	this.mouse = new mouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
-	graph = new graph();
+	this.graph = new graph();
 
 	bindMouseHandlers();
 	setInterval(drawingLoop, this.drawingTimeStep);
 };
 
 drawingLoop = function () {
-	graph.calculateForces();
-	// graph.updateNodeBounds();  // Has huge performance penalty!
-	graph.updateNodePositions();
+	pyGrid.graph.calculateForces();
+	// pyGrid.graph.updateNodeBounds();  // Has huge performance penalty!
+	pyGrid.graph.updateNodePositions();
 	pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
 	if (pyGrid.linkWidth) {
 		pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
-		graph.drawLinks();
+		pyGrid.graph.drawLinks();
 	}
-	if (pyGrid.nodeRadius) graph.drawNodes();
+	if (pyGrid.nodeRadius) pyGrid.graph.drawNodes();
 };
 
 rgbToHex = function (r, g, b) {
