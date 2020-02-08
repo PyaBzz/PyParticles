@@ -126,7 +126,7 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
-	var coordinatesInGrid = convertCoordinate.fromWindowToPyGrid(hor, ver);
+	var coordinatesInGrid = pyGrid.convertCoordinate.fromWindowToPyGrid(hor, ver);
 	var row = Math.round(coordinatesInGrid.ver / pyGrid.restingLinkLength);
 	var col = Math.round(coordinatesInGrid.hor / pyGrid.restingLinkLength);
 	return this.nodes[row][col];

@@ -31,41 +31,42 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.graph = new graph();
 
 	this.mouse.bindMouseHandlers();
-	setInterval(drawingLoop, this.drawingTimeStep);
-};
 
-drawingLoop = function () {
-	pyGrid.graph.calculateForces();
-	// pyGrid.graph.updateNodeBounds();  // Has huge performance penalty!
-	pyGrid.graph.updateNodePositions();
-	pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
-	if (pyGrid.linkWidth) {
-		pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
-		pyGrid.graph.drawLinks();
+	this.rgbToHex = function (r, g, b) {
+		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+	};
+
+	this.componentToHex = function (c) {
+		var hex = c.toString(16);
+		return hex.length == 1 ? "0" + hex : hex;
+	};
+
+	this.convertCoordinate = {
+		fromWindowToPyGrid: function (horizontal, vertical) {
+			return {
+				hor: horizontal - pyGrid.referenceFrame.left,
+				ver: vertical - pyGrid.referenceFrame.top
+			};
+		},
+		fromPyGridToWindow: function (horizontal, vertical) {
+			return {
+				hor: horizontal + pyGrid.referenceFrame.left,
+				ver: vertical + pyGrid.referenceFrame.top
+			};
+		},
 	}
-	if (pyGrid.nodeRadius) pyGrid.graph.drawNodes();
-};
 
-rgbToHex = function (r, g, b) {
-	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-};
+	this.drawingLoop = function () {
+		pyGrid.graph.calculateForces();
+		// pyGrid.graph.updateNodeBounds();  // Has huge performance penalty!
+		pyGrid.graph.updateNodePositions();
+		pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
+		if (pyGrid.linkWidth) {
+			pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
+			pyGrid.graph.drawLinks();
+		}
+		if (pyGrid.nodeRadius) pyGrid.graph.drawNodes();
+	};
 
-componentToHex = function (c) {
-	var hex = c.toString(16);
-	return hex.length == 1 ? "0" + hex : hex;
+	setInterval(this.drawingLoop, this.drawingTimeStep);
 };
-
-convertCoordinate = {
-	fromWindowToPyGrid: function (horizontal, vertical) {
-		return {
-			hor: horizontal - pyGrid.referenceFrame.left,
-			ver: vertical - pyGrid.referenceFrame.top
-		};
-	},
-	fromPyGridToWindow: function (horizontal, vertical) {
-		return {
-			hor: horizontal + pyGrid.referenceFrame.left,
-			ver: vertical + pyGrid.referenceFrame.top
-		};
-	},
-}
