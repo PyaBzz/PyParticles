@@ -7,8 +7,6 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.currentDrag = { x: 0, y: 0 };
     this.clickX = 0;
     this.clickY = 0;
-    this.dragX = 0;
-    this.dragY = 0;
     this.key = 0;
     this.heldNodes = [];
     this.dragBox = null;
@@ -71,8 +69,7 @@ mouse.prototype.bindMouseHandlers = function () {
                         }
                     });
                 }
-            }
-            if (pyGrid.mouse.key == 2) {
+            } else if (pyGrid.mouse.key == 2) {
                 var targetNode = pyGrid.graph.getClosestNodeToCoordinates(pyGrid.mouse.clickX, pyGrid.mouse.clickY);
                 if (pyGrid.mouse.touches(targetNode))
                     targetNode.pin();
@@ -85,12 +82,10 @@ mouse.prototype.bindMouseHandlers = function () {
 
     pyGrid.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
-        var currentDragStartX = pyGrid.mouse.x;
-        var currentDragStartY = pyGrid.mouse.y;
         pyGrid.mouse.x = moveEvent.pageX;
         pyGrid.mouse.y = moveEvent.pageY;
-        pyGrid.mouse.currentDrag.x = pyGrid.mouse.x - currentDragStartX;
-        pyGrid.mouse.currentDrag.y = pyGrid.mouse.y - currentDragStartY;
+        pyGrid.mouse.currentDrag.x = moveEvent.movementX;
+        pyGrid.mouse.currentDrag.y = moveEvent.movementY;
         if (pyGrid.mouse.hasDragBox) {
             pyGrid.mouse.dragBox.move(pyGrid.mouse.currentDrag.x, pyGrid.mouse.currentDrag.y);
         }
@@ -102,8 +97,6 @@ mouse.prototype.bindMouseHandlers = function () {
     pyGrid.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
         pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false });
-        pyGrid.mouse.dragX = releaseEvent.x - pyGrid.mouse.clickX;
-        pyGrid.mouse.dragY = releaseEvent.y - pyGrid.mouse.clickY;
         pyGrid.mouse.key = 0;
         pyGrid.mouse.heldNodes = [];
         pyGrid.mouse.dragBox = null;

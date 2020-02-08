@@ -26,7 +26,7 @@ node = function (col, row, zUnits) {
 };
 
 node.prototype.updatePosition = function () {
-
+	// TODO: Bring other mouse related stuff here. Or take this one there.
 	if (pyGrid.mouse.key == 3 && pyGrid.mouse.cuts(this)) this.links = [];
 
 	this.acceleration.x = -this.force.x / pyGrid.nodeMass;
