@@ -67,8 +67,11 @@ bindMouseHandlers = function () {
                     });
                 }
             }
-            if (pyGrid.mouse.key == 2)
-                graph.getClosestNodeToCoordinates(pyGrid.mouse.clickX, pyGrid.mouse.clickY).pin();
+            if (pyGrid.mouse.key == 2) {
+                var targetNode = graph.getClosestNodeToCoordinates(pyGrid.mouse.clickX, pyGrid.mouse.clickY);
+                if (pyGrid.mouse.touches(targetNode))
+                    targetNode.pin();
+            }
         } else if (mouseDownEvent.target.className == 'dragbox') {
             var dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
             pyGrid.mouse.dragBox = pyGrid.dragBoxes[dragBoxIndex];
