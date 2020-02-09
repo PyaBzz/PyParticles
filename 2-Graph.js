@@ -23,15 +23,17 @@ graph = function () {
 				p.leftNeighbour.rightNeighbour = p;
 			}
 
-			if (row != 0 && col != 0) {
+			if (row != 0 && col != 0) {  // Link leftNeighbour
 				p.upLeftNeighbour = this.nodes[row - 1][col - 1];
-				p.attach(p.upLeftNeighbour);
+				if (pyGrid.drawDiagonalLinks)
+					p.attach(p.upLeftNeighbour);
 				p.upLeftNeighbour.downRightNeighbour = p;
 			}
 
-			if (row != 0 && col != pyGrid.horizontalCellCount) {
+			if (row != 0 && col != pyGrid.horizontalCellCount) {  // Link leftNeighbour
 				p.upRightNeighbour = this.nodes[row - 1][col + 1];
-				p.attach(p.upRightNeighbour);
+				if (pyGrid.drawDiagonalLinks)
+					p.attach(p.upRightNeighbour);
 				p.upRightNeighbour.downLeftNeighbour = p;
 			}
 
