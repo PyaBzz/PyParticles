@@ -26,23 +26,9 @@ node = function (col, row, zUnits) {
 };
 
 node.prototype.updatePosition = function () {
-	if (this.pinned) return;
+	pyGrid.mouse.check(this);
 
-	if (pyGrid.mouse.key == 3 && pyGrid.mouse.cuts(this)) {
-		this.removeLinks();
-		return;
-	}
-	else if (pyGrid.mouse.key == 2 && pyGrid.mouse.touches(this)) {
-		this.pin();
-		return;
-	}
-	else if (pyGrid.mouse.key == 1) {
-		if (this.heldByMouse) {
-			return;
-		}
-		else if (pyGrid.mouse.touches(this))
-			this.move({ x: pyGrid.mouse.drag.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.drag.y * pyGrid.mouse.slipFactor });
-	}
+	if (!this.isFree) return;
 
 	this.acceleration.x = -this.force.x / pyGrid.nodeMass;
 	this.acceleration.y = -this.force.y / pyGrid.nodeMass;
@@ -86,6 +72,9 @@ node.prototype.attach = function (node) {
 };
 
 node.prototype.move = function (vector) {
+	if (this.pinned)
+		return;
+
 	this.x += vector.x;
 	this.y += vector.y;
 };
@@ -102,10 +91,6 @@ node.prototype.pin = function () {
 	this.pinned = true;
 };
 
-node.prototype.isInBox = function (x1, x2, y1, y2) {
-	return this.x > x1 && this.x < x2 && this.y > y1 && this.y < y2;
-};
-
 node.prototype.clearForce = function () {
 	this.force = { x: 0, y: 0, z: 0 };
 };
@@ -116,6 +101,7 @@ node.prototype.applyForce = function (x, y, z) {
 
 Object.defineProperties(node.prototype, {
 	neighbours: { get: function () { return [this.upNeighbour, this.upRightNeighbour, this.rightNeighbour, this.downRightNeighbour, this.downNeighbour, this.downLeftNeighbour, this.leftNeighbour, this.upLeftNeighbour] } },
+	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
 	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
 });

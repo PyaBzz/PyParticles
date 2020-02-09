@@ -16,9 +16,13 @@ dragBox.prototype.move = function (x, y) {
     this.updateBoundaries();  // Caching for performance reasons!
 };
 
+dragBox.prototype.coversNode = function (n) {
+    return n.x > this.left && n.x < this.right && n.y < this.bottom && n.y > this.top;
+};
+
 dragBox.prototype.updateBoundaries = function () {
     this.left = this.element.offsetLeft;
-    this.right = this.element.offsetLeft + this.element.offsetWidth;
+    this.right = this.left + this.element.offsetWidth;
     this.top = this.element.offsetTop;
-    this.buttom = this.element.offsetTop + this.element.offsetHeight;
+    this.bottom = this.top + this.element.offsetHeight;
 };
