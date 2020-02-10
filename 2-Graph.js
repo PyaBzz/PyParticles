@@ -109,14 +109,14 @@ graph.prototype.getNodesWhere = function (func) {
 
 graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
 	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
-	var runnerNodeDistance = Math.sqrt(Math.pow(runnerNode.clientX - hor, 2) + Math.pow(runnerNode.clientY - ver, 2));
+	var runnerNodeDistance = runnerNode.getDistanceToCoordinates(hor, ver);
 	var iterationLimit = Math.max(this.nodes.length, this.nodes[0].length);
 	var minDistance = Number.MAX_VALUE;
 	var bestNeighbour = null;
 	for (var i = 0; i < iterationLimit; i++) {
 		runnerNode.neighbours.forEach(function (neighbour) {
 			if (neighbour != null) {
-				var neighbourDistance = Math.sqrt(Math.pow(neighbour.clientX - hor, 2) + Math.pow(neighbour.clientY - ver, 2));
+				var neighbourDistance = neighbour.getDistanceToCoordinates(hor, ver);
 				if (neighbourDistance < minDistance) {
 					bestNeighbour = neighbour;
 					minDistance = neighbourDistance;
@@ -130,8 +130,7 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
-	var coordinatesInGrid = pyGrid.convertCoordinate.fromWindowToPyGrid(hor, ver);
-	var row = Math.round(coordinatesInGrid.ver / pyGrid.restingLinkLength);
-	var col = Math.round(coordinatesInGrid.hor / pyGrid.restingLinkLength);
+	var row = Math.round(ver / pyGrid.restingLinkLength);
+	var col = Math.round(hor / pyGrid.restingLinkLength);
 	return this.nodes[row][col];
 };

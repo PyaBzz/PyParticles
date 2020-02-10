@@ -17,7 +17,8 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
 };
 
 mouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(hor, ver);
+    var gridCoordinates = pyGrid.convertCoordinate.fromWindowToPyGrid(hor,ver);
+    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
     if (this.isSlippy)
         this.touchedNodes.push(this.closestNode);
     else

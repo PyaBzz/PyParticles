@@ -45,6 +45,9 @@ node.prototype.updatePosition = function () {
 	this.clearForce();
 };
 
+node.prototype.getDistanceToCoordinates = function (hor, ver) {
+	return Math.sqrt(Math.pow(this.x - hor, 2) + Math.pow(this.y - ver, 2))
+}
 node.prototype.draw = function () {
 	pyGrid.canvasCtx.beginPath();
 	if (this.pinned) {
