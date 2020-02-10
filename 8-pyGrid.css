@@ -1,49 +1,49 @@
 * {
-    margin: 0;
-    overflow: hidden;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    -o-user-select: none;
-    user-select: none;
+  margin: 0;
+  overflow: hidden;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 }
 body {
-    background: black;
-	font-family: helvetica;
+  background: black;
+  font-family: helvetica;
 }
 .spread-children {
-	text-align: justify;
-	font-size: 0.1px;
+  text-align: justify;
+  font-size: 0.1px;
 }
 header {
-	margin-top:10px;
+  margin-top: 10px;
 }
 p {
-	display:inline-block;
-	color:darkorange;
-	text-align: center;
-	font-size:24px;
+  display: inline-block;
+  color: darkorange;
+  text-align: center;
+  font-size: 24px;
 }
 .spread-children:after {
-	content: '';
-	width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
-	display: inline-block;
+  content: "";
+  width: 100%; /* Ensures there are at least 2 lines of text, so justification works */
+  display: inline-block;
 }
 #container {
-	position: relative;
-	width: 60vw;
-	height: 60vh;
-	display: block;
-	margin: 20px auto 0 auto;
-	border:1px solid green;
+  position: relative;
+  width: 60vw;
+  height: 60vh;
+  display: block;
+  margin: 20px auto 0 auto;
+  border: 1px solid green;
 }
-.dragbox{
-	position: absolute;
-	background-color: skyblue;
-	width: 10vw;
-	height: 10vw;
-	border: 1px solid blue;
-	line-height: 10vw;
-	text-align: center;
-	border-radius: 6px;
+.dragbox {
+  position: absolute;
+  background-color: skyblue;
+  width: 10vw;
+  height: 10vw;
+  border: 1px solid blue;
+  line-height: 10vw;
+  text-align: center;
+  border-radius: 6px;
 }
