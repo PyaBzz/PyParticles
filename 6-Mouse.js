@@ -16,6 +16,20 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.dragBox = null;
 };
 
+mouse.prototype.getNodesForCoordinates = function (hor, ver) {
+    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(hor, ver);
+    if (this.isSlippy)
+        this.touchedNodes.push(this.closestNode);
+    else
+        this.heldNodes.push(this.closestNode);
+};
+
+mouse.prototype.clearNodes = function () {
+    this.closestNode = null;
+    this.touchedNodes = [];
+    this.heldNodes = [];
+};
+
 mouse.prototype.check = function (node) {
     var distance = this.cursorDistanceTo(node);
     if (distance < this.closestNodeDistance) {
@@ -49,15 +63,20 @@ mouse.prototype.dragThem = function () {
         return;
 
     if (this.isSlippy) {
+        this.getNodesForCoordinates(this.x, this.y);
         this.touchedNodes.forEach(function (n) {
             n.move({ x: pyGrid.mouse.dragVect.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.dragVect.y * pyGrid.mouse.slipFactor })
         });
+        this.clearNodes();
     } else {
 
         this.heldNodes.forEach(function (n) {
             n.move({ x: pyGrid.mouse.dragVect.x, y: pyGrid.mouse.dragVect.y });
         });
     }
+
+    this.x += this.dragVect.x;
+    this.y += this.dragVect.y;
 };
 
 mouse.prototype.cut = function () {
@@ -70,6 +89,7 @@ mouse.prototype.mouseDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     this.clickX = mouseDownEvent.x;
     this.clickY = mouseDownEvent.y;
+    this.getNodesForCoordinates(this.clickX, this.clickY);
     if (mouseDownEvent.target == pyGrid.canvas) {
         switch (this.key) {
             case 1:
@@ -77,7 +97,6 @@ mouse.prototype.mouseDown = function (mouseDownEvent) {
 
                 } else {
                     this.closestNode.heldByMouse = true;
-                    this.heldNodes.push(this.closestNode);
                 };
                 break;
             case 2:
@@ -137,8 +156,7 @@ mouse.prototype.bindMouseHandlers = function () {
         releaseEvent.preventDefault();
         pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false });
         pyGrid.mouse.key = 0;
-        pyGrid.mouse.heldNodes = [];
-        pyGrid.mouse.touchedNodes = [];
+        this.clearNodes();
         pyGrid.mouse.dragBox = null;
     };
 }

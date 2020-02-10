@@ -27,8 +27,6 @@ node = function (col, row, zUnits) {
 };
 
 node.prototype.updatePosition = function () {
-	pyGrid.mouse.check(this);
-
 	if (!this.isFree) return;
 
 	this.acceleration.x = -this.force.x / pyGrid.nodeMass;

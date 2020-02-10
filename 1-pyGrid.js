@@ -57,10 +57,6 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	}
 
 	this.drawingLoop = function () {
-		pyGrid.mouse.closestNode = null;
-		pyGrid.mouse.closestNodeDistance = Number.MAX_VALUE;
-		pyGrid.mouse.cutNodes = [];
-		pyGrid.mouse.touchedNodes = [];
 		pyGrid.graph.calculateForces();
 		// pyGrid.graph.updateNodeBounds();  // Has huge performance penalty!
 		pyGrid.graph.updateNodePositions();
@@ -70,7 +66,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 			pyGrid.graph.drawLinks();
 		}
 		if (pyGrid.nodeRadius) pyGrid.graph.drawNodes();
-	};
+	}
 
 	setInterval(this.drawingLoop, this.drawingTimeStep);
 };

@@ -109,16 +109,18 @@ graph.prototype.getNodesWhere = function (func) {
 
 graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
 	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
-	var runnerNodeDistance = pyGrid.mouse.clickDistanceTo(runnerNode);
+	var runnerNodeDistance = Math.sqrt(Math.pow(runnerNode.clientX - hor, 2) + Math.pow(runnerNode.clientY - ver, 2));
 	var iterationLimit = Math.max(this.nodes.length, this.nodes[0].length);
+	var minDistance = Number.MAX_VALUE;
+	var bestNeighbour = null;
 	for (var i = 0; i < iterationLimit; i++) {
-		var minDistance = Number.MAX_VALUE;
-		var bestNeighbour = null;
 		runnerNode.neighbours.forEach(function (neighbour) {
-			neighbourToMouse = pyGrid.mouse.clickDistanceTo(neighbour);
-			if (neighbour != null && neighbourToMouse < minDistance) {
-				bestNeighbour = neighbour;
-				minDistance = neighbourToMouse;
+			if (neighbour != null) {
+				var neighbourDistance = Math.sqrt(Math.pow(neighbour.clientX - hor, 2) + Math.pow(neighbour.clientY - ver, 2));
+				if (neighbourDistance < minDistance) {
+					bestNeighbour = neighbour;
+					minDistance = neighbourDistance;
+				}
 			}
 		});
 		if (minDistance < runnerNodeDistance)
