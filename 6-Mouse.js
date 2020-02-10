@@ -156,7 +156,7 @@ mouse.prototype.bindMouseHandlers = function () {
         releaseEvent.preventDefault();
         pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false });
         pyGrid.mouse.key = 0;
-        this.clearNodes();
+        pyGrid.mouse.clearNodes();
         pyGrid.mouse.dragBox = null;
     };
 }
