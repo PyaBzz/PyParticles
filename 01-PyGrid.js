@@ -33,8 +33,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
 
 	this.graph = new graph();
-
-	this.mouse.bindMouseHandlers();
+	this.mouse.bindHandlers();
 
 	this.rgbToHex = function (r, g, b) {
 		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
