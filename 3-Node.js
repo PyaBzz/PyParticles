@@ -19,6 +19,7 @@ node = function (col, row, zUnits) {
 	this.speed = { x: 0, y: 0, z: 0 };
 	this.acceleration = { x: 0, y: 0, z: 0 };
 	this.pinned = false;
+	this.marked = false;
 	this.heldByMouse = false;
 	this.heldByBox = false;
 	this.links = [];
@@ -51,7 +52,11 @@ node.prototype.draw = function () {
 	if (this.pinned) {
 		pyGrid.canvasCtx.fillStyle = pyGrid.pinColour;
 		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.nodeRadius, 0, 2 * Math.PI)
-	} else {
+	} else if (this.marked) {
+		pyGrid.canvasCtx.fillStyle = pyGrid.markedNodeColour;
+		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.nodeRadius, 0, 2 * Math.PI)
+	}
+	else {
 		pyGrid.canvasCtx.fillStyle = pyGrid.nodeColour;
 		pyGrid.enableZAxis
 			? pyGrid.canvasCtx.arc(this.x, this.y, Math.abs(this.z), 0, 2 * Math.PI)
@@ -89,6 +94,10 @@ node.prototype.removeLinks = function () {
 
 node.prototype.pin = function () {
 	this.pinned = true;
+};
+
+node.prototype.mark = function () {
+	this.marked = true;
 };
 
 node.prototype.clearForce = function () {

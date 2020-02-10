@@ -87,7 +87,10 @@ mouse.prototype.mouseDown = function (mouseDownEvent) {
                     this.closestNode.pin();
                 break;
             case 3:
-                this.cut();
+                if (pyGrid.rightClickAction === 0)
+                    this.cut();
+                else
+                    this.closestNode.mark();
                 break;
             default:
                 break;
