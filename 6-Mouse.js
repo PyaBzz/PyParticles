@@ -16,8 +16,16 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.dragBox = null;
 };
 
-mouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    var gridCoordinates = pyGrid.convertCoordinate.fromWindowToPyGrid(hor,ver);
+slippyMouse = function (impactRadius, cuttingRadius, slipFactor) {
+    mouse.call(this, impactRadius, cuttingRadius, slipFactor);
+};
+
+pinchyMouse = function (impactRadius, cuttingRadius, slipFactor) {
+    console.error("Not implemented yet");
+};
+
+slippyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
+    var gridCoordinates = pyGrid.convertCoordinate.fromWindowToPyGrid(hor, ver);
     this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
     if (this.isSlippy)
         this.touchedNodes.push(this.closestNode);
@@ -25,13 +33,13 @@ mouse.prototype.getNodesForCoordinates = function (hor, ver) {
         this.heldNodes.push(this.closestNode);
 };
 
-mouse.prototype.clearNodes = function () {
+slippyMouse.prototype.clearNodes = function () {
     this.closestNode = null;
     this.touchedNodes = [];
     this.heldNodes = [];
 };
 
-mouse.prototype.check = function (node) {
+slippyMouse.prototype.check = function (node) {
     var distance = this.cursorDistanceTo(node);
     if (distance < this.closestNodeDistance) {
         this.closestNode = node;
@@ -51,15 +59,15 @@ mouse.prototype.check = function (node) {
     }
 };
 
-mouse.prototype.cursorDistanceTo = function (node) {
+slippyMouse.prototype.cursorDistanceTo = function (node) {
     return Math.sqrt(Math.pow(node.clientX - this.x, 2) + Math.pow(node.clientY - this.y, 2));
 };
 
-mouse.prototype.clickDistanceTo = function (node) {
+slippyMouse.prototype.clickDistanceTo = function (node) {
     return Math.sqrt(Math.pow(node.clientX - this.clickX, 2) + Math.pow(node.clientY - this.clickY, 2));
 };
 
-mouse.prototype.dragThem = function () {
+slippyMouse.prototype.dragThem = function () {
     if (this.key !== 1)
         return;
 
@@ -80,13 +88,13 @@ mouse.prototype.dragThem = function () {
     this.y += this.dragVect.y;
 };
 
-mouse.prototype.cut = function () {
+slippyMouse.prototype.cut = function () {
     this.cutNodes.forEach(function (n) {
         n.removeLinks();
     });
 };
 
-mouse.prototype.mouseDown = function (mouseDownEvent) {
+slippyMouse.prototype.mouseDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     this.clickX = mouseDownEvent.x;
     this.clickY = mouseDownEvent.y;
@@ -123,14 +131,14 @@ mouse.prototype.mouseDown = function (mouseDownEvent) {
     }
 };
 
-Object.defineProperties(mouse.prototype, {
+Object.defineProperties(slippyMouse.prototype, {
     isUp: { get: function () { return this.key === 0 } },
     isSlippy: { get: function () { return this.slipFactor !== 1 } },
     hasDragBox: { get: function () { return this.dragBox !== null } },
     isHoldingNodes: { get: function () { return this.heldNodes.length !== 0 } },
 });
 
-mouse.prototype.bindMouseHandlers = function () {
+slippyMouse.prototype.bindMouseHandlers = function () {
     pyGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
     pyGrid.dragBoxes.forEach(function (d) {
         d.element.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };

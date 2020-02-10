@@ -27,7 +27,11 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 		this.appendChild(box.element);
 	}
 
-	this.mouse = new mouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
+	if (this.mouseSlipFactor === 1)
+		this.mouse = new pinchyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
+	else
+		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
+
 	this.graph = new graph();
 
 	this.mouse.bindMouseHandlers();
