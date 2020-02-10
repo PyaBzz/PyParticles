@@ -8,10 +8,7 @@ slippyMouse.prototype.constructor = slippyMouse;
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
     var gridCoordinates = pyGrid.convertCoordinate.fromWindowToPyGrid(hor, ver);
     this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
-    if (this.isSlippy)
-        this.touchedNodes.push(this.closestNode);
-    else
-        this.heldNodes.push(this.closestNode);
+    this.touchedNodes.push(this.closestNode);
 };
 
 slippyMouse.prototype.clearNodes = function () {
@@ -52,18 +49,11 @@ slippyMouse.prototype.dragThem = function () {
     if (this.key !== 1)
         return;
 
-    if (this.isSlippy) {
-        this.getNodesForCoordinates(this.x, this.y);
-        this.touchedNodes.forEach(function (n) {
-            n.move({ x: pyGrid.mouse.dragVect.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.dragVect.y * pyGrid.mouse.slipFactor })
-        });
-        this.clearNodes();
-    } else {
-
-        this.heldNodes.forEach(function (n) {
-            n.move({ x: pyGrid.mouse.dragVect.x, y: pyGrid.mouse.dragVect.y });
-        });
-    }
+    this.getNodesForCoordinates(this.x, this.y);
+    this.touchedNodes.forEach(function (n) {
+        n.move({ x: pyGrid.mouse.dragVect.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.dragVect.y * pyGrid.mouse.slipFactor })
+    });
+    this.clearNodes();
 
     this.x += this.dragVect.x;
     this.y += this.dragVect.y;
@@ -83,11 +73,7 @@ slippyMouse.prototype.mouseDown = function (mouseDownEvent) {
     if (mouseDownEvent.target == pyGrid.canvas) {
         switch (this.key) {
             case 1:
-                if (this.isSlippy) {
-
-                } else {
-                    this.closestNode.heldByMouse = true;
-                };
+                this.closestNode.heldByMouse = true;
                 break;
             case 2:
                 if (this.isHoldingNodes)
@@ -114,7 +100,6 @@ slippyMouse.prototype.mouseDown = function (mouseDownEvent) {
 
 Object.defineProperties(slippyMouse.prototype, {
     isUp: { get: function () { return this.key === 0 } },
-    isSlippy: { get: function () { return this.slipFactor !== 1 } },
     hasDragBox: { get: function () { return this.dragBox !== null } },
     isHoldingNodes: { get: function () { return this.heldNodes.length !== 0 } },
 });
