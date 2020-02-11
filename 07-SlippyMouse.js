@@ -8,7 +8,8 @@ slippyMouse.prototype.constructor = slippyMouse;
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
     var gridCoordinates = pyGrid.convertCoordinate.fromWindowToPyGrid(hor, ver);
     this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
-    this.touchedNodes.push(this.closestNode);
+    this.touchedNodes = this.closestNode.getNodesInRadius(this.impactRadius);
+    // this.touchedNodes.forEach(function (n) { n.mark() });
 };
 
 slippyMouse.prototype.clearNodes = function () {
