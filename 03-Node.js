@@ -48,7 +48,7 @@ node.prototype.updatePosition = function () {
 node.prototype.getNodesInRadius = function (radius = 0) {
 	var res = [this];
 	if (radius !== 0)
-		this.neighbours.forEach(function (n) { res.push(n) }, this);
+		this.neighbours.forEach(function (n) { if (n !== null) res.push(n) }, this);
 	return res;
 }
 
