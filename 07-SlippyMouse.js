@@ -35,19 +35,21 @@ slippyMouse.prototype.onMouseDown = function (mouseDownEvent) {
 };
 
 slippyMouse.prototype.dragThem = function (moveEvent) {
-    if (this.key !== 1 || moveEvent.target != pyGrid.canvas)
+    if (moveEvent.target != pyGrid.canvas)
         return;
     this.x = moveEvent.offsetX;
     this.y = moveEvent.offsetY;
     this.dragVect.x = moveEvent.movementX;
     this.dragVect.y = moveEvent.movementY;
     this.getNodesForCoordinates(this.x, this.y, false);
-    if (this.hasDragBox)
-        this.dragBox.move(this.dragVect.x, this.dragVect.y);
-
-    this.touchedNodes.forEach(function (n) {
-        n.move({ x: this.dragVect.x * this.slipFactor, y: this.dragVect.y * this.slipFactor })
-    }, this);
+    if (this.key === 1) {
+        if (this.hasDragBox)
+            this.dragBox.move(this.dragVect.x, this.dragVect.y);
+        else
+            this.drag();
+    } else if (this.key === 3) {
+        this.cut();
+    }
     this.clearNodes();
 };
 
@@ -61,14 +63,16 @@ slippyMouse.prototype.clearNodes = function () {
     this.touchedNodes = [];
 };
 
-// slippyMouse.prototype.cursorDistanceTo = function (node) {
-//     return Math.sqrt(Math.pow(node.clientX - this.x, 2) + Math.pow(node.clientY - this.y, 2));
-// };
-
 slippyMouse.prototype.cut = function () {
-    this.cutNodes.forEach(function (n) {
+    this.touchedNodes.forEach(function (n) {
         n.removeLinks();
     });
+};
+
+slippyMouse.prototype.drag = function () {
+    this.touchedNodes.forEach(function (n) {
+        n.move({ x: this.dragVect.x * this.slipFactor, y: this.dragVect.y * this.slipFactor })
+    }, this);
 };
 
 Object.defineProperties(slippyMouse.prototype, {
