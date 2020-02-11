@@ -24,12 +24,12 @@ mouse.prototype.bindHandlers = function () {
 
     pyGrid.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
-        pyGrid.mouse.onMouseDown(mouseDownEvent);
+        pyGrid.mouse.onDown(mouseDownEvent);
     };
 
     pyGrid.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
-        pyGrid.mouse.dragThem(moveEvent);
+        pyGrid.mouse.onMove(moveEvent);
     };
 
     pyGrid.onmouseup = function (releaseEvent) {

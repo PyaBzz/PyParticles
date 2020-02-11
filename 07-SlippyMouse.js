@@ -5,7 +5,7 @@ slippyMouse = function (impactRadius, cuttingRadius, slipFactor) {
 slippyMouse.prototype = new mouse();
 slippyMouse.prototype.constructor = slippyMouse;
 
-slippyMouse.prototype.onMouseDown = function (mouseDownEvent) {
+slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     this.x = mouseDownEvent.offsetX;
     this.y = mouseDownEvent.offsetY;
@@ -34,7 +34,7 @@ slippyMouse.prototype.onMouseDown = function (mouseDownEvent) {
     }
 };
 
-slippyMouse.prototype.dragThem = function (moveEvent) {
+slippyMouse.prototype.onMove = function (moveEvent) {
     if (moveEvent.target != pyGrid.canvas)
         return;
     this.x = moveEvent.offsetX;

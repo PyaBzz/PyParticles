@@ -5,7 +5,7 @@ pinchyMouse = function (impactRadius, cuttingRadius, slipFactor) {
 pinchyMouse.prototype = new mouse();
 pinchyMouse.prototype.constructor = pinchyMouse;
 
-pinchyMouse.prototype.onMouseDown = function (mouseDownEvent) {
+pinchyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     this.clickX = mouseDownEvent.x;
     this.clickY = mouseDownEvent.y;
@@ -42,7 +42,7 @@ pinchyMouse.prototype.onMouseDown = function (mouseDownEvent) {
     }
 };
 
-pinchyMouse.prototype.dragThem = function () {
+pinchyMouse.prototype.onMove = function () {
     if (this.key !== 1)
         return;
 
