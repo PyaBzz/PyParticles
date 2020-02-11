@@ -108,23 +108,23 @@ graph.prototype.getNodesWhere = function (func) {
 };
 
 graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
+	// var runnerNode = this.nodes[0][0];
 	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
-	var runnerNodeDistance = runnerNode.getDistanceToCoordinates(hor, ver);
-	var iterationLimit = Math.max(this.nodes.length, this.nodes[0].length);
-	var minDistance = Number.MAX_VALUE;
-	var bestNeighbour = null;
-	for (var i = 0; i < iterationLimit; i++) {
+	var bestNeighbour = runnerNode;
+	var runnerNodeDistance = Infinity;
+	var bestNeighbourDistance = Number.MAX_VALUE;
+	while (bestNeighbourDistance < runnerNodeDistance) {
+		runnerNode = bestNeighbour;
+		runnerNodeDistance = runnerNode.getDistanceToCoordinates(hor, ver);
 		runnerNode.neighbours.forEach(function (neighbour) {
 			if (neighbour != null) {
 				var neighbourDistance = neighbour.getDistanceToCoordinates(hor, ver);
-				if (neighbourDistance < minDistance) {
+				if (neighbourDistance < bestNeighbourDistance) {
 					bestNeighbour = neighbour;
-					minDistance = neighbourDistance;
+					bestNeighbourDistance = neighbourDistance;
 				}
 			}
 		});
-		if (minDistance < runnerNodeDistance)
-			runnerNode = bestNeighbour;
 	}
 	return runnerNode;
 };
