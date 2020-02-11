@@ -107,13 +107,15 @@ graph.prototype.getNodesWhere = function (func) {
 	return compliantNodes;
 };
 
-graph.prototype.getClosestNodeToCoordinates = function (hor, ver) {
+graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = false) {
 	// var runnerNode = this.nodes[0][0];
 	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
 	var bestNeighbour = runnerNode;
 	var runnerNodeDistance = Infinity;
 	var bestNeighbourDistance = Number.MAX_VALUE;
 	while (bestNeighbourDistance < runnerNodeDistance) {
+		if (markPath)
+			runnerNode.mark();
 		runnerNode = bestNeighbour;
 		runnerNodeDistance = runnerNode.getDistanceToCoordinates(hor, ver);
 		runnerNode.neighbours.forEach(function (neighbour) {

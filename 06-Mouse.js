@@ -24,24 +24,17 @@ mouse.prototype.bindHandlers = function () {
 
     pyGrid.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
-        pyGrid.mouse.mouseDown(mouseDownEvent);
+        pyGrid.mouse.onMouseDown(mouseDownEvent);
     };
 
     pyGrid.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
-        pyGrid.mouse.x = moveEvent.pageX;
-        pyGrid.mouse.y = moveEvent.pageY;
-        pyGrid.mouse.dragVect.x = moveEvent.movementX;
-        pyGrid.mouse.dragVect.y = moveEvent.movementY;
-        if (pyGrid.mouse.hasDragBox)
-            pyGrid.mouse.dragBox.move(pyGrid.mouse.dragVect.x, pyGrid.mouse.dragVect.y);
-
-        pyGrid.mouse.dragThem();
+        pyGrid.mouse.dragThem(moveEvent);
     };
 
     pyGrid.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
-        pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false });
+        pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
         pyGrid.mouse.key = 0;
         pyGrid.mouse.clearNodes();
         pyGrid.mouse.dragBox = null;
