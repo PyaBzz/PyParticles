@@ -24,6 +24,7 @@ node = function (col, row, zUnits) {
 	this.heldByBox = false;
 	this.links = [];
 	this.containingBox = null;
+	this.visited = false;
 };
 
 node.prototype.updatePosition = function () {
@@ -44,13 +45,6 @@ node.prototype.updatePosition = function () {
 
 	this.clearForce();
 };
-
-node.prototype.getNodesInRadius = function (radius = 0) {
-	var res = [this];
-	if (radius !== 0)
-		this.neighbours.forEach(function (n) { if (n !== null) res.push(n) }, this);
-	return res;
-}
 
 node.prototype.getDistanceToCoordinates = function (hor, ver) {
 	return Math.sqrt(Math.pow(this.x - hor, 2) + Math.pow(this.y - ver, 2))

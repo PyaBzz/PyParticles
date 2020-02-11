@@ -35,7 +35,7 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
 };
 
 slippyMouse.prototype.onMove = function (moveEvent) {
-    if (moveEvent.target != pyGrid.canvas)
+    if (this.key === 0 || moveEvent.target !== pyGrid.canvas)
         return;
     this.x = moveEvent.offsetX;
     this.y = moveEvent.offsetY;
@@ -48,19 +48,36 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         else
             this.drag();
     } else if (this.key === 3) {
-        this.cut();
+        if (pyGrid.rightClickAction === 0)
+            this.cut();
+        else
+            this.closestNode.mark();
     }
     this.clearNodes();
 };
 
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, markPath = false) {
-    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(hor, ver, markPath);
-    this.touchedNodes = this.closestNode.getNodesInRadius(this.impactRadius);
+    this.clearNodes();
+    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(hor, ver, false);
+    this.getNodesInRadius(this.closestNode, hor, ver, markPath);
+};
+
+slippyMouse.prototype.getNodesInRadius = function (rootNode, hor, ver, markPath) {
+    this.touchedNodes.push(rootNode);
+    rootNode.visited = true;
+    if (markPath)
+        rootNode.mark();
+    rootNode.neighbours.forEach(function (n) {
+        if (n.visited === false && n.getDistanceToCoordinates(hor, ver) <= this.impactRadius) {
+            this.getNodesInRadius(n, hor, ver);
+        }
+    }, this);
 };
 
 slippyMouse.prototype.clearNodes = function () {
-    this.closestNode = null;
+    this.touchedNodes.forEach(function (n) { n.visited = false });
     this.touchedNodes = [];
+    this.closestNode = null;
 };
 
 slippyMouse.prototype.cut = function () {
