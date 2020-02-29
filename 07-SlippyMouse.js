@@ -9,8 +9,8 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     this.x = mouseDownEvent.offsetX;
     this.y = mouseDownEvent.offsetY;
-    this.getNodesForCoordinates(this.x, this.y);
     if (mouseDownEvent.target == pyGrid.canvas) {
+        this.getNodesForCoordinates(this.x, this.y);
         switch (this.key) {
             case 1:
                 break;
@@ -35,25 +35,30 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
 };
 
 slippyMouse.prototype.onMove = function (moveEvent) {
-    if (this.key === 0 || moveEvent.target !== pyGrid.canvas)
+    if (this.key === 0)
         return;
-    this.x = moveEvent.offsetX;
-    this.y = moveEvent.offsetY;
-    this.dragVect.x = moveEvent.movementX;
-    this.dragVect.y = moveEvent.movementY;
-    this.getNodesForCoordinates(this.x, this.y, false);
-    if (this.key === 1) {
-        if (this.hasDragBox)
-            this.dragBox.move(this.dragVect.x, this.dragVect.y);
-        else
+
+    if (this.hasDragBox) {
+        this.dragBox.move(moveEvent.movementX, moveEvent.movementY);
+    } else {
+        if (moveEvent.target !== pyGrid.canvas)
+            return;
+        this.x = moveEvent.offsetX;
+        this.y = moveEvent.offsetY;
+        this.dragVect.x = moveEvent.movementX;
+        this.dragVect.y = moveEvent.movementY;
+        this.getNodesForCoordinates(this.x, this.y, false);
+        if (this.key === 1) {
             this.drag();
-    } else if (this.key === 3) {
-        if (pyGrid.rightClickAction === 0)
-            this.cut();
-        else
-            this.closestNode.mark();
+        } else if (this.key === 3) {
+            //Todo: Replace with enum for mouse actions
+            if (pyGrid.rightClickAction === 0)
+                this.cut();
+            else
+                this.closestNode.mark();
+        }
+        this.clearNodes();
     }
-    this.clearNodes();
 };
 
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, markPath = false) {
