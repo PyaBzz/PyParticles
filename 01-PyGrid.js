@@ -35,6 +35,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.graph = new graph();
 	this.mouse.bindHandlers();
 
+	//Todo: Combine all convert functions into child objects of a single convert object
 	this.rgbToHex = function (r, g, b) {
 		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 	};
