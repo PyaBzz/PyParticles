@@ -112,7 +112,12 @@ node.prototype.applyForce = function (x, y, z) {
 };
 
 Object.defineProperties(node.prototype, {
-	neighbours: { get: function () { return [this.upNeighbour, this.upRightNeighbour, this.rightNeighbour, this.downRightNeighbour, this.downNeighbour, this.downLeftNeighbour, this.leftNeighbour, this.upLeftNeighbour] } },
+	neighbours: {
+		get: function () {
+			let allNeighbours = [this.upNeighbour, this.upRightNeighbour, this.rightNeighbour, this.downRightNeighbour, this.downNeighbour, this.downLeftNeighbour, this.leftNeighbour, this.upLeftNeighbour];
+			return allNeighbours.filter(function (n) { return n !== null });
+		}
+	},
 	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
 	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
