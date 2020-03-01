@@ -20,20 +20,22 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.canvasCtx = this.canvas.getContext('2d');
 	this.referenceFrame = this.canvas.getBoundingClientRect();  // Required for comparison against node positions
 
-	this.dragBoxes = [];
-	for (var i = 0; i < pyGrid.dragBoxCount; i++) {
-		var box = new dragBox(i);
-		this.dragBoxes.push(box);
-		this.appendChild(box.element);
-		box.updateBoundaries();
-	}
-
 	if (this.mouseSlipFactor === 1)
 		this.mouse = new pinchyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
 	else
 		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
 
 	this.graph = new graph();
+
+	this.dragBoxes = [];
+	for (var i = 0; i < pyGrid.dragBoxCount; i++) {
+		var box = new dragBox(i);
+		this.dragBoxes.push(box);
+		this.appendChild(box.element);
+		box.updateBoundaries();
+		box.updateTouchedNodes();
+	}
+
 	this.mouse.bindHandlers();
 
 	this.convert = {

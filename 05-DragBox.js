@@ -8,25 +8,26 @@ dragBox = function (i) {
     this.element.setAttribute("dragbox-index", i);
     this.element.textContent = 'Drag Me!';
     this.element.style.top = 0;
+    this.touchedNodes = [];
 };
 
 dragBox.prototype.move = function (dragX, dragY) {
-    let centreNode = this.getCentreNode();
-    let touchedNodes = this.getTouchedNodes(centreNode, [], false);
-    this.dragNodes(touchedNodes, { x: dragX, y: dragY });
+    // let touchedNodes = this.updateTouchedNodes();
+    this.dragNodes({ x: dragX, y: dragY });
 
     this.element.style.left = this.element.offsetLeft + dragX + "px";
     this.element.style.top = this.element.offsetTop + dragY + "px";
 
-    touchedNodes.forEach(function (n) {
+    this.touchedNodes.forEach(function (n) {
         n.visited = false;
     });
 
     this.updateBoundaries();  // Caching for performance reasons!
+    this.updateTouchedNodes();
 };
 
-dragBox.prototype.dragNodes = function (nodes, dragVect) {
-    nodes.forEach(function (n) {
+dragBox.prototype.dragNodes = function (dragVect) {
+    this.touchedNodes.forEach(function (n) {
         n.move({ x: dragVect.x * pyGrid.mouse.slipFactor, y: dragVect.y * pyGrid.mouse.slipFactor })
     }, this);
 };
@@ -35,17 +36,39 @@ dragBox.prototype.getCentreNode = function () {
     return pyGrid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
 };
 
-dragBox.prototype.getTouchedNodes = function (rootNode, nodesSoFar, markPath = false) {
-    nodesSoFar.push(rootNode);
+dragBox.prototype.updateTouchedNodes = function (markPath = false) {
+    this.clearTouchedNodes();
+    let node = this.getCentreNode();
+    this.touchedNodes.push(node);
+    node.visited = true;
+    node.heldByBox = true;
+    if (markPath)
+        node.mark();
+    node.neighbours.forEach(function (n) {
+        if (n.visited === false && this.coversNode(n)) {
+            this.updateTouchedNodesRecurse(n, markPath);
+        }
+    }, this);
+    return this.touchedNodes;
+};
+
+dragBox.prototype.updateTouchedNodesRecurse = function (rootNode, markPath = false) {
+    this.touchedNodes.push(rootNode);
     rootNode.visited = true;
+    rootNode.heldByBox = true;
     if (markPath)
         rootNode.mark();
     rootNode.neighbours.forEach(function (n) {
         if (n.visited === false && this.coversNode(n)) {
-            this.getTouchedNodes(n, nodesSoFar, markPath);
+            this.updateTouchedNodesRecurse(n, markPath);
         }
     }, this);
-    return nodesSoFar;
+    return this.touchedNodes;
+};
+
+dragBox.prototype.clearTouchedNodes = function () {
+    this.touchedNodes.forEach(function (n) { n.heldByBox = false; });
+    this.touchedNodes = [];
 };
 
 dragBox.prototype.coversNode = function (n) {
