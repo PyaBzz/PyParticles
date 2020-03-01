@@ -25,6 +25,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 		var box = new dragBox(i);
 		this.dragBoxes.push(box);
 		this.appendChild(box.element);
+		box.updateBoundaries();
 	}
 
 	if (this.mouseSlipFactor === 1)
