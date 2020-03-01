@@ -57,21 +57,25 @@ node.prototype.getDistanceToCoordinates = function (hor, ver) {
 }
 
 node.prototype.draw = function () {
-	pyGrid.canvasCtx.beginPath();
-	if (this.pinned) {
+	if (pyGrid.pinRadius && this.pinned) {
+		pyGrid.canvasCtx.beginPath();
 		pyGrid.canvasCtx.fillStyle = pyGrid.pinColour;
-		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.nodeRadius, 0, 2 * Math.PI)
-	} else if (this.marked) {
+		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.pinRadius, 0, 2 * Math.PI)
+		pyGrid.canvasCtx.fill();
+	} else if (pyGrid.markedNodeRadius && this.marked) {
+		pyGrid.canvasCtx.beginPath();
 		pyGrid.canvasCtx.fillStyle = pyGrid.markedNodeColour;
-		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.nodeRadius, 0, 2 * Math.PI)
+		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.markedNodeRadius, 0, 2 * Math.PI)
+		pyGrid.canvasCtx.fill();
 	}
-	else {
+	else if (pyGrid.nodeRadius) {
+		pyGrid.canvasCtx.beginPath();
 		pyGrid.canvasCtx.fillStyle = pyGrid.nodeColour;
 		pyGrid.enableZAxis
 			? pyGrid.canvasCtx.arc(this.x, this.y, Math.abs(this.z), 0, 2 * Math.PI)
 			: pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.nodeRadius, 0, 2 * Math.PI);
+		pyGrid.canvasCtx.fill();
 	}
-	pyGrid.canvasCtx.fill();
 };
 
 node.prototype.drawLinks = function () {

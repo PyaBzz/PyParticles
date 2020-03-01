@@ -66,14 +66,13 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 
 	this.drawingLoop = function () {
 		pyGrid.graph.calculateForces();
-		// pyGrid.graph.updateNodeBounds();  // Has huge performance penalty!
 		pyGrid.graph.updateNodePositions();
 		pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
 		if (pyGrid.linkWidth) {
 			pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
 			pyGrid.graph.drawLinks();
 		}
-		if (pyGrid.nodeRadius) pyGrid.graph.drawNodes();
+		pyGrid.graph.drawNodes();
 	}
 
 	setInterval(this.drawingLoop, this.drawingTimeStep);

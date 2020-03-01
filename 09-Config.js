@@ -16,11 +16,13 @@ waterConfig = {
     linkWidth: 1,  // in pixels. 0 to disable link drawing
     drawDiagonalLinks: true,  // in pixels. 0 to disable link drawing
     nodeColour: "blue",
-    markedNodeColour: "yellow",
     nodeRadius: 0,  // in pixels. 0 to disable node drawing
     pinColour: "red",
+    pinRadius: 5,  // in pixels. 0 to disable pin drawing
+    markedNodeColour: "yellow",
+    markedNodeRadius: 3,  // in pixels. 0 to disable marked node drawing
     mouseImpactRadius: 2, // diameter of mouse impact in number of cells
-    rightClickAction: 0, // 0 = cut, 1 = mark
+    rightClickAction: 1, // 0 = cut, 1 = mark
     mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
     mouseSlipFactor: 0.6, // [0-1] 0 = maximum slip, 1 = no slip
     dragBoxHoldingFactor: 0.1, // [0-1] 0 = maximum holding, 1 = no holding
