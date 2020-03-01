@@ -11,7 +11,7 @@ dragBox = function (i) {
 };
 
 dragBox.prototype.move = function (dragX, dragY) {
-    let centreNode = pyGrid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
+    let centreNode = this.getCentreNode();
     let touchedNodes = this.getTouchedNodes(centreNode, [], false);
     this.dragNodes(touchedNodes, { x: dragX, y: dragY });
 
@@ -29,6 +29,10 @@ dragBox.prototype.dragNodes = function (nodes, dragVect) {
     nodes.forEach(function (n) {
         n.move({ x: dragVect.x * pyGrid.mouse.slipFactor, y: dragVect.y * pyGrid.mouse.slipFactor })
     }, this);
+};
+
+dragBox.prototype.getCentreNode = function () {
+    return pyGrid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
 };
 
 dragBox.prototype.getTouchedNodes = function (rootNode, nodesSoFar, markPath = false) {
