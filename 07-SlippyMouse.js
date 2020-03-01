@@ -51,8 +51,7 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         if (this.key === 1) {
             this.drag();
         } else if (this.key === 3) {
-            //Todo: Replace with enum for mouse actions
-            if (pyGrid.rightClickAction === 0)
+            if (pyGrid.rightClickAction === this.rightClickActionEnum.cut)
                 this.cut();
             else
                 this.closestNode.mark();

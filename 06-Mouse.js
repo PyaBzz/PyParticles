@@ -14,6 +14,7 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.touchedNodes = [];
     this.heldNodes = [];
     this.dragBox = null;
+    this.rightClickActionEnum = Object.freeze({ "cut": 0, "mark": 1 })
 };
 
 mouse.prototype.bindHandlers = function () {
