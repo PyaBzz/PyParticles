@@ -64,7 +64,7 @@ pinchyMouse.prototype.onMove = function () {
 };
 
 pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    var gridCoordinates = pyGrid.convertCoordinate.fromWindowToPyGrid(hor, ver);
+    var gridCoordinates = pyGrid.convert.coordinate.fromWindowToPyGrid(hor, ver);
     this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
     if (this.isSlippy)
         this.touchedNodes.push(this.closestNode);

@@ -36,28 +36,29 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.graph = new graph();
 	this.mouse.bindHandlers();
 
-	//Todo: Combine all convert functions into child objects of a single convert object
-	this.rgbToHex = function (r, g, b) {
-		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-	};
-
-	this.componentToHex = function (c) {
-		var hex = c.toString(16);
-		return hex.length == 1 ? "0" + hex : hex;
-	};
-
-	this.convertCoordinate = {
-		fromWindowToPyGrid: function (horizontal, vertical) {
-			return {
-				hor: horizontal - pyGrid.referenceFrame.left,
-				ver: vertical - pyGrid.referenceFrame.top
-			};
+	this.convert = {
+		colour: {
+			rgbToHex: function (r, g, b) {
+				return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+			},
+			componentToHex: function (c) {
+				var hex = c.toString(16);
+				return hex.length == 1 ? "0" + hex : hex;
+			},
 		},
-		fromPyGridToWindow: function (horizontal, vertical) {
-			return {
-				hor: horizontal + pyGrid.referenceFrame.left,
-				ver: vertical + pyGrid.referenceFrame.top
-			};
+		coordinate: {
+			fromWindowToPyGrid: function (horizontal, vertical) {
+				return {
+					hor: horizontal - pyGrid.referenceFrame.left,
+					ver: vertical - pyGrid.referenceFrame.top
+				};
+			},
+			fromPyGridToWindow: function (horizontal, vertical) {
+				return {
+					hor: horizontal + pyGrid.referenceFrame.left,
+					ver: vertical + pyGrid.referenceFrame.top
+				};
+			},
 		},
 	}
 
