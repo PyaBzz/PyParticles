@@ -35,9 +35,9 @@ node.prototype.updatePosition = function () {
 	this.acceleration.z = -this.force.z / pyGrid.nodeMass - pyGrid.gravity;  // Gravity acts in -z direction
 
 	if (this.heldByBox) {
-		if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x) * pyGrid.dragBoxHoldingFactor;
-		if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y) * pyGrid.dragBoxHoldingFactor;
-		if (pyGrid.enableZAxis) this.z += (this.acceleration.z / 2 + pyGrid.damping * this.speed.z) * pyGrid.dragBoxHoldingFactor;
+		if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x) * pyGrid.boxedNodeBrakingFactor;
+		if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y) * pyGrid.boxedNodeBrakingFactor;
+		if (pyGrid.enableZAxis) this.z += (this.acceleration.z / 2 + pyGrid.damping * this.speed.z) * pyGrid.boxedNodeBrakingFactor;
 	} else {
 		if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x);
 		if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y);
