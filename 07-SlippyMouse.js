@@ -39,7 +39,10 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         return;
 
     if (this.hasDragBox) {
-        this.dragBox.move(moveEvent.movementX, moveEvent.movementY);
+        if (this.key === 3)
+            this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = true);
+        else
+            this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = false);
     } else {
         if (moveEvent.target !== pyGrid.canvas)
             return;

@@ -111,7 +111,7 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = fal
 	return runnerNode;
 };
 
-graph.prototype.getNodesWhere = function (predicate, rootNode = null) {
+graph.prototype.getNodesWhere = function (predicate, rootNode = null, markPath = false) {
 	var resultArray = [];
 	if (rootNode == null) {
 		for (var row = 0; row < this.nodes.length; row++) {
@@ -124,10 +124,11 @@ graph.prototype.getNodesWhere = function (predicate, rootNode = null) {
 	} else {
 		resultArray.push(rootNode);
 		rootNode.visited = true;
-		rootNode.mark();
+		if (markPath)
+			rootNode.mark();
 		rootNode.neighbours.forEach(function (n) {
 			if (n.visited === false && predicate(n) != false) {
-				this.getNodesWhereRecurse(predicate, n, resultArray, true);
+				this.getNodesWhereRecurse(predicate, n, resultArray, markPath);
 			}
 		}, this);
 

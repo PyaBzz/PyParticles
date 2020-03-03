@@ -11,8 +11,8 @@ dragBox = function (i) {
     this.touchedNodes = [];
 };
 
-dragBox.prototype.move = function (dragX, dragY) {
-    this.updateTouchedNodes();
+dragBox.prototype.move = function (dragX, dragY, markPath = false) {
+    this.updateTouchedNodes(markPath);
     this.dragNodes({ x: dragX, y: dragY });
 
     this.element.style.left = this.element.offsetLeft + dragX + "px";
@@ -34,7 +34,7 @@ dragBox.prototype.getCentreNode = function () {
 dragBox.prototype.updateTouchedNodes = function (markPath = false) {
     this.clearTouchedNodes();
     let centreNode = this.getCentreNode();
-    this.touchedNodes = pyGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode);
+    this.touchedNodes = pyGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
     return this.touchedNodes;
 };
 
