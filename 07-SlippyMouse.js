@@ -39,10 +39,18 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         return;
 
     if (this.hasDragBox) {
-        if (this.key === this.buttonsEnum.right)
-            this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = true);
-        else
-            this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = false);
+        switch (this.key) {
+            case this.buttonsEnum.left:
+                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = false);
+                break;
+            case this.buttonsEnum.middle:
+                break;
+            case this.buttonsEnum.right:
+                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = true);
+                break;
+            default:
+                break;
+        }
     } else {
         if (moveEvent.target !== pyGrid.canvas)
             return;
@@ -51,13 +59,21 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         this.dragVect.x = moveEvent.movementX;
         this.dragVect.y = moveEvent.movementY;
         this.getNodesForCoordinates(this.x, this.y, false);
-        if (this.key === this.buttonsEnum.left) {
-            this.drag();
-        } else if (this.key === this.buttonsEnum.right) {
-            if (pyGrid.rightClickAction === this.actionsEnum.cut)
-                this.cut();
-            else
-                this.closestNode.mark();
+        switch (this.key) {
+            case this.buttonsEnum.left:
+                this.drag();
+                break;
+            case this.buttonsEnum.middle:
+                this.closestNode.pin();
+                break;
+            case this.buttonsEnum.right:
+                if (pyGrid.rightClickAction === this.actionsEnum.cut)
+                    this.cut();
+                else
+                    this.closestNode.mark();
+                break;
+            default:
+                break;
         }
         this.clearNodes();
     }
