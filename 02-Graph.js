@@ -87,18 +87,6 @@ graph.prototype.doToAllNodes = function (func) {
 	}
 };
 
-graph.prototype.getNodesWhere = function (func) {
-	var compliantNodes = [];
-	for (var row = 0; row < this.nodes.length; row++) {
-		for (var col = 0; col < this.nodes[0].length; col++) {
-			n = this.nodes[row][col];
-			if (func(n) != false)
-				compliantNodes.push(n);
-		}
-	}
-	return compliantNodes;
-};
-
 graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = false) {
 	// var runnerNode = this.nodes[0][0];
 	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
@@ -121,6 +109,45 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = fal
 		});
 	}
 	return runnerNode;
+};
+
+graph.prototype.getNodesWhere = function (predicate, rootNode = null) {
+	var resultArray = [];
+	if (rootNode == null) {
+		for (var row = 0; row < this.nodes.length; row++) {
+			for (var col = 0; col < this.nodes[0].length; col++) {
+				n = this.nodes[row][col];
+				if (predicate(n) != false)
+					resultArray.push(n);
+			}
+		}
+	} else {
+		resultArray.push(rootNode);
+		rootNode.visited = true;
+		rootNode.mark();
+		rootNode.neighbours.forEach(function (n) {
+			if (n.visited === false && predicate(n) != false) {
+				this.getNodesWhereRecurse(predicate, n, resultArray, true);
+			}
+		}, this);
+
+		resultArray.forEach(function (n) {
+			n.visited = false;
+		});
+	}
+	return resultArray;
+};
+
+graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, markPath = false) {
+	resultArray.push(node);
+	node.visited = true;
+	if (markPath)
+		node.mark();
+	node.neighbours.forEach(function (n) {
+		if (n.visited === false && predicate(n) != false) {
+			this.getNodesWhereRecurse(predicate, n, resultArray, markPath);
+		}
+	}, this);
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
