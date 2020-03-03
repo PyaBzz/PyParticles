@@ -33,35 +33,8 @@ dragBox.prototype.getCentreNode = function () {
 
 dragBox.prototype.updateTouchedNodes = function (markPath = false) {
     this.clearTouchedNodes();
-    let node = this.getCentreNode();
-    this.touchedNodes.push(node);
-    node.visited = true;
-    node.heldByBox = true;
-    if (markPath)
-        node.mark();
-    node.neighbours.forEach(function (n) {
-        if (n.visited === false && this.coversNode(n)) {
-            this.updateTouchedNodesRecurse(n, markPath);
-        }
-    }, this);
-
-    this.touchedNodes.forEach(function (n) {
-        n.visited = false;
-    });
-    return this.touchedNodes;
-};
-
-dragBox.prototype.updateTouchedNodesRecurse = function (rootNode, markPath = false) {
-    this.touchedNodes.push(rootNode);
-    rootNode.visited = true;
-    rootNode.heldByBox = true;
-    if (markPath)
-        rootNode.mark();
-    rootNode.neighbours.forEach(function (n) {
-        if (n.visited === false && this.coversNode(n)) {
-            this.updateTouchedNodesRecurse(n, markPath);
-        }
-    }, this);
+    let centreNode = this.getCentreNode();
+    this.touchedNodes = pyGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode);
     return this.touchedNodes;
 };
 

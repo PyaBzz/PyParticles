@@ -63,19 +63,8 @@ slippyMouse.prototype.onMove = function (moveEvent) {
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, markPath = false) {
     this.clearNodes();
     this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(hor, ver, false);
-    this.getNodesInRadius(this.closestNode, hor, ver, markPath);
-};
-
-slippyMouse.prototype.getNodesInRadius = function (rootNode, hor, ver, markPath) {
-    this.touchedNodes.push(rootNode);
-    rootNode.visited = true;
-    if (markPath)
-        rootNode.mark();
-    rootNode.neighbours.forEach(function (n) {
-        if (n.visited === false && n.getDistanceToCoordinates(hor, ver) <= this.impactRadius) {
-            this.getNodesInRadius(n, hor, ver);
-        }
-    }, this);
+    this.touchedNodes = pyGrid.graph.getNodesWhere(n => n.getDistanceToCoordinates(hor, ver) <= this.impactRadius, this.closestNode);
+    return this.touchedNodes;
 };
 
 slippyMouse.prototype.clearNodes = function () {
