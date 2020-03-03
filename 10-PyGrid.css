@@ -19,20 +19,20 @@ body {
 }
 
 header {
+    color: aqua;
     margin-top: 10px;
 }
 
 p {
     display: inline-block;
-    color: yellow;
     text-align: center;
-    font-size: 24px;
+    font-size: 16px;
 }
 
 .help {
     color: yellowgreen;
     text-align: center;
-    font-size: 24px;
+    font-size: 16px;
 }
 
 .spread-children:after {
