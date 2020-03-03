@@ -25,7 +25,7 @@ waterConfig = {
     rightClickAction: 1, // 0 = cut, 1 = mark
     mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
     mouseSlipFactor: 0.6, // [0-1] 0 = maximum slip, 1 = no slip
-    dragBoxHoldingFactor: 0.1, // [0-1] 0 = maximum holding, 1 = no holding
+    dragBoxHoldingFactor: 0.4, // [0-1] 0 = maximum holding, 1 = no holding
 };
 
 clothConfig = {

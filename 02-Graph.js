@@ -56,18 +56,10 @@ graph.prototype.calculateForces = function () {
 	});
 };
 
-graph.prototype.updateNodeBounds = function () {
-	this.doToAllNodes(function (p) {
-		Array.prototype.forEach.call(pyGrid.dragBoxes, function (b) {
-			if (p.isInBox(b.offsetLeft, b.offsetLeft + b.offsetWidth, b.offsetTop, b.offsetTop + b.offsetHeight)) {
-				p.heldByBox = 1;
-				p.containingBox = b;
-			} else {
-				p.heldByBox = 0;
-				p.containingBox = null;
-			}
-		});
-	});
+graph.prototype.updateBoxedNodes = function () {
+	pyGrid.dragBoxes.forEach(function (d) {
+		d.updateTouchedNodes();
+	}, this);
 };
 
 graph.prototype.updateNodePositions = function () {

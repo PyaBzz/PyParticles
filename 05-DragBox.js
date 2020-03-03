@@ -12,18 +12,13 @@ dragBox = function (i) {
 };
 
 dragBox.prototype.move = function (dragX, dragY) {
-    // let touchedNodes = this.updateTouchedNodes();
+    this.updateTouchedNodes();
     this.dragNodes({ x: dragX, y: dragY });
 
     this.element.style.left = this.element.offsetLeft + dragX + "px";
     this.element.style.top = this.element.offsetTop + dragY + "px";
 
-    this.touchedNodes.forEach(function (n) {
-        n.visited = false;
-    });
-
     this.updateBoundaries();  // Caching for performance reasons!
-    this.updateTouchedNodes();
 };
 
 dragBox.prototype.dragNodes = function (dragVect) {
@@ -49,6 +44,10 @@ dragBox.prototype.updateTouchedNodes = function (markPath = false) {
             this.updateTouchedNodesRecurse(n, markPath);
         }
     }, this);
+
+    this.touchedNodes.forEach(function (n) {
+        n.visited = false;
+    });
     return this.touchedNodes;
 };
 

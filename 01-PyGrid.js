@@ -33,7 +33,6 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 		this.dragBoxes.push(box);
 		this.appendChild(box.element);
 		box.updateBoundaries();
-		box.updateTouchedNodes();
 	}
 
 	this.mouse.bindHandlers();
@@ -65,6 +64,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	}
 
 	this.drawingLoop = function () {
+		pyGrid.graph.updateBoxedNodes();
 		pyGrid.graph.calculateForces();
 		pyGrid.graph.updateNodePositions();
 		pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
