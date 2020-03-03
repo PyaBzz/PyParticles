@@ -12,13 +12,13 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
     if (mouseDownEvent.target == pyGrid.canvas) {
         this.getNodesForCoordinates(this.x, this.y);
         switch (this.key) {
-            case 1:
+            case this.buttonsEnum.left:
                 break;
-            case 2:
+            case this.buttonsEnum.middle:
                 this.closestNode.pin();
                 break;
-            case 3:
-                if (pyGrid.rightClickAction === 0)
+            case this.buttonsEnum.right:
+                if (pyGrid.rightClickAction === this.actionsEnum.cut)
                     this.cut();
                 else
                     this.closestNode.mark();
@@ -35,11 +35,11 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
 };
 
 slippyMouse.prototype.onMove = function (moveEvent) {
-    if (this.key === 0)
+    if (this.isUp)
         return;
 
     if (this.hasDragBox) {
-        if (this.key === 3)
+        if (this.key === this.buttonsEnum.right)
             this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = true);
         else
             this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = false);
@@ -51,10 +51,10 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         this.dragVect.x = moveEvent.movementX;
         this.dragVect.y = moveEvent.movementY;
         this.getNodesForCoordinates(this.x, this.y, false);
-        if (this.key === 1) {
+        if (this.key === this.buttonsEnum.left) {
             this.drag();
-        } else if (this.key === 3) {
-            if (pyGrid.rightClickAction === this.rightClickActionEnum.cut)
+        } else if (this.key === this.buttonsEnum.right) {
+            if (pyGrid.rightClickAction === this.actionsEnum.cut)
                 this.cut();
             else
                 this.closestNode.mark();
@@ -89,7 +89,7 @@ slippyMouse.prototype.drag = function () {
 };
 
 Object.defineProperties(slippyMouse.prototype, {
-    isUp: { get: function () { return this.key === 0 } },
+    isUp: { get: function () { return this.key === this.buttonsEnum.none } },
     hasDragBox: { get: function () { return this.dragBox !== null } },
     isHoldingNodes: { get: function () { return this.heldNodes.length !== 0 } },
 });
