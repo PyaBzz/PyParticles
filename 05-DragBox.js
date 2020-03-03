@@ -35,6 +35,7 @@ dragBox.prototype.updateTouchedNodes = function (markPath = false) {
     this.clearTouchedNodes();
     let centreNode = this.getCentreNode();
     this.touchedNodes = pyGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
+    this.touchedNodes.forEach(n => n.heldByBox = true);
     return this.touchedNodes;
 };
 
