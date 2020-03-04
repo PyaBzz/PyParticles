@@ -18,6 +18,7 @@ node = function (col, row, zUnits) {
 	this.force = { x: 0, y: 0, z: 0 };
 	this.speed = { x: 0, y: 0, z: 0 };
 	this.acceleration = { x: 0, y: 0, z: 0 };
+	this.isFrame = false;
 	this.pinned = false;
 	this.marked = false;
 	this.heldByMouse = false;
@@ -57,7 +58,9 @@ node.prototype.getDistanceToCoordinates = function (hor, ver) {
 }
 
 node.prototype.draw = function () {
-	if (pyGrid.pinRadius && this.pinned) {
+	if (this.isFrame)
+		return;
+	else if (pyGrid.pinRadius && this.pinned) {
 		pyGrid.canvasCtx.beginPath();
 		pyGrid.canvasCtx.fillStyle = pyGrid.pinColour;
 		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.pinRadius, 0, 2 * Math.PI)
@@ -90,7 +93,7 @@ node.prototype.attach = function (node) {
 };
 
 node.prototype.move = function (vector) {
-	if (this.pinned)
+	if (this.isFree === false)
 		return;
 
 	this.x += vector.x;
@@ -107,6 +110,10 @@ node.prototype.removeLinks = function () {
 
 node.prototype.pin = function () {
 	this.pinned = true;
+};
+
+node.prototype.frame = function () {
+	this.isFrame = true;
 };
 
 node.prototype.mark = function () {
@@ -128,7 +135,7 @@ Object.defineProperties(node.prototype, {
 			return allNeighbours.filter(function (n) { return n !== null });
 		}
 	},
-	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false; } },
+	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false && this.isFrame === false; } },
 	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
 });

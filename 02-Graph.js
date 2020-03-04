@@ -8,7 +8,7 @@ graph = function () {
 			var p = new node(col, row, 0);
 
 			if (row == 0)
-				p.pin();                   // Pin the top edge of the graph
+				p.frame();                   // The top edge of the graph is frame
 			else {  // Link upNeighbour
 				p.upNeighbour = this.nodes[row - 1][col];
 				p.attach(p.upNeighbour);
@@ -16,7 +16,7 @@ graph = function () {
 			}
 
 			if (col == 0)
-				p.pin();                   // Pin the left edge of the graph
+				p.frame();                   // The left edge of the graph is frame
 			else {  // Link leftNeighbour
 				p.leftNeighbour = this.nodes[row][col - 1];
 				p.attach(p.leftNeighbour);
@@ -38,10 +38,10 @@ graph = function () {
 			}
 
 			if (col == pyGrid.horizontalCellCount)
-				p.pin();   // Pin the right edge of the graph
+				p.frame();   // The right edge of the graph is frame
 
 			if (row == pyGrid.verticalCellCount)
-				p.pin();  // Pin the bottom edge of the graph
+				p.frame();  // The bottom edge of the graph is frame
 
 			this.nodes[row].push(p);
 		}
