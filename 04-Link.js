@@ -11,16 +11,17 @@ link.prototype.applyForces = function () {
 	if (this.p1.isFree === false && this.p2.isFree === false)
 		return;
 
-	var force = {};
-	force.x = Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
-	force.y = Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
-	force.z = Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness;
+	var force = {
+		x: Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness,
+		y: Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness,
+		z: Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), pyGrid.elasticNonlinearity) * pyGrid.elasticStiffness,
+	};
 
 	if (this.p2.isFree)
-		this.p2.applyForce(-force.x, -force.y, -force.z);
+		this.p2.applyForce({ x: -force.x, y: -force.y, z: -force.z });
 
 	if (this.p1.isFree)
-		this.p1.applyForce(force.x, force.y, force.z);
+		this.p1.applyForce(force);
 };
 
 link.prototype.draw = function () {

@@ -124,8 +124,8 @@ node.prototype.clearForce = function () {
 	this.force = { x: 0, y: 0, z: 0 };
 };
 
-node.prototype.applyForce = function (x, y, z) {
-	this.force.x += x; this.force.y += y; this.force.z += z;
+node.prototype.applyForce = function (vector) {
+	this.force.x += vector.x; this.force.y += vector.y; this.force.z += vector.z;
 };
 
 Object.defineProperties(node.prototype, {
