@@ -5,7 +5,7 @@ link = function (p1, p2) {
 
 link.prototype.applyForces = function () {
 
-	if (this.hastStretchedToTear)
+	if (this.hasStretchedToTear)
 		this.p1.removeLink(this);  // 2D
 
 	if (this.p1.isFree === false && this.p2.isFree === false)
@@ -31,7 +31,7 @@ link.prototype.draw = function () {
 
 Object.defineProperties(link.prototype, {
 	diff: { get: function () { return { x: this.p1.x - this.p2.x, y: this.p1.y - this.p2.y, z: this.p1.z - this.p2.z } } },
-	hastStretchedToTear: { get: function () { return pyGrid.linkTearingLength && this.length2D > pyGrid.linkTearingLength } },
+	hasStretchedToTear: { get: function () { return pyGrid.linkTearingLength && this.length2D > pyGrid.linkTearingLength } },
 	length2D: { get: function () { return Math.sqrt(Math.pow(this.diff.x, 2) + Math.pow(this.diff.y, 2)) } },
 	length3D: { get: function () { return Math.sqrt(Math.pow(this.diff.x, 2) + Math.pow(this.diff.y, 2) + Math.pow(this.diff.z, 2)) } },
 });
