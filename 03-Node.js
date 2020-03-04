@@ -128,7 +128,7 @@ Object.defineProperties(node.prototype, {
 			return allNeighbours.filter(function (n) { return n !== null });
 		}
 	},
-	isFree: { get: function () { return !this.pinned && !this.heldByMouse; } },
+	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false; } },
 	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
 	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
 });
