@@ -17,7 +17,6 @@ node = function (col, row, zUnits) {
 	this.z = zUnits * pyGrid.restingLinkLength;
 	this.force = { x: 0, y: 0, z: 0 };
 	this.speed = { x: 0, y: 0, z: 0 };
-	this.acceleration = { x: 0, y: 0, z: 0 };
 	this.isFrame = false;
 	this.pinned = false;
 	this.marked = false;
@@ -29,26 +28,27 @@ node = function (col, row, zUnits) {
 };
 
 node.prototype.updatePosition = function () {
-	if (!this.isFree) return;
+	if (!this.isFree)
+		return;
 
-	this.acceleration.x = -this.force.x / pyGrid.nodeMass;
-	this.acceleration.y = -this.force.y / pyGrid.nodeMass;
-	this.acceleration.z = -this.force.z / pyGrid.nodeMass - pyGrid.gravity;  // Gravity acts in -z direction
+	let acceleration = {
+		x: -this.force.x / pyGrid.nodeMass,
+		y: -this.force.y / pyGrid.nodeMass,
+		z: -this.force.z / pyGrid.nodeMass - pyGrid.gravity,  // Gravity acts in -z direction
+	};
 
 	if (this.heldByBox) {
-		if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x) * pyGrid.boxedNodeBrakingFactor;
-		if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y) * pyGrid.boxedNodeBrakingFactor;
-		if (pyGrid.enableZAxis) this.z += (this.acceleration.z / 2 + pyGrid.damping * this.speed.z) * pyGrid.boxedNodeBrakingFactor;
+		if (pyGrid.enableXAxis) this.x += (acceleration.x / 2 + pyGrid.damping * this.speed.x) * pyGrid.boxedNodeBrakingFactor;
+		if (pyGrid.enableYAxis) this.y += (acceleration.y / 2 + pyGrid.damping * this.speed.y) * pyGrid.boxedNodeBrakingFactor;
+		if (pyGrid.enableZAxis) this.z += (acceleration.z / 2 + pyGrid.damping * this.speed.z) * pyGrid.boxedNodeBrakingFactor;
 	} else {
-		if (pyGrid.enableXAxis) this.x += (this.acceleration.x / 2 + pyGrid.damping * this.speed.x);
-		if (pyGrid.enableYAxis) this.y += (this.acceleration.y / 2 + pyGrid.damping * this.speed.y);
-		if (pyGrid.enableZAxis) this.z += (this.acceleration.z / 2 + pyGrid.damping * this.speed.z);
+		if (pyGrid.enableXAxis) this.x += (acceleration.x / 2 + pyGrid.damping * this.speed.x);
+		if (pyGrid.enableYAxis) this.y += (acceleration.y / 2 + pyGrid.damping * this.speed.y);
+		if (pyGrid.enableZAxis) this.z += (acceleration.z / 2 + pyGrid.damping * this.speed.z);
 	}
 	pyGrid.minZ = Math.min(pyGrid.minZ, this.z);
 
-	this.speed.x += this.acceleration.x;
-	this.speed.y += this.acceleration.y;
-	this.speed.z += this.acceleration.z;
+	this.applyAcceleration(acceleration);
 
 	this.clearForce();
 };
@@ -126,6 +126,10 @@ node.prototype.clearForce = function () {
 
 node.prototype.applyForce = function (vector) {
 	this.force.x += vector.x; this.force.y += vector.y; this.force.z += vector.z;
+};
+
+node.prototype.applyAcceleration = function (vector) {
+	this.speed.x += vector.x; this.speed.y += vector.y; this.speed.z += vector.z; // Because time step is normalised to 1 sec
 };
 
 Object.defineProperties(node.prototype, {
