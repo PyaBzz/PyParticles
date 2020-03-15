@@ -54,11 +54,11 @@ slippyMouse.prototype.onMove = function (moveEvent) {
     } else {
         if (moveEvent.target !== pyGrid.canvas)
             return;
-        this.x = moveEvent.offsetX;
-        this.y = moveEvent.offsetY;
+        let x = moveEvent.offsetX + moveEvent.movementX;
+        let y = moveEvent.offsetY + moveEvent.movementY;
         this.dragVect.x = moveEvent.movementX;
         this.dragVect.y = moveEvent.movementY;
-        this.getNodesForCoordinates(this.x, this.y, false);
+        this.getNodesForCoordinates(x, y, false);
         switch (this.key) {
             case this.buttonsEnum.left:
                 this.drag();
