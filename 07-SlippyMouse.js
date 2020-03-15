@@ -7,10 +7,10 @@ slippyMouse.prototype.constructor = slippyMouse;
 
 slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
-    this.x = mouseDownEvent.offsetX;
-    this.y = mouseDownEvent.offsetY;
+    let hor = mouseDownEvent.offsetX;
+    let ver = mouseDownEvent.offsetY;
     if (mouseDownEvent.target == pyGrid.canvas) {
-        this.getNodesForCoordinates(this.x, this.y);
+        this.getNodesForCoordinates(hor, ver);
         switch (this.key) {
             case this.buttonsEnum.left:
                 break;
@@ -54,14 +54,13 @@ slippyMouse.prototype.onMove = function (moveEvent) {
     } else {
         if (moveEvent.target !== pyGrid.canvas)
             return;
-        let x = moveEvent.offsetX + moveEvent.movementX;
-        let y = moveEvent.offsetY + moveEvent.movementY;
-        this.dragVect.x = moveEvent.movementX;
-        this.dragVect.y = moveEvent.movementY;
-        this.getNodesForCoordinates(x, y, false);
+        let hor = moveEvent.offsetX + moveEvent.movementX;
+        let ver = moveEvent.offsetY + moveEvent.movementY;
+        let dragVect = { x: moveEvent.movementX, y: moveEvent.movementY };
+        this.getNodesForCoordinates(hor, ver, false);
         switch (this.key) {
             case this.buttonsEnum.left:
-                this.drag();
+                this.drag(dragVect);
                 break;
             case this.buttonsEnum.middle:
                 this.closestNode.pin();
@@ -98,9 +97,9 @@ slippyMouse.prototype.cut = function () {
     });
 };
 
-slippyMouse.prototype.drag = function () {
+slippyMouse.prototype.drag = function (dragVect) {
     this.touchedNodes.forEach(function (n) {
-        n.move({ x: this.dragVect.x * this.slipFactor, y: this.dragVect.y * this.slipFactor })
+        n.move({ x: dragVect.x * this.slipFactor, y: dragVect.y * this.slipFactor })
     }, this);
 };
 
