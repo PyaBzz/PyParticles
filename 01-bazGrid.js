@@ -6,7 +6,7 @@ onload = function () {
 HTMLDivElement.prototype.createBazGrid = function (config) {
 	bazGrid = this;
 
-	for (var key in config)
+	for (let key in config)
 		this[key] = config[key];
 
 	this.restingLinkLength = this.clientWidth / this.horizontalCellCount;
@@ -28,8 +28,8 @@ HTMLDivElement.prototype.createBazGrid = function (config) {
 	this.graph = new graph();
 
 	this.dragBoxes = [];
-	for (var i = 0; i < bazGrid.dragBoxCount; i++) {
-		var box = new dragBox(i);
+	for (let i = 0; i < bazGrid.dragBoxCount; i++) {
+		let box = new dragBox(i);
 		this.dragBoxes.push(box);
 		this.appendChild(box.element);
 		box.updateBoundaries();
@@ -43,7 +43,7 @@ HTMLDivElement.prototype.createBazGrid = function (config) {
 				return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 			},
 			componentToHex: function (c) {
-				var hex = c.toString(16);
+				let hex = c.toString(16);
 				return hex.length == 1 ? "0" + hex : hex;
 			},
 		},

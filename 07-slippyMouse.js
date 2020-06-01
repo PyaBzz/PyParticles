@@ -28,7 +28,7 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
         }
     }
     else if (mouseDownEvent.target.className == 'dragbox') {
-        var dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
+        let dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
         this.dragBox = bazGrid.dragBoxes[dragBoxIndex];
         this.dragBox.updateBoundaries();
     }

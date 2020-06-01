@@ -36,7 +36,7 @@ pinchyMouse.prototype.onDown = function (mouseDownEvent) {
         }
     }
     else if (mouseDownEvent.target.className == 'dragbox') {
-        var dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
+        let dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
         this.dragBox = bazGrid.dragBoxes[dragBoxIndex];
         this.dragBox.updateBoundaries();
     }
@@ -64,7 +64,7 @@ pinchyMouse.prototype.onMove = function () {
 };
 
 pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    var gridCoordinates = bazGrid.convert.coordinate.fromWindowToBazGrid(hor, ver);
+    let gridCoordinates = bazGrid.convert.coordinate.fromWindowToBazGrid(hor, ver);
     this.closestNode = bazGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
     if (this.isSlippy)
         this.touchedNodes.push(this.closestNode);
@@ -79,7 +79,7 @@ pinchyMouse.prototype.clearNodes = function () {
 };
 
 pinchyMouse.prototype.check = function (node) {
-    // var distance = this.cursorDistanceTo(node);
+    // let distance = this.cursorDistanceTo(node);
     // if (distance < this.closestNodeDistance) {
     //     this.closestNode = node;
     //     this.closestNodeDistance = distance;

@@ -2,10 +2,10 @@ graph = function () {
 
 	this.nodes = [];
 
-	for (var row = 0; row <= bazGrid.verticalCellCount; row++) {
+	for (let row = 0; row <= bazGrid.verticalCellCount; row++) {
 		this.nodes[row] = [];
-		for (var col = 0; col <= bazGrid.horizontalCellCount; col++) {
-			var p = new node(col, row, 0);
+		for (let col = 0; col <= bazGrid.horizontalCellCount; col++) {
+			let p = new node(col, row, 0);
 
 			if (row == 0)
 				p.frame();                   // The top edge of the graph is frame
@@ -80,19 +80,19 @@ graph.prototype.drawLinks = function () {
 };
 
 graph.prototype.doToAllNodes = function (func) {
-	for (var row = 0; row < this.nodes.length; row++) {
-		for (var col = 0; col < this.nodes[0].length; col++) {
+	for (let row = 0; row < this.nodes.length; row++) {
+		for (let col = 0; col < this.nodes[0].length; col++) {
 			func(this.nodes[row][col]);
 		};
 	}
 };
 
 graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = false) {
-	// var runnerNode = this.nodes[0][0];
-	var runnerNode = this.estimateNodeByCoordinates(hor, ver);
-	var bestNeighbour = runnerNode;
-	var runnerNodeDistance = Infinity;
-	var bestNeighbourDistance = Number.MAX_VALUE;
+	// let runnerNode = this.nodes[0][0];
+	let runnerNode = this.estimateNodeByCoordinates(hor, ver);
+	let bestNeighbour = runnerNode;
+	let runnerNodeDistance = Infinity;
+	let bestNeighbourDistance = Number.MAX_VALUE;
 	while (bestNeighbourDistance < runnerNodeDistance) {
 		if (markPath)
 			runnerNode.mark();
@@ -100,7 +100,7 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = fal
 		runnerNodeDistance = runnerNode.getDistanceToCoordinates(hor, ver);
 		runnerNode.neighbours.forEach(function (neighbour) {
 			if (neighbour != null) {
-				var neighbourDistance = neighbour.getDistanceToCoordinates(hor, ver);
+				let neighbourDistance = neighbour.getDistanceToCoordinates(hor, ver);
 				if (neighbourDistance < bestNeighbourDistance) {
 					bestNeighbour = neighbour;
 					bestNeighbourDistance = neighbourDistance;
@@ -112,10 +112,10 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = fal
 };
 
 graph.prototype.getNodesWhere = function (predicate, rootNode = null, markPath = false) {
-	var resultArray = [];
+	let resultArray = [];
 	if (rootNode == null) {
-		for (var row = 0; row < this.nodes.length; row++) {
-			for (var col = 0; col < this.nodes[0].length; col++) {
+		for (let row = 0; row < this.nodes.length; row++) {
+			for (let col = 0; col < this.nodes[0].length; col++) {
 				n = this.nodes[row][col];
 				if (predicate(n) != false)
 					resultArray.push(n);
@@ -152,7 +152,7 @@ graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, m
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
-	var row = Math.round(ver / bazGrid.restingLinkLength);
-	var col = Math.round(hor / bazGrid.restingLinkLength);
+	let row = Math.round(ver / bazGrid.restingLinkLength);
+	let col = Math.round(hor / bazGrid.restingLinkLength);
 	return this.nodes[row][col];
 };

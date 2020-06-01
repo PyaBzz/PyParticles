@@ -11,7 +11,7 @@ link.prototype.applyForces = function () {
 	if (this.p1.isFree === false && this.p2.isFree === false)
 		return;
 
-	var force = {
+	let force = {
 		x: Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), bazGrid.elasticNonlinearity) * bazGrid.elasticStiffness,
 		y: Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), bazGrid.elasticNonlinearity) * bazGrid.elasticStiffness,
 		z: Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), bazGrid.elasticNonlinearity) * bazGrid.elasticStiffness,
