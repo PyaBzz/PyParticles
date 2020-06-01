@@ -23,18 +23,18 @@ dragBox.prototype.move = function (dragX, dragY, markPath = false) {
 
 dragBox.prototype.dragNodes = function (dragVect) {
     this.touchedNodes.forEach(function (n) {
-        n.move({ x: dragVect.x * pyGrid.mouse.slipFactor, y: dragVect.y * pyGrid.mouse.slipFactor })
+        n.move({ x: dragVect.x * bazGrid.mouse.slipFactor, y: dragVect.y * bazGrid.mouse.slipFactor })
     }, this);
 };
 
 dragBox.prototype.getCentreNode = function () {
-    return pyGrid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
+    return bazGrid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
 };
 
 dragBox.prototype.updateTouchedNodes = function (markPath = false) {
     this.clearTouchedNodes();
     let centreNode = this.getCentreNode();
-    this.touchedNodes = pyGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
+    this.touchedNodes = bazGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
     this.touchedNodes.forEach(n => n.heldByBox = true);
     return this.touchedNodes;
 };

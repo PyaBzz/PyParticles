@@ -2,9 +2,9 @@ graph = function () {
 
 	this.nodes = [];
 
-	for (var row = 0; row <= pyGrid.verticalCellCount; row++) {
+	for (var row = 0; row <= bazGrid.verticalCellCount; row++) {
 		this.nodes[row] = [];
-		for (var col = 0; col <= pyGrid.horizontalCellCount; col++) {
+		for (var col = 0; col <= bazGrid.horizontalCellCount; col++) {
 			var p = new node(col, row, 0);
 
 			if (row == 0)
@@ -25,22 +25,22 @@ graph = function () {
 
 			if (row != 0 && col != 0) {  // Link leftNeighbour
 				p.upLeftNeighbour = this.nodes[row - 1][col - 1];
-				if (pyGrid.drawDiagonalLinks)
+				if (bazGrid.drawDiagonalLinks)
 					p.attach(p.upLeftNeighbour);
 				p.upLeftNeighbour.downRightNeighbour = p;
 			}
 
-			if (row != 0 && col != pyGrid.horizontalCellCount) {  // Link leftNeighbour
+			if (row != 0 && col != bazGrid.horizontalCellCount) {  // Link leftNeighbour
 				p.upRightNeighbour = this.nodes[row - 1][col + 1];
-				if (pyGrid.drawDiagonalLinks)
+				if (bazGrid.drawDiagonalLinks)
 					p.attach(p.upRightNeighbour);
 				p.upRightNeighbour.downLeftNeighbour = p;
 			}
 
-			if (col == pyGrid.horizontalCellCount)
+			if (col == bazGrid.horizontalCellCount)
 				p.frame();   // The right edge of the graph is frame
 
-			if (row == pyGrid.verticalCellCount)
+			if (row == bazGrid.verticalCellCount)
 				p.frame();  // The bottom edge of the graph is frame
 
 			this.nodes[row].push(p);
@@ -57,7 +57,7 @@ graph.prototype.calculateForces = function () {
 };
 
 graph.prototype.updateBoxedNodes = function () {
-	pyGrid.dragBoxes.forEach(function (d) {
+	bazGrid.dragBoxes.forEach(function (d) {
 		d.updateTouchedNodes();
 	}, this);
 };
@@ -73,10 +73,10 @@ graph.prototype.drawNodes = function () {
 };
 
 graph.prototype.drawLinks = function () {
-	pyGrid.canvasCtx.strokeStyle = pyGrid.linkColour;
-	pyGrid.canvasCtx.beginPath();
+	bazGrid.canvasCtx.strokeStyle = bazGrid.linkColour;
+	bazGrid.canvasCtx.beginPath();
 	this.doToAllNodes(function (p) { p.drawLinks() });
-	pyGrid.canvasCtx.stroke();
+	bazGrid.canvasCtx.stroke();
 };
 
 graph.prototype.doToAllNodes = function (func) {
@@ -152,7 +152,7 @@ graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, m
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
-	var row = Math.round(ver / pyGrid.restingLinkLength);
-	var col = Math.round(hor / pyGrid.restingLinkLength);
+	var row = Math.round(ver / bazGrid.restingLinkLength);
+	var col = Math.round(hor / bazGrid.restingLinkLength);
 	return this.nodes[row][col];
 };

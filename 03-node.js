@@ -12,9 +12,9 @@ node = function (col, row, zUnits) {
 	this.leftNeighbour = null;
 	this.upLeftNeighbour = null;
 
-	this.x = col * pyGrid.restingLinkLength;
-	this.y = row * pyGrid.restingLinkLength;
-	this.z = zUnits * pyGrid.restingLinkLength;
+	this.x = col * bazGrid.restingLinkLength;
+	this.y = row * bazGrid.restingLinkLength;
+	this.z = zUnits * bazGrid.restingLinkLength;
 	this.force = { x: 0, y: 0, z: 0 };
 	this.speed = { x: 0, y: 0, z: 0 };
 	this.isFrame = false;
@@ -32,21 +32,21 @@ node.prototype.updatePosition = function () {
 		return;
 
 	let acceleration = {
-		x: -this.force.x / pyGrid.nodeMass,
-		y: -this.force.y / pyGrid.nodeMass,
-		z: -this.force.z / pyGrid.nodeMass - pyGrid.gravity,  // Gravity acts in -z direction
+		x: -this.force.x / bazGrid.nodeMass,
+		y: -this.force.y / bazGrid.nodeMass,
+		z: -this.force.z / bazGrid.nodeMass - bazGrid.gravity,  // Gravity acts in -z direction
 	};
 
 	if (this.heldByBox) {
-		if (pyGrid.enableXAxis) this.x += (acceleration.x / 2 + pyGrid.damping * this.speed.x) * pyGrid.boxedNodeBrakingFactor;
-		if (pyGrid.enableYAxis) this.y += (acceleration.y / 2 + pyGrid.damping * this.speed.y) * pyGrid.boxedNodeBrakingFactor;
-		if (pyGrid.enableZAxis) this.z += (acceleration.z / 2 + pyGrid.damping * this.speed.z) * pyGrid.boxedNodeBrakingFactor;
+		if (bazGrid.enableXAxis) this.x += (acceleration.x / 2 + bazGrid.damping * this.speed.x) * bazGrid.boxedNodeBrakingFactor;
+		if (bazGrid.enableYAxis) this.y += (acceleration.y / 2 + bazGrid.damping * this.speed.y) * bazGrid.boxedNodeBrakingFactor;
+		if (bazGrid.enableZAxis) this.z += (acceleration.z / 2 + bazGrid.damping * this.speed.z) * bazGrid.boxedNodeBrakingFactor;
 	} else {
-		if (pyGrid.enableXAxis) this.x += (acceleration.x / 2 + pyGrid.damping * this.speed.x);
-		if (pyGrid.enableYAxis) this.y += (acceleration.y / 2 + pyGrid.damping * this.speed.y);
-		if (pyGrid.enableZAxis) this.z += (acceleration.z / 2 + pyGrid.damping * this.speed.z);
+		if (bazGrid.enableXAxis) this.x += (acceleration.x / 2 + bazGrid.damping * this.speed.x);
+		if (bazGrid.enableYAxis) this.y += (acceleration.y / 2 + bazGrid.damping * this.speed.y);
+		if (bazGrid.enableZAxis) this.z += (acceleration.z / 2 + bazGrid.damping * this.speed.z);
 	}
-	pyGrid.minZ = Math.min(pyGrid.minZ, this.z);
+	bazGrid.minZ = Math.min(bazGrid.minZ, this.z);
 
 	this.applyAcceleration(acceleration);
 
@@ -60,24 +60,24 @@ node.prototype.getDistanceToCoordinates = function (hor, ver) {
 node.prototype.draw = function () {
 	if (this.isFrame)
 		return;
-	else if (pyGrid.pinRadius && this.pinned) {
-		pyGrid.canvasCtx.beginPath();
-		pyGrid.canvasCtx.fillStyle = pyGrid.pinColour;
-		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.pinRadius, 0, 2 * Math.PI)
-		pyGrid.canvasCtx.fill();
-	} else if (pyGrid.markedNodeRadius && this.marked) {
-		pyGrid.canvasCtx.beginPath();
-		pyGrid.canvasCtx.fillStyle = pyGrid.markedNodeColour;
-		pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.markedNodeRadius, 0, 2 * Math.PI)
-		pyGrid.canvasCtx.fill();
+	else if (bazGrid.pinRadius && this.pinned) {
+		bazGrid.canvasCtx.beginPath();
+		bazGrid.canvasCtx.fillStyle = bazGrid.pinColour;
+		bazGrid.canvasCtx.arc(this.x, this.y, bazGrid.pinRadius, 0, 2 * Math.PI)
+		bazGrid.canvasCtx.fill();
+	} else if (bazGrid.markedNodeRadius && this.marked) {
+		bazGrid.canvasCtx.beginPath();
+		bazGrid.canvasCtx.fillStyle = bazGrid.markedNodeColour;
+		bazGrid.canvasCtx.arc(this.x, this.y, bazGrid.markedNodeRadius, 0, 2 * Math.PI)
+		bazGrid.canvasCtx.fill();
 	}
-	else if (pyGrid.nodeRadius) {
-		pyGrid.canvasCtx.beginPath();
-		pyGrid.canvasCtx.fillStyle = pyGrid.nodeColour;
-		pyGrid.enableZAxis
-			? pyGrid.canvasCtx.arc(this.x, this.y, Math.abs(this.z), 0, 2 * Math.PI)
-			: pyGrid.canvasCtx.arc(this.x, this.y, pyGrid.nodeRadius, 0, 2 * Math.PI);
-		pyGrid.canvasCtx.fill();
+	else if (bazGrid.nodeRadius) {
+		bazGrid.canvasCtx.beginPath();
+		bazGrid.canvasCtx.fillStyle = bazGrid.nodeColour;
+		bazGrid.enableZAxis
+			? bazGrid.canvasCtx.arc(this.x, this.y, Math.abs(this.z), 0, 2 * Math.PI)
+			: bazGrid.canvasCtx.arc(this.x, this.y, bazGrid.nodeRadius, 0, 2 * Math.PI);
+		bazGrid.canvasCtx.fill();
 	}
 };
 
@@ -140,6 +140,6 @@ Object.defineProperties(node.prototype, {
 		}
 	},
 	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false && this.isFrame === false; } },
-	clientX: { get: function () { return this.x + pyGrid.referenceFrame.left; } },  // Coordinates within the canvas!
-	clientY: { get: function () { return this.y + pyGrid.referenceFrame.top; } },  // Coordinates within the canvas!
+	clientX: { get: function () { return this.x + bazGrid.referenceFrame.left; } },  // Coordinates within the canvas!
+	clientY: { get: function () { return this.y + bazGrid.referenceFrame.top; } },  // Coordinates within the canvas!
 });

@@ -16,26 +16,26 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
 };
 
 mouse.prototype.bindHandlers = function () {
-    pyGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
-    pyGrid.dragBoxes.forEach(function (d) {
+    bazGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
+    bazGrid.dragBoxes.forEach(function (d) {
         d.element.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
     });
 
-    pyGrid.onmousedown = function (mouseDownEvent) {
+    bazGrid.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
-        pyGrid.mouse.onDown(mouseDownEvent);
+        bazGrid.mouse.onDown(mouseDownEvent);
     };
 
-    pyGrid.onmousemove = function (moveEvent) {
+    bazGrid.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
-        pyGrid.mouse.onMove(moveEvent);
+        bazGrid.mouse.onMove(moveEvent);
     };
 
-    pyGrid.onmouseup = function (releaseEvent) {
+    bazGrid.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
-        pyGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
-        pyGrid.mouse.key = 0;
-        pyGrid.mouse.clearNodes();
-        pyGrid.mouse.dragBox = null;
+        bazGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
+        bazGrid.mouse.key = 0;
+        bazGrid.mouse.clearNodes();
+        bazGrid.mouse.dragBox = null;
     };
 }

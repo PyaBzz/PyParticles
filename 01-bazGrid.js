@@ -1,10 +1,10 @@
 onload = function () {
 	container = document.getElementById('container');
-	container.createPyGrid(waterConfig);
+	container.createBazGrid(waterConfig);
 };
 
-HTMLDivElement.prototype.createPyGrid = function (config) {
-	pyGrid = this;
+HTMLDivElement.prototype.createBazGrid = function (config) {
+	bazGrid = this;
 
 	for (var key in config)
 		this[key] = config[key];
@@ -28,7 +28,7 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 	this.graph = new graph();
 
 	this.dragBoxes = [];
-	for (var i = 0; i < pyGrid.dragBoxCount; i++) {
+	for (var i = 0; i < bazGrid.dragBoxCount; i++) {
 		var box = new dragBox(i);
 		this.dragBoxes.push(box);
 		this.appendChild(box.element);
@@ -48,31 +48,31 @@ HTMLDivElement.prototype.createPyGrid = function (config) {
 			},
 		},
 		coordinate: {
-			fromWindowToPyGrid: function (horizontal, vertical) {
+			fromWindowToBazGrid: function (horizontal, vertical) {
 				return {
-					hor: horizontal - pyGrid.referenceFrame.left,
-					ver: vertical - pyGrid.referenceFrame.top
+					hor: horizontal - bazGrid.referenceFrame.left,
+					ver: vertical - bazGrid.referenceFrame.top
 				};
 			},
-			fromPyGridToWindow: function (horizontal, vertical) {
+			fromBazGridToWindow: function (horizontal, vertical) {
 				return {
-					hor: horizontal + pyGrid.referenceFrame.left,
-					ver: vertical + pyGrid.referenceFrame.top
+					hor: horizontal + bazGrid.referenceFrame.left,
+					ver: vertical + bazGrid.referenceFrame.top
 				};
 			},
 		},
 	}
 
 	this.drawingLoop = function () {
-		pyGrid.graph.updateBoxedNodes();
-		pyGrid.graph.calculateForces();
-		pyGrid.graph.updateNodePositions();
-		pyGrid.canvasCtx.clearRect(0, 0, pyGrid.canvas.width, pyGrid.canvas.height);
-		if (pyGrid.linkWidth) {
-			pyGrid.canvasCtx.lineWidth = pyGrid.linkWidth;
-			pyGrid.graph.drawLinks();
+		bazGrid.graph.updateBoxedNodes();
+		bazGrid.graph.calculateForces();
+		bazGrid.graph.updateNodePositions();
+		bazGrid.canvasCtx.clearRect(0, 0, bazGrid.canvas.width, bazGrid.canvas.height);
+		if (bazGrid.linkWidth) {
+			bazGrid.canvasCtx.lineWidth = bazGrid.linkWidth;
+			bazGrid.graph.drawLinks();
 		}
-		pyGrid.graph.drawNodes();
+		bazGrid.graph.drawNodes();
 	}
 
 	setInterval(this.drawingLoop, this.drawingTimeStep);

@@ -10,7 +10,7 @@ pinchyMouse.prototype.onDown = function (mouseDownEvent) {
     this.clickX = mouseDownEvent.x;
     this.clickY = mouseDownEvent.y;
     this.getNodesForCoordinates(this.clickX, this.clickY);
-    if (mouseDownEvent.target == pyGrid.canvas) {
+    if (mouseDownEvent.target == bazGrid.canvas) {
         switch (this.key) {
             case 1:
                 if (this.isSlippy) {
@@ -26,7 +26,7 @@ pinchyMouse.prototype.onDown = function (mouseDownEvent) {
                     this.closestNode.pin();
                 break;
             case 3:
-                if (pyGrid.rightClickAction === 0)
+                if (bazGrid.rightClickAction === 0)
                     this.cut();
                 else
                     this.closestNode.mark();
@@ -37,7 +37,7 @@ pinchyMouse.prototype.onDown = function (mouseDownEvent) {
     }
     else if (mouseDownEvent.target.className == 'dragbox') {
         var dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
-        this.dragBox = pyGrid.dragBoxes[dragBoxIndex];
+        this.dragBox = bazGrid.dragBoxes[dragBoxIndex];
         this.dragBox.updateBoundaries();
     }
 };
@@ -49,13 +49,13 @@ pinchyMouse.prototype.onMove = function () {
     if (this.isSlippy) {
         this.getNodesForCoordinates(this.x, this.y);
         this.touchedNodes.forEach(function (n) {
-            n.move({ x: pyGrid.mouse.dragVect.x * pyGrid.mouse.slipFactor, y: pyGrid.mouse.dragVect.y * pyGrid.mouse.slipFactor })
+            n.move({ x: bazGrid.mouse.dragVect.x * bazGrid.mouse.slipFactor, y: bazGrid.mouse.dragVect.y * bazGrid.mouse.slipFactor })
         });
         this.clearNodes();
     } else {
 
         this.heldNodes.forEach(function (n) {
-            n.move({ x: pyGrid.mouse.dragVect.x, y: pyGrid.mouse.dragVect.y });
+            n.move({ x: bazGrid.mouse.dragVect.x, y: bazGrid.mouse.dragVect.y });
         });
     }
 
@@ -64,8 +64,8 @@ pinchyMouse.prototype.onMove = function () {
 };
 
 pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    var gridCoordinates = pyGrid.convert.coordinate.fromWindowToPyGrid(hor, ver);
-    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
+    var gridCoordinates = bazGrid.convert.coordinate.fromWindowToBazGrid(hor, ver);
+    this.closestNode = bazGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
     if (this.isSlippy)
         this.touchedNodes.push(this.closestNode);
     else

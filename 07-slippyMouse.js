@@ -9,7 +9,7 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     let hor = mouseDownEvent.offsetX;
     let ver = mouseDownEvent.offsetY;
-    if (mouseDownEvent.target == pyGrid.canvas) {
+    if (mouseDownEvent.target == bazGrid.canvas) {
         this.getNodesForCoordinates(hor, ver);
         switch (this.key) {
             case this.buttonsEnum.left:
@@ -18,7 +18,7 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
                 this.closestNode.pin();
                 break;
             case this.buttonsEnum.right:
-                if (pyGrid.rightClickAction === this.actionsEnum.cut)
+                if (bazGrid.rightClickAction === this.actionsEnum.cut)
                     this.cut();
                 else
                     this.closestNode.mark();
@@ -29,7 +29,7 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
     }
     else if (mouseDownEvent.target.className == 'dragbox') {
         var dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
-        this.dragBox = pyGrid.dragBoxes[dragBoxIndex];
+        this.dragBox = bazGrid.dragBoxes[dragBoxIndex];
         this.dragBox.updateBoundaries();
     }
 };
@@ -52,7 +52,7 @@ slippyMouse.prototype.onMove = function (moveEvent) {
                 break;
         }
     } else {
-        if (moveEvent.target !== pyGrid.canvas)
+        if (moveEvent.target !== bazGrid.canvas)
             return;
         let hor = moveEvent.offsetX + moveEvent.movementX;
         let ver = moveEvent.offsetY + moveEvent.movementY;
@@ -66,7 +66,7 @@ slippyMouse.prototype.onMove = function (moveEvent) {
                 this.closestNode.pin();
                 break;
             case this.buttonsEnum.right:
-                if (pyGrid.rightClickAction === this.actionsEnum.cut)
+                if (bazGrid.rightClickAction === this.actionsEnum.cut)
                     this.cut();
                 else
                     this.closestNode.mark();
@@ -80,8 +80,8 @@ slippyMouse.prototype.onMove = function (moveEvent) {
 
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, markPath = false) {
     this.clearNodes();
-    this.closestNode = pyGrid.graph.getClosestNodeToCoordinates(hor, ver, false);
-    this.touchedNodes = pyGrid.graph.getNodesWhere(n => n.getDistanceToCoordinates(hor, ver) <= this.impactRadius, this.closestNode);
+    this.closestNode = bazGrid.graph.getClosestNodeToCoordinates(hor, ver, false);
+    this.touchedNodes = bazGrid.graph.getNodesWhere(n => n.getDistanceToCoordinates(hor, ver) <= this.impactRadius, this.closestNode);
     return this.touchedNodes;
 };
 
