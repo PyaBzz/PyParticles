@@ -1,11 +1,11 @@
-graph = function () {
-
+graph = function (bazgrid) {
+	this.grid = bazgrid;
 	this.nodes = [];
 
-	for (let row = 0; row <= bazGrid.verticalCellCount; row++) {
+	for (let row = 0; row <= this.grid.verticalCellCount; row++) {
 		this.nodes[row] = [];
-		for (let col = 0; col <= bazGrid.horizontalCellCount; col++) {
-			let p = new node(col, row, 0);
+		for (let col = 0; col <= this.grid.horizontalCellCount; col++) {
+			let p = new node(col, row, 0, this.grid);
 
 			if (row == 0)
 				p.frame();                   // The top edge of the graph is frame
@@ -25,22 +25,22 @@ graph = function () {
 
 			if (row != 0 && col != 0) {  // Link leftNeighbour
 				p.upLeftNeighbour = this.nodes[row - 1][col - 1];
-				if (bazGrid.drawDiagonalLinks)
+				if (this.grid.drawDiagonalLinks)
 					p.attach(p.upLeftNeighbour);
 				p.upLeftNeighbour.downRightNeighbour = p;
 			}
 
-			if (row != 0 && col != bazGrid.horizontalCellCount) {  // Link leftNeighbour
+			if (row != 0 && col != this.grid.horizontalCellCount) {  // Link leftNeighbour
 				p.upRightNeighbour = this.nodes[row - 1][col + 1];
-				if (bazGrid.drawDiagonalLinks)
+				if (this.grid.drawDiagonalLinks)
 					p.attach(p.upRightNeighbour);
 				p.upRightNeighbour.downLeftNeighbour = p;
 			}
 
-			if (col == bazGrid.horizontalCellCount)
+			if (col == this.grid.horizontalCellCount)
 				p.frame();   // The right edge of the graph is frame
 
-			if (row == bazGrid.verticalCellCount)
+			if (row == this.grid.verticalCellCount)
 				p.frame();  // The bottom edge of the graph is frame
 
 			this.nodes[row].push(p);
@@ -56,12 +56,6 @@ graph.prototype.calculateForces = function () {
 	});
 };
 
-graph.prototype.updateBoxedNodes = function () {
-	bazGrid.dragBoxes.forEach(function (d) {
-		d.updateTouchedNodes();
-	}, this);
-};
-
 graph.prototype.updateNodePositions = function () {
 	this.doToAllNodes(function (p) {
 		p.updatePosition();
@@ -73,10 +67,10 @@ graph.prototype.drawNodes = function () {
 };
 
 graph.prototype.drawLinks = function () {
-	bazGrid.canvasCtx.strokeStyle = bazGrid.linkColour;
-	bazGrid.canvasCtx.beginPath();
+	this.grid.canvasCtx.strokeStyle = this.grid.linkColour;
+	this.grid.canvasCtx.beginPath();
 	this.doToAllNodes(function (p) { p.drawLinks() });
-	bazGrid.canvasCtx.stroke();
+	this.grid.canvasCtx.stroke();
 };
 
 graph.prototype.doToAllNodes = function (func) {
@@ -152,7 +146,7 @@ graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, m
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
-	let row = Math.round(ver / bazGrid.restingLinkLength);
-	let col = Math.round(hor / bazGrid.restingLinkLength);
+	let row = Math.round(ver / this.grid.restingLinkLength);
+	let col = Math.round(hor / this.grid.restingLinkLength);
 	return this.nodes[row][col];
 };

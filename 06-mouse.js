@@ -1,4 +1,5 @@
-mouse = function (impactRadius, cuttingRadius, slipFactor) {
+mouse = function (impactRadius, cuttingRadius, slipFactor, bazgrid) {
+    this.grid = bazgrid;
     this.impactRadius = impactRadius;
     this.cuttingRadius = cuttingRadius;
     this.slipFactor = slipFactor;
@@ -15,27 +16,27 @@ mouse = function (impactRadius, cuttingRadius, slipFactor) {
     this.buttonsEnum = Object.freeze({ "none": 0, "left": 1, "middle": 2, "right": 3 })
 };
 
-mouse.prototype.bindHandlers = function () {
-    bazGrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
-    bazGrid.dragBoxes.forEach(function (d) {
+mouse.prototype.bindHandlers = function (bazgrid) {
+    bazgrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
+    bazgrid.dragBoxes.forEach(function (d) {
         d.element.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
     });
 
-    bazGrid.onmousedown = function (mouseDownEvent) {
+    bazgrid.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
-        bazGrid.mouse.onDown(mouseDownEvent);
+        bazgrid.mouse.onDown(mouseDownEvent);
     };
 
-    bazGrid.onmousemove = function (moveEvent) {
+    bazgrid.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
-        bazGrid.mouse.onMove(moveEvent);
+        bazgrid.mouse.onMove(moveEvent);
     };
 
-    bazGrid.onmouseup = function (releaseEvent) {
+    bazgrid.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
-        bazGrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
-        bazGrid.mouse.key = 0;
-        bazGrid.mouse.clearNodes();
-        bazGrid.mouse.dragBox = null;
+        bazgrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
+        bazgrid.mouse.key = 0;
+        bazgrid.mouse.clearNodes();
+        bazgrid.mouse.dragBox = null;
     };
 }

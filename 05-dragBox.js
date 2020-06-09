@@ -1,4 +1,5 @@
-dragBox = function (i) {
+dragBox = function (i, bazgrid) {
+    this.grid = bazgrid;
     this.top = 0;
     this.bottom = 0;
     this.left = 0;
@@ -23,18 +24,18 @@ dragBox.prototype.move = function (dragX, dragY, markPath = false) {
 
 dragBox.prototype.dragNodes = function (dragVect) {
     this.touchedNodes.forEach(function (n) {
-        n.move({ x: dragVect.x * bazGrid.mouse.slipFactor, y: dragVect.y * bazGrid.mouse.slipFactor })
+        n.move({ x: dragVect.x * this.grid.mouse.slipFactor, y: dragVect.y * this.grid.mouse.slipFactor })
     }, this);
 };
 
 dragBox.prototype.getCentreNode = function () {
-    return bazGrid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
+    return this.grid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
 };
 
 dragBox.prototype.updateTouchedNodes = function (markPath = false) {
     this.clearTouchedNodes();
     let centreNode = this.getCentreNode();
-    this.touchedNodes = bazGrid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
+    this.touchedNodes = this.grid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
     this.touchedNodes.forEach(n => n.heldByBox = true);
     return this.touchedNodes;
 };

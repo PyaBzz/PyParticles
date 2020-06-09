@@ -4,7 +4,6 @@ onload = function () {
 };
 
 HTMLDivElement.prototype.createBazGrid = function (config) {
-	bazGrid = this;
 
 	for (let key in config)
 		this[key] = config[key];
@@ -21,21 +20,21 @@ HTMLDivElement.prototype.createBazGrid = function (config) {
 	this.referenceFrame = this.canvas.getBoundingClientRect();  // Required for comparison against node positions
 
 	if (this.mouseSlipFactor === 1)
-		this.mouse = new pinchyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
+		this.mouse = new pinchyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
 	else
-		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor);
+		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
 
-	this.graph = new graph();
+	this.graph = new graph(this);
 
 	this.dragBoxes = [];
 	for (let i = 0; i < this.dragBoxCount; i++) {
-		let box = new dragBox(i);
+		let box = new dragBox(i, this);
 		this.dragBoxes.push(box);
 		this.appendChild(box.element);
 		box.updateBoundaries();
 	}
 
-	this.mouse.bindHandlers();
+	this.mouse.bindHandlers(this);
 
 	this.convert = {
 		colour: {

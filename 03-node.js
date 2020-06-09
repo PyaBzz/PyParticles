@@ -1,4 +1,5 @@
-node = function (col, row, zUnits) {
+node = function (col, row, zUnits, bazgrid) {
+	this.grid = bazgrid;
 	this.col = col;
 	this.row = row;
 	this.zUnits = zUnits;
@@ -12,9 +13,9 @@ node = function (col, row, zUnits) {
 	this.leftNeighbour = null;
 	this.upLeftNeighbour = null;
 
-	this.x = col * bazGrid.restingLinkLength;
-	this.y = row * bazGrid.restingLinkLength;
-	this.z = zUnits * bazGrid.restingLinkLength;
+	this.x = col * this.grid.restingLinkLength;
+	this.y = row * this.grid.restingLinkLength;
+	this.z = zUnits * this.grid.restingLinkLength;
 	this.force = { x: 0, y: 0, z: 0 };
 	this.speed = { x: 0, y: 0, z: 0 };
 	this.isFrame = false;
@@ -32,21 +33,21 @@ node.prototype.updatePosition = function () {
 		return;
 
 	let acceleration = {
-		x: -this.force.x / bazGrid.nodeMass,
-		y: -this.force.y / bazGrid.nodeMass,
-		z: -this.force.z / bazGrid.nodeMass - bazGrid.gravity,  // Gravity acts in -z direction
+		x: -this.force.x / this.grid.nodeMass,
+		y: -this.force.y / this.grid.nodeMass,
+		z: -this.force.z / this.grid.nodeMass - this.grid.gravity,  // Gravity acts in -z direction
 	};
 
 	if (this.heldByBox) {
-		if (bazGrid.enableXAxis) this.x += (acceleration.x / 2 + bazGrid.damping * this.speed.x) * bazGrid.boxedNodeBrakingFactor;
-		if (bazGrid.enableYAxis) this.y += (acceleration.y / 2 + bazGrid.damping * this.speed.y) * bazGrid.boxedNodeBrakingFactor;
-		if (bazGrid.enableZAxis) this.z += (acceleration.z / 2 + bazGrid.damping * this.speed.z) * bazGrid.boxedNodeBrakingFactor;
+		if (this.grid.enableXAxis) this.x += (acceleration.x / 2 + this.grid.damping * this.speed.x) * this.grid.boxedNodeBrakingFactor;
+		if (this.grid.enableYAxis) this.y += (acceleration.y / 2 + this.grid.damping * this.speed.y) * this.grid.boxedNodeBrakingFactor;
+		if (this.grid.enableZAxis) this.z += (acceleration.z / 2 + this.grid.damping * this.speed.z) * this.grid.boxedNodeBrakingFactor;
 	} else {
-		if (bazGrid.enableXAxis) this.x += (acceleration.x / 2 + bazGrid.damping * this.speed.x);
-		if (bazGrid.enableYAxis) this.y += (acceleration.y / 2 + bazGrid.damping * this.speed.y);
-		if (bazGrid.enableZAxis) this.z += (acceleration.z / 2 + bazGrid.damping * this.speed.z);
+		if (this.grid.enableXAxis) this.x += (acceleration.x / 2 + this.grid.damping * this.speed.x);
+		if (this.grid.enableYAxis) this.y += (acceleration.y / 2 + this.grid.damping * this.speed.y);
+		if (this.grid.enableZAxis) this.z += (acceleration.z / 2 + this.grid.damping * this.speed.z);
 	}
-	bazGrid.minZ = Math.min(bazGrid.minZ, this.z);
+	this.grid.minZ = Math.min(this.grid.minZ, this.z);
 
 	this.applyAcceleration(acceleration);
 
@@ -60,24 +61,24 @@ node.prototype.getDistanceToCoordinates = function (hor, ver) {
 node.prototype.draw = function () {
 	if (this.isFrame)
 		return;
-	else if (bazGrid.pinRadius && this.pinned) {
-		bazGrid.canvasCtx.beginPath();
-		bazGrid.canvasCtx.fillStyle = bazGrid.pinColour;
-		bazGrid.canvasCtx.arc(this.x, this.y, bazGrid.pinRadius, 0, 2 * Math.PI)
-		bazGrid.canvasCtx.fill();
-	} else if (bazGrid.markedNodeRadius && this.marked) {
-		bazGrid.canvasCtx.beginPath();
-		bazGrid.canvasCtx.fillStyle = bazGrid.markedNodeColour;
-		bazGrid.canvasCtx.arc(this.x, this.y, bazGrid.markedNodeRadius, 0, 2 * Math.PI)
-		bazGrid.canvasCtx.fill();
+	else if (this.grid.pinRadius && this.pinned) {
+		this.grid.canvasCtx.beginPath();
+		this.grid.canvasCtx.fillStyle = this.grid.pinColour;
+		this.grid.canvasCtx.arc(this.x, this.y, this.grid.pinRadius, 0, 2 * Math.PI)
+		this.grid.canvasCtx.fill();
+	} else if (this.grid.markedNodeRadius && this.marked) {
+		this.grid.canvasCtx.beginPath();
+		this.grid.canvasCtx.fillStyle = this.grid.markedNodeColour;
+		this.grid.canvasCtx.arc(this.x, this.y, this.grid.markedNodeRadius, 0, 2 * Math.PI)
+		this.grid.canvasCtx.fill();
 	}
-	else if (bazGrid.nodeRadius) {
-		bazGrid.canvasCtx.beginPath();
-		bazGrid.canvasCtx.fillStyle = bazGrid.nodeColour;
-		bazGrid.enableZAxis
-			? bazGrid.canvasCtx.arc(this.x, this.y, Math.abs(this.z), 0, 2 * Math.PI)
-			: bazGrid.canvasCtx.arc(this.x, this.y, bazGrid.nodeRadius, 0, 2 * Math.PI);
-		bazGrid.canvasCtx.fill();
+	else if (this.grid.nodeRadius) {
+		this.grid.canvasCtx.beginPath();
+		this.grid.canvasCtx.fillStyle = this.grid.nodeColour;
+		this.grid.enableZAxis
+			? this.grid.canvasCtx.arc(this.x, this.y, Math.abs(this.z), 0, 2 * Math.PI)
+			: this.grid.canvasCtx.arc(this.x, this.y, this.grid.nodeRadius, 0, 2 * Math.PI);
+		this.grid.canvasCtx.fill();
 	}
 };
 
@@ -88,7 +89,7 @@ node.prototype.drawLinks = function () {
 
 node.prototype.attach = function (node) {
 	this.links.push(
-		new link(this, node)
+		new link(this, node, this.grid)
 	);
 };
 
@@ -140,6 +141,6 @@ Object.defineProperties(node.prototype, {
 		}
 	},
 	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false && this.isFrame === false; } },
-	clientX: { get: function () { return this.x + bazGrid.referenceFrame.left; } },  // Coordinates within the canvas!
-	clientY: { get: function () { return this.y + bazGrid.referenceFrame.top; } },  // Coordinates within the canvas!
+	clientX: { get: function () { return this.x + this.grid.referenceFrame.left; } },  // Coordinates within the canvas!
+	clientY: { get: function () { return this.y + this.grid.referenceFrame.top; } },  // Coordinates within the canvas!
 });

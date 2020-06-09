@@ -1,4 +1,4 @@
-pinchyMouse = function (impactRadius, cuttingRadius, slipFactor) {
+pinchyMouse = function (impactRadius, cuttingRadius, slipFactor, bazgrid) {
     console.error("Not implemented yet");
 };
 
