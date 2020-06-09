@@ -28,7 +28,7 @@ HTMLDivElement.prototype.createBazGrid = function (config) {
 	this.graph = new graph();
 
 	this.dragBoxes = [];
-	for (let i = 0; i < bazGrid.dragBoxCount; i++) {
+	for (let i = 0; i < this.dragBoxCount; i++) {
 		let box = new dragBox(i);
 		this.dragBoxes.push(box);
 		this.appendChild(box.element);
@@ -50,30 +50,36 @@ HTMLDivElement.prototype.createBazGrid = function (config) {
 		coordinate: {
 			fromWindowToBazGrid: function (horizontal, vertical) {
 				return {
-					hor: horizontal - bazGrid.referenceFrame.left,
-					ver: vertical - bazGrid.referenceFrame.top
+					hor: horizontal - this.referenceFrame.left,
+					ver: vertical - this.referenceFrame.top
 				};
 			},
 			fromBazGridToWindow: function (horizontal, vertical) {
 				return {
-					hor: horizontal + bazGrid.referenceFrame.left,
-					ver: vertical + bazGrid.referenceFrame.top
+					hor: horizontal + this.referenceFrame.left,
+					ver: vertical + this.referenceFrame.top
 				};
 			},
 		},
 	}
 
+	this.updateBoxedNodes = function () {
+		this.dragBoxes.forEach(function (d) {
+			d.updateTouchedNodes();
+		});
+	};
+	
 	this.drawingLoop = function () {
-		bazGrid.graph.updateBoxedNodes();
-		bazGrid.graph.calculateForces();
-		bazGrid.graph.updateNodePositions();
-		bazGrid.canvasCtx.clearRect(0, 0, bazGrid.canvas.width, bazGrid.canvas.height);
-		if (bazGrid.linkWidth) {
-			bazGrid.canvasCtx.lineWidth = bazGrid.linkWidth;
-			bazGrid.graph.drawLinks();
+		this.updateBoxedNodes();
+		this.graph.calculateForces();
+		this.graph.updateNodePositions();
+		this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		if (this.linkWidth) {
+			this.canvasCtx.lineWidth = this.linkWidth;
+			this.graph.drawLinks();
 		}
-		bazGrid.graph.drawNodes();
+		this.graph.drawNodes();
 	}
 
-	setInterval(this.drawingLoop, this.drawingTimeStep);
+	setInterval(() => this.drawingLoop(), this.drawingCycleTime);
 };
