@@ -1,5 +1,5 @@
 onload = function () {
-	container = document.getElementById('container');
+	let container = document.getElementById('container');
 	container.createBazGrid(waterConfig);
 };
 
