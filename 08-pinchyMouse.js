@@ -64,7 +64,7 @@ pinchyMouse.prototype.onMove = function () {
 };
 
 pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    let gridCoordinates = bazGrid.convert.coordinate.fromWindowToBazGrid(hor, ver);
+    let gridCoordinates = bazGrid.convertCoordinate(hor, ver, 0, 'dasoo');
     this.closestNode = bazGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
     if (this.isSlippy)
         this.touchedNodes.push(this.closestNode);

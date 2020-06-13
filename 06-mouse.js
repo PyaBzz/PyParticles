@@ -22,17 +22,17 @@ mouse.prototype.bindHandlers = function (bazgrid) {
         d.element.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
     });
 
-    bazgrid.onmousedown = function (mouseDownEvent) {
+    bazgrid.container.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
         bazgrid.mouse.onDown(mouseDownEvent);
     };
 
-    bazgrid.onmousemove = function (moveEvent) {
+    bazgrid.container.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
         bazgrid.mouse.onMove(moveEvent);
     };
 
-    bazgrid.onmouseup = function (releaseEvent) {
+    bazgrid.container.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
         bazgrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
         bazgrid.mouse.key = 0;
