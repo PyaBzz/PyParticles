@@ -9,8 +9,8 @@ waterConfig = {
     elasticNonlinearity: 1.20,  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
     enableHorAxis: 1,
     enableVerAxis: 1,
-    enableZAxis: 0,
-    minZ: 0,
+    enableDepAxis: 0,
+    minDep: 0,
     gravity: 0.0020, // (m/S^2)
     linkColour: "aqua",
     linkWidth: 1,  // in pixels. 0 to disable link drawing

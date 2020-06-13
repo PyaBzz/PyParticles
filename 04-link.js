@@ -15,11 +15,11 @@ link.prototype.applyForces = function () {
 	let force = {
 		hor: Math.sign(this.diff.hor) * Math.pow(Math.abs(this.diff.hor), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
 		ver: Math.sign(this.diff.ver) * Math.pow(Math.abs(this.diff.ver), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
-		z: Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
+		dep: Math.sign(this.diff.dep) * Math.pow(Math.abs(this.diff.dep), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
 	};
 
 	if (this.p2.isFree)
-		this.p2.applyForce({ hor: -force.hor, ver: -force.ver, z: -force.z });
+		this.p2.applyForce({ hor: -force.hor, ver: -force.ver, dep: -force.dep });
 
 	if (this.p1.isFree)
 		this.p1.applyForce(force);
@@ -31,8 +31,8 @@ link.prototype.draw = function () {
 };
 
 Object.defineProperties(link.prototype, {
-	diff: { get: function () { return { hor: this.p1.hor - this.p2.hor, ver: this.p1.ver - this.p2.ver, z: this.p1.z - this.p2.z } } },
+	diff: { get: function () { return { hor: this.p1.hor - this.p2.hor, ver: this.p1.ver - this.p2.ver, dep: this.p1.dep - this.p2.dep } } },
 	hasStretchedToTear: { get: function () { return this.grid.linkTearingLength && this.length2D > this.grid.linkTearingLength } },
 	length2D: { get: function () { return Math.sqrt(Math.pow(this.diff.hor, 2) + Math.pow(this.diff.ver, 2)) } },
-	length3D: { get: function () { return Math.sqrt(Math.pow(this.diff.hor, 2) + Math.pow(this.diff.ver, 2) + Math.pow(this.diff.z, 2)) } },
+	length3D: { get: function () { return Math.sqrt(Math.pow(this.diff.hor, 2) + Math.pow(this.diff.ver, 2) + Math.pow(this.diff.dep, 2)) } },
 });

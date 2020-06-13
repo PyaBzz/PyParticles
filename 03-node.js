@@ -1,8 +1,8 @@
-node = function (col, row, zUnits, bazgrid) {
+node = function (col, row, depUnits, bazgrid) {
 	this.grid = bazgrid;
 	this.col = col;
 	this.row = row;
-	this.zUnits = zUnits;
+	this.depUnits = depUnits;
 
 	this.upNeighbour = null;
 	this.upRightNeighbour = null;
@@ -15,9 +15,9 @@ node = function (col, row, zUnits, bazgrid) {
 
 	this.hor = col * this.grid.restingLinkLength;
 	this.ver = row * this.grid.restingLinkLength;
-	this.z = zUnits * this.grid.restingLinkLength;
-	this.force = { hor: 0, ver: 0, z: 0 };
-	this.speed = { hor: 0, ver: 0, z: 0 };
+	this.dep = depUnits * this.grid.restingLinkLength;
+	this.force = { hor: 0, ver: 0, dep: 0 };
+	this.speed = { hor: 0, ver: 0, dep: 0 };
 	this.isFrame = false;
 	this.pinned = false;
 	this.marked = false;
@@ -35,19 +35,19 @@ node.prototype.updatePosition = function () {
 	let acceleration = {
 		hor: -this.force.hor / this.grid.nodeMass,
 		ver: -this.force.ver / this.grid.nodeMass,
-		z: -this.force.z / this.grid.nodeMass - this.grid.gravity,  // Gravity acts in -z direction
+		dep: -this.force.dep / this.grid.nodeMass - this.grid.gravity,  // Gravity acts in depth direction
 	};
 
 	if (this.heldByBox) {
 		if (this.grid.enableHorAxis) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor) * this.grid.boxedNodeBrakingFactor;
 		if (this.grid.enableVerAxis) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver) * this.grid.boxedNodeBrakingFactor;
-		if (this.grid.enableZAxis) this.z += (acceleration.z / 2 + this.grid.damping * this.speed.z) * this.grid.boxedNodeBrakingFactor;
+		if (this.grid.enableDepAxis) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep) * this.grid.boxedNodeBrakingFactor;
 	} else {
 		if (this.grid.enableHorAxis) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor);
 		if (this.grid.enableVerAxis) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver);
-		if (this.grid.enableZAxis) this.z += (acceleration.z / 2 + this.grid.damping * this.speed.z);
+		if (this.grid.enableDepAxis) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep);
 	}
-	this.grid.minZ = Math.min(this.grid.minZ, this.z);
+	this.grid.minDep = Math.min(this.grid.minDep, this.dep);
 
 	this.applyAcceleration(acceleration);
 
@@ -76,8 +76,8 @@ node.prototype.draw = function () {
 	else if (this.grid.nodeRadius) {
 		this.grid.canvasCtx.beginPath();
 		this.grid.canvasCtx.fillStyle = this.grid.nodeColour;
-		this.grid.enableZAxis
-			? this.grid.canvasCtx.arc(this.hor, this.ver, Math.abs(this.z), 0, 2 * Math.PI)
+		this.grid.enableDepAxis
+			? this.grid.canvasCtx.arc(this.hor, this.ver, Math.abs(this.dep), 0, 2 * Math.PI)
 			: this.grid.canvasCtx.arc(this.hor, this.ver, this.grid.nodeRadius, 0, 2 * Math.PI);
 		this.grid.canvasCtx.fill();
 	}
@@ -123,15 +123,15 @@ node.prototype.mark = function () {
 };
 
 node.prototype.clearForce = function () {
-	this.force = { hor: 0, ver: 0, z: 0 };
+	this.force = { hor: 0, ver: 0, dep: 0 };
 };
 
 node.prototype.applyForce = function (vector) {
-	this.force.hor += vector.hor; this.force.ver += vector.ver; this.force.z += vector.z;
+	this.force.hor += vector.hor; this.force.ver += vector.ver; this.force.dep += vector.dep;
 };
 
 node.prototype.applyAcceleration = function (vector) {
-	this.speed.hor += vector.hor; this.speed.ver += vector.ver; this.speed.z += vector.z; // Because time step is normalised to 1 sec
+	this.speed.hor += vector.hor; this.speed.ver += vector.ver; this.speed.dep += vector.dep; // Because time step is normalised to 1 sec
 };
 
 Object.defineProperties(node.prototype, {
