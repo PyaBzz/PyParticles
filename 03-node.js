@@ -39,13 +39,13 @@ node.prototype.updatePosition = function () {
 	};
 
 	if (this.heldByBox) {
-		if (this.grid.enableHorAxis) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor) * this.grid.boxedNodeBrakingFactor;
-		if (this.grid.enableVerAxis) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver) * this.grid.boxedNodeBrakingFactor;
-		if (this.grid.enableDepAxis) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep) * this.grid.boxedNodeBrakingFactor;
+		if (this.grid.enableAxis.hor) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor) * this.grid.boxedNodeBrakingFactor;
+		if (this.grid.enableAxis.ver) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver) * this.grid.boxedNodeBrakingFactor;
+		if (this.grid.enableAxis.dep) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep) * this.grid.boxedNodeBrakingFactor;
 	} else {
-		if (this.grid.enableHorAxis) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor);
-		if (this.grid.enableVerAxis) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver);
-		if (this.grid.enableDepAxis) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep);
+		if (this.grid.enableAxis.hor) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor);
+		if (this.grid.enableAxis.ver) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver);
+		if (this.grid.enableAxis.dep) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep);
 	}
 	this.grid.minDep = Math.min(this.grid.minDep, this.dep);
 
