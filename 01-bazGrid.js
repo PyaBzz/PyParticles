@@ -8,7 +8,7 @@ BazGrid = function (container, config) {
 	for (let key in config)
 		this[key] = config[key];
 
-	this.restingLinkLength = this.container.clientWidth / this.horizontalCellCount;  // Todo: Refactor to cellCount.hor and cellCount.ver
+	this.restingLinkLength = this.container.clientWidth / this.horizontalCellCount;
 	this.verticalCellCount = Math.ceil(this.container.clientHeight / this.restingLinkLength);
 	this.linkTearingLength = this.linkTearingLengthFactor * this.restingLinkLength;
 

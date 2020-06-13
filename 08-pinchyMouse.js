@@ -7,9 +7,9 @@ pinchyMouse.prototype.constructor = pinchyMouse;
 
 pinchyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
-    this.clickX = mouseDownEvent.x;
-    this.clickY = mouseDownEvent.y;
-    this.getNodesForCoordinates(this.clickX, this.clickY);
+    this.clickHor = mouseDownEvent.x;
+    this.clickVer = mouseDownEvent.y;
+    this.getNodesForCoordinates(this.clickHor, this.clickVer);
     if (mouseDownEvent.target == bazGrid.canvas) {
         switch (this.key) {
             case 1:
@@ -98,13 +98,11 @@ pinchyMouse.prototype.check = function (node) {
     // }
 };
 
-pinchyMouse.prototype.cursorDistanceTo = function (node) {
-    return Math.sqrt(Math.pow(node.clientCoordinates.hor - this.hor, 2) + Math.pow(node.clientCoordinates.ver - this.ver, 2));
-};
+pinchyMouse.prototype.cursorDistanceTo = (node)
+    => node.getDistanceToCoordinates(this.hor, this.ver);
 
-pinchyMouse.prototype.clickDistanceTo = function (node) {
-    return Math.sqrt(Math.pow(node.clientCoordinates.hor - this.clickX, 2) + Math.pow(node.clientCoordinates.ver - this.clickY, 2));
-};
+pinchyMouse.prototype.clickDistanceTo = (node)
+    => node.getDistanceToCoordinates(this.clickHor, this.clickVer);
 
 pinchyMouse.prototype.cut = function () {
     this.cutNodes.forEach(function (n) {
