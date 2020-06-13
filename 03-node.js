@@ -39,13 +39,13 @@ node.prototype.updatePosition = function () {
 	};
 
 	if (this.heldByBox) {
-		if (this.grid.enableAxis.hor) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor) * this.grid.boxedNodeBrakingFactor;
-		if (this.grid.enableAxis.ver) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver) * this.grid.boxedNodeBrakingFactor;
-		if (this.grid.enableAxis.dep) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep) * this.grid.boxedNodeBrakingFactor;
+		this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor) * this.grid.boxedNodeBrakingFactor;
+		this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver) * this.grid.boxedNodeBrakingFactor;
+		this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep) * this.grid.boxedNodeBrakingFactor;
 	} else {
-		if (this.grid.enableAxis.hor) this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor);
-		if (this.grid.enableAxis.ver) this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver);
-		if (this.grid.enableAxis.dep) this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep);
+		this.hor += (acceleration.hor / 2 + this.grid.damping * this.speed.hor);
+		this.ver += (acceleration.ver / 2 + this.grid.damping * this.speed.ver);
+		this.dep += (acceleration.dep / 2 + this.grid.damping * this.speed.dep);
 	}
 	this.grid.minDep = Math.min(this.grid.minDep, this.dep);
 
@@ -97,8 +97,9 @@ node.prototype.move = function (vector) {
 	if (this.isFree === false)
 		return;
 
-	this.hor += vector.hor;
-	this.ver += vector.ver;
+	if (this.grid.enableMovementAxis.hor) this.hor += vector.hor;
+	if (this.grid.enableMovementAxis.ver) this.ver += vector.ver;
+	if (this.grid.enableMovementAxis.dep) this.dep += vector.dep;
 };
 
 node.prototype.removeLink = function (link) {
@@ -130,7 +131,7 @@ node.prototype.applyForce = function (vector) {
 };
 
 node.prototype.applyAcceleration = function (vector) {
-	this.speed.hor += vector.hor; this.speed.ver += vector.ver; this.speed.dep += vector.dep; // Because time step is normalised to 1 sec
+	this.speed.hor += vector.hor; this.speed.ver += vector.ver; this.speed.dep += vector.dep;
 };
 
 Object.defineProperties(node.prototype, {

@@ -42,7 +42,8 @@ BazGrid.prototype.run = function () {
 	this.drawingLoop = setInterval(() => {
 		this.updateBoxedNodes();
 		this.graph.calculateForces();
-		this.graph.updateNodePositions();
+		if (this.enableDynamics)
+			this.graph.updateNodePositions();
 		this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 		if (this.linkWidth) {
 			this.canvasCtx.lineWidth = this.linkWidth;
