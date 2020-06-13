@@ -141,6 +141,5 @@ Object.defineProperties(node.prototype, {
 		}
 	},
 	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false && this.isFrame === false; } },
-	clientX: { get: function () { return this.x + this.grid.referenceFrame.left; } },  // Coordinates within the canvas!
-	clientY: { get: function () { return this.y + this.grid.referenceFrame.top; } },  // Coordinates within the canvas!
+	clientCoordinates: { get: () => this.grid.convertCoordinate(this.x, this.y, 0) },  // Coordinates within the canvas!
 });

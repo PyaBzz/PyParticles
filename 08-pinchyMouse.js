@@ -99,11 +99,11 @@ pinchyMouse.prototype.check = function (node) {
 };
 
 pinchyMouse.prototype.cursorDistanceTo = function (node) {
-    return Math.sqrt(Math.pow(node.clientX - this.x, 2) + Math.pow(node.clientY - this.y, 2));
+    return Math.sqrt(Math.pow(node.clientCoordinates.hor - this.x, 2) + Math.pow(node.clientCoordinates.ver - this.y, 2));
 };
 
 pinchyMouse.prototype.clickDistanceTo = function (node) {
-    return Math.sqrt(Math.pow(node.clientX - this.clickX, 2) + Math.pow(node.clientY - this.clickY, 2));
+    return Math.sqrt(Math.pow(node.clientCoordinates.hor - this.clickX, 2) + Math.pow(node.clientCoordinates.ver - this.clickY, 2));
 };
 
 pinchyMouse.prototype.cut = function () {
