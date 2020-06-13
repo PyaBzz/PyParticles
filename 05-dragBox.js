@@ -12,19 +12,19 @@ dragBox = function (i, bazgrid) {
     this.touchedNodes = [];
 };
 
-dragBox.prototype.move = function (dragX, dragY, markPath = false) {
+dragBox.prototype.move = function (dragHor, dragVer, markPath = false) {
     this.updateTouchedNodes(markPath);
-    this.dragNodes({ x: dragX, y: dragY });
+    this.dragNodes({ hor: dragHor, ver: dragVer });
 
-    this.element.style.left = this.element.offsetLeft + dragX + "px";
-    this.element.style.top = this.element.offsetTop + dragY + "px";
+    this.element.style.left = this.element.offsetLeft + dragHor + "px";
+    this.element.style.top = this.element.offsetTop + dragVer + "px";
 
     this.updateBoundaries();  // Caching for performance reasons!
 };
 
 dragBox.prototype.dragNodes = function (dragVect) {
     this.touchedNodes.forEach(function (n) {
-        n.move({ x: dragVect.x * this.grid.mouse.slipFactor, y: dragVect.y * this.grid.mouse.slipFactor })
+        n.move({ hor: dragVect.hor * this.grid.mouse.slipFactor, ver: dragVect.ver * this.grid.mouse.slipFactor })
     }, this);
 };
 
@@ -46,7 +46,7 @@ dragBox.prototype.clearTouchedNodes = function () {
 };
 
 dragBox.prototype.coversNode = function (n) {
-    return n.x > this.left && n.x < this.right && n.y < this.bottom && n.y > this.top;
+    return n.hor > this.left && n.hor < this.right && n.ver < this.bottom && n.ver > this.top;
 };
 
 // Caching for performance reasons!

@@ -13,26 +13,26 @@ link.prototype.applyForces = function () {
 		return;
 
 	let force = {
-		x: Math.sign(this.diff.x) * Math.pow(Math.abs(this.diff.x), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
-		y: Math.sign(this.diff.y) * Math.pow(Math.abs(this.diff.y), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
+		hor: Math.sign(this.diff.hor) * Math.pow(Math.abs(this.diff.hor), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
+		ver: Math.sign(this.diff.ver) * Math.pow(Math.abs(this.diff.ver), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
 		z: Math.sign(this.diff.z) * Math.pow(Math.abs(this.diff.z), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
 	};
 
 	if (this.p2.isFree)
-		this.p2.applyForce({ x: -force.x, y: -force.y, z: -force.z });
+		this.p2.applyForce({ hor: -force.hor, ver: -force.ver, z: -force.z });
 
 	if (this.p1.isFree)
 		this.p1.applyForce(force);
 };
 
 link.prototype.draw = function () {
-	this.grid.canvasCtx.moveTo(this.p1.x, this.p1.y);  // 0.5 pixels to properly apply odd numbers to line thickness
-	this.grid.canvasCtx.lineTo(this.p2.x, this.p2.y);  // 0.5 pixels to properly apply odd numbers to line thickness
+	this.grid.canvasCtx.moveTo(this.p1.hor, this.p1.ver);  // 0.5 pixels to properly apply odd numbers to line thickness
+	this.grid.canvasCtx.lineTo(this.p2.hor, this.p2.ver);  // 0.5 pixels to properly apply odd numbers to line thickness
 };
 
 Object.defineProperties(link.prototype, {
-	diff: { get: function () { return { x: this.p1.x - this.p2.x, y: this.p1.y - this.p2.y, z: this.p1.z - this.p2.z } } },
+	diff: { get: function () { return { hor: this.p1.hor - this.p2.hor, ver: this.p1.ver - this.p2.ver, z: this.p1.z - this.p2.z } } },
 	hasStretchedToTear: { get: function () { return this.grid.linkTearingLength && this.length2D > this.grid.linkTearingLength } },
-	length2D: { get: function () { return Math.sqrt(Math.pow(this.diff.x, 2) + Math.pow(this.diff.y, 2)) } },
-	length3D: { get: function () { return Math.sqrt(Math.pow(this.diff.x, 2) + Math.pow(this.diff.y, 2) + Math.pow(this.diff.z, 2)) } },
+	length2D: { get: function () { return Math.sqrt(Math.pow(this.diff.hor, 2) + Math.pow(this.diff.ver, 2)) } },
+	length3D: { get: function () { return Math.sqrt(Math.pow(this.diff.hor, 2) + Math.pow(this.diff.ver, 2) + Math.pow(this.diff.z, 2)) } },
 });

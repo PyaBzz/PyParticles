@@ -7,8 +7,8 @@ waterConfig = {
     damping: 0.30,    // 0 = greatest loss, 1 = no loss (potentially unstable)
     elasticStiffness: 0.26,
     elasticNonlinearity: 1.20,  // 1 is linear elasticity. Has problems with lengths less than 1 !! Also, brings higher order harmonics !!
-    enableXAxis: 1,
-    enableYAxis: 1,
+    enableHorAxis: 1,
+    enableVerAxis: 1,
     enableZAxis: 0,
     minZ: 0,
     gravity: 0.0020, // (m/S^2)

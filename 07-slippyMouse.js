@@ -56,7 +56,7 @@ slippyMouse.prototype.onMove = function (moveEvent) {
             return;
         let hor = moveEvent.offsetX + moveEvent.movementX;
         let ver = moveEvent.offsetY + moveEvent.movementY;
-        let dragVect = { x: moveEvent.movementX, y: moveEvent.movementY };
+        let dragVect = { hor: moveEvent.movementX, ver: moveEvent.movementY };
         this.getNodesForCoordinates(hor, ver, false);
         switch (this.key) {
             case this.buttonsEnum.left:
@@ -99,7 +99,7 @@ slippyMouse.prototype.cut = function () {
 
 slippyMouse.prototype.drag = function (dragVect) {
     this.touchedNodes.forEach(function (n) {
-        n.move({ x: dragVect.x * this.slipFactor, y: dragVect.y * this.slipFactor })
+        n.move({ hor: dragVect.hor * this.slipFactor, ver: dragVect.ver * this.slipFactor })
     }, this);
 };
 

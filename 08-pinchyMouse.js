@@ -47,20 +47,20 @@ pinchyMouse.prototype.onMove = function () {
         return;
 
     if (this.isSlippy) {
-        this.getNodesForCoordinates(this.x, this.y);
+        this.getNodesForCoordinates(this.hor, this.ver);
         this.touchedNodes.forEach(function (n) {
-            n.move({ x: bazGrid.mouse.dragVect.x * bazGrid.mouse.slipFactor, y: bazGrid.mouse.dragVect.y * bazGrid.mouse.slipFactor })
+            n.move({ hor: bazGrid.mouse.dragVect.hor * bazGrid.mouse.slipFactor, ver: bazGrid.mouse.dragVect.ver * bazGrid.mouse.slipFactor })
         });
         this.clearNodes();
     } else {
 
         this.heldNodes.forEach(function (n) {
-            n.move({ x: bazGrid.mouse.dragVect.x, y: bazGrid.mouse.dragVect.y });
+            n.move({ hor: bazGrid.mouse.dragVect.hor, ver: bazGrid.mouse.dragVect.ver });
         });
     }
 
-    this.x += this.dragVect.x;
-    this.y += this.dragVect.y;
+    this.hor += this.dragVect.hor;
+    this.ver += this.dragVect.ver;
 };
 
 pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
@@ -99,7 +99,7 @@ pinchyMouse.prototype.check = function (node) {
 };
 
 pinchyMouse.prototype.cursorDistanceTo = function (node) {
-    return Math.sqrt(Math.pow(node.clientCoordinates.hor - this.x, 2) + Math.pow(node.clientCoordinates.ver - this.y, 2));
+    return Math.sqrt(Math.pow(node.clientCoordinates.hor - this.hor, 2) + Math.pow(node.clientCoordinates.ver - this.ver, 2));
 };
 
 pinchyMouse.prototype.clickDistanceTo = function (node) {
