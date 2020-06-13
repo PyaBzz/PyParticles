@@ -54,9 +54,8 @@ node.prototype.updatePosition = function () {
 	this.clearForce();
 };
 
-node.prototype.getDistanceToCoordinates = function (hor, ver) {
-	// Todo: Reuse this for all distance calculations
-	return Math.sqrt(Math.pow(this.hor - hor, 2) + Math.pow(this.ver - ver, 2))
+node.prototype.getDistanceToCoordinates = function (hor, ver, dep = this.dep) {
+	return Math.sqrt(Math.pow(this.hor - hor, 2) + Math.pow(this.ver - ver, 2) + Math.pow(this.dep - dep, 2))
 }
 
 node.prototype.draw = function () {
