@@ -39,7 +39,17 @@ BazGrid = function (container, config) {
 };
 
 BazGrid.prototype.run = function () {
-	this.drawingLoop = setInterval(() => this.draw(), this.drawingCycleTime);
+	this.drawingLoop = setInterval(() => {
+		this.updateBoxedNodes();
+		this.graph.calculateForces();
+		this.graph.updateNodePositions();
+		this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		if (this.linkWidth) {
+			this.canvasCtx.lineWidth = this.linkWidth;
+			this.graph.drawLinks();
+		}
+		this.graph.drawNodes();
+	}, this.drawingCycleTime);
 }
 
 BazGrid.prototype.convertCoordinate = function (horizontal, vertical, direction = 0) {
@@ -60,15 +70,3 @@ BazGrid.prototype.updateBoxedNodes = function () {
 		d.updateTouchedNodes();
 	});
 };
-
-BazGrid.prototype.draw = function () {
-	this.updateBoxedNodes();
-	this.graph.calculateForces();
-	this.graph.updateNodePositions();
-	this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-	if (this.linkWidth) {
-		this.canvasCtx.lineWidth = this.linkWidth;
-		this.graph.drawLinks();
-	}
-	this.graph.drawNodes();
-}
