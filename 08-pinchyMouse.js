@@ -98,11 +98,13 @@ pinchyMouse.prototype.check = function (node) {
     // }
 };
 
-pinchyMouse.prototype.cursorDistanceTo = (node)
-    => node.getDistanceToCoordinates(this.hor, this.ver);
+pinchyMouse.prototype.cursorDistanceTo = function (node) {
+    node.getDistanceToCoordinates(this.hor, this.ver);
+}
 
-pinchyMouse.prototype.clickDistanceTo = (node)
-    => node.getDistanceToCoordinates(this.clickHor, this.clickVer);
+pinchyMouse.prototype.clickDistanceTo = function (node) {
+    node.getDistanceToCoordinates(this.clickHor, this.clickVer);
+}
 
 pinchyMouse.prototype.cut = function () {
     this.cutNodes.forEach(function (n) {
