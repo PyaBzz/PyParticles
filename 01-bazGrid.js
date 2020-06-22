@@ -35,21 +35,23 @@ BazGrid = function (container, config) {
 	}
 
 	this.mouse.bindHandlers();
+	this.bindHandlers();
 	this.run();
 };
 
 BazGrid.prototype.run = function () {
-	this.drawingLoop = setInterval(() => {
-		this.updateBoxedNodes();
-		this.graph.calculateForces();
-		if (this.enableDynamics)
-			this.graph.updateNodePositions();
-		this.canvasCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-		if (this.linkWidth) {
-			this.canvasCtx.lineWidth = this.linkWidth;
-			this.graph.drawLinks();
+	let me = this;
+	this.drawingLoop = setInterval(function () {
+		me.updateBoxedNodes();
+		me.graph.calculateForces();
+		if (me.enableDynamics)
+			me.graph.updateNodePositions();
+		me.canvasCtx.clearRect(0, 0, me.canvas.width, me.canvas.height);
+		if (me.linkWidth) {
+			me.canvasCtx.lineWidth = me.linkWidth;
+			me.graph.drawLinks();
 		}
-		this.graph.drawNodes();
+		me.graph.drawNodes();
 	}, this.drawingCycleTime);
 }
 
@@ -70,4 +72,26 @@ BazGrid.prototype.updateBoxedNodes = function () {
 	this.dragBoxes.forEach(function (d) {
 		d.updateTouchedNodes();
 	});
+};
+
+BazGrid.prototype.pause = function () {
+	clearInterval(this.drawingLoop);
+	this.drawingLoop = 0;
+}
+
+BazGrid.prototype.resume = function () {
+	this.run();
+}
+
+BazGrid.prototype.bindHandlers = function () {
+	let me = this;
+	let ctrl_pause = document.getElementById('ctrl-pause');
+
+	ctrl_pause.onchange = function (changeEvent) {
+		changeEvent.target.checked;
+		if (changeEvent.target.checked)
+			me.pause();
+		else
+			me.resume();
+	}
 };
