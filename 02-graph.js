@@ -146,7 +146,16 @@ graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, m
 };
 
 graph.prototype.estimateNodeByCoordinates = function (hor, ver) {
-	let row = Math.round(ver / this.grid.restingLinkLength);
 	let col = Math.round(hor / this.grid.restingLinkLength);
-	return this.nodes[row][col];
+	col = Math.min(col, this.maxColIndex);
+	col = Math.max(col, 0);
+	let row = Math.round(ver / this.grid.restingLinkLength);
+	row = Math.min(row, this.maxRowIndex);
+	row = Math.max(row, 0);
+	return this.nodes[row][col]; //Todo: Is the order right?
 };
+
+Object.defineProperties(graph.prototype, {
+	maxRowIndex: { get: function () { return this.nodes.length - 1 } },
+	maxColIndex: { get: function () { return this.nodes[0].length - 1 } },
+});
