@@ -34,7 +34,7 @@ BazGrid = function (container, config) {
 		box.updateBoundaries();
 	}
 
-	this.mouse.bindHandlers(this);
+	this.mouse.bindHandlers();
 	this.run();
 };
 

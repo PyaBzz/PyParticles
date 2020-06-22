@@ -19,35 +19,42 @@ mouse = function (impactRadius, cuttingRadius, slipFactor, bazgrid) {
     this.buttonsEnum = Object.freeze({ "none": 0, "left": 1, "middle": 2, "right": 3 })
 };
 
-mouse.prototype.bindHandlers = function (bazgrid) {
-    bazgrid.canvas.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
-    bazgrid.dragBoxes.forEach(function (d) {
-        d.element.oncontextmenu = function (contextEvent) { contextEvent.preventDefault(); };
+mouse.prototype.bindHandlers = function () {
+    let me = this;
+
+    this.grid.canvas.oncontextmenu = function (contextEvent) {
+        contextEvent.preventDefault();
+    };
+
+    this.grid.dragBoxes.forEach(function (d) {
+        d.element.oncontextmenu = function (contextEvent) {
+            contextEvent.preventDefault();
+        };
     });
 
-    bazgrid.container.onmousedown = function (mouseDownEvent) {
+    this.grid.container.onmousedown = function (mouseDownEvent) {
         mouseDownEvent.preventDefault();
-        bazgrid.mouse.onDown(mouseDownEvent);
+        me.onDown(mouseDownEvent);
     };
 
-    bazgrid.container.onmousemove = function (moveEvent) {
+    this.grid.container.onmousemove = function (moveEvent) {
         moveEvent.preventDefault();
-        bazgrid.mouse.onMove(moveEvent);
+        me.onMove(moveEvent);
     };
 
-    bazgrid.container.onmouseup = function (releaseEvent) {
+    this.grid.container.onmouseup = function (releaseEvent) {
         releaseEvent.preventDefault();
-        bazgrid.mouse.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
-        bazgrid.mouse.key = 0;
-        bazgrid.mouse.clearNodes();
-        bazgrid.mouse.dragBox = null;
+        me.heldNodes.forEach(function (p) { p.heldByMouse = false }); //TODO: Move to pinchyMouse.clearNodes()
+        me.key = 0;
+        me.clearNodes();
+        me.dragBox = null;
     };
 
-    bazgrid.container.onmouseenter = function (enterEvent) {
-        this.isOnGrid = true;
+    this.grid.container.onmouseenter = function (enterEvent) {
+        me.isOnGrid = true;
     }
 
-    bazgrid.container.onmouseleave = function (leaveEvent) {
-        this.isOnGrid = false;
+    this.grid.container.onmouseleave = function (leaveEvent) {
+        me.isOnGrid = false;
     }
 }

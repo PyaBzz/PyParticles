@@ -5,6 +5,10 @@ slippyMouse = function (impactRadius, cuttingRadius, slipFactor, bazgrid) {
 slippyMouse.prototype = new mouse();
 slippyMouse.prototype.constructor = slippyMouse;
 
+slippyMouse.prototype.bindHandlers = function () {
+    mouse.prototype.bindHandlers.call(this);
+}
+
 slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
     this.hor = mouseDownEvent.offsetX;
