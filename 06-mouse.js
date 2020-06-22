@@ -45,11 +45,9 @@ mouse.prototype.bindHandlers = function (bazgrid) {
 
     bazgrid.container.onmouseenter = function (enterEvent) {
         this.isOnGrid = true;
-        console.log(this.isOnGrid);
     }
 
     bazgrid.container.onmouseleave = function (leaveEvent) {
         this.isOnGrid = false;
-        console.log(this.isOnGrid);
     }
 }
