@@ -81,15 +81,15 @@ graph.prototype.doToAllNodes = function (func) {
 	}
 };
 
-graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = false) {
+graph.prototype.getClosestNodeToCoordinates = function (hor, ver, nodeVisitFunc = null) {
 	// let runnerNode = this.nodes[0][0];
 	let runnerNode = this.estimateNodeByCoordinates(hor, ver);
 	let bestNeighbour = runnerNode;
 	let runnerNodeDistance = Infinity;
 	let bestNeighbourDistance = Number.MAX_VALUE;
 	while (bestNeighbourDistance < runnerNodeDistance) {
-		if (markPath)
-			runnerNode.mark();
+		if (nodeVisitFunc)
+			nodeVisitFunc(runnerNode);
 		runnerNode = bestNeighbour;
 		runnerNodeDistance = runnerNode.getDistanceToCoordinates(hor, ver);
 		runnerNode.neighbours.forEach(function (neighbour) {
@@ -105,9 +105,9 @@ graph.prototype.getClosestNodeToCoordinates = function (hor, ver, markPath = fal
 	return runnerNode;
 };
 
-graph.prototype.getNodesWhere = function (predicate, rootNode = null, markPath = false) {
+graph.prototype.getNodesWhere = function (predicate, rootNode, nodeVisitFunc = null) {
 	let resultArray = [];
-	if (rootNode == null) {
+	if (rootNode == null) { // Todo: Do we need this?
 		for (let row = 0; row < this.nodes.length; row++) {
 			for (let col = 0; col < this.nodes[0].length; col++) {
 				n = this.nodes[row][col];
@@ -118,11 +118,11 @@ graph.prototype.getNodesWhere = function (predicate, rootNode = null, markPath =
 	} else {
 		resultArray.push(rootNode);
 		rootNode.visited = true;
-		if (markPath)
-			rootNode.mark();
+		if (nodeVisitFunc)
+			nodeVisitFunc(rootNode);
 		rootNode.neighbours.forEach(function (n) {
 			if (n.visited === false && predicate(n) != false) {
-				this.getNodesWhereRecurse(predicate, n, resultArray, markPath);
+				this.getNodesWhereRecurse(predicate, n, resultArray, nodeVisitFunc);
 			}
 		}, this);
 
@@ -133,14 +133,14 @@ graph.prototype.getNodesWhere = function (predicate, rootNode = null, markPath =
 	return resultArray;
 };
 
-graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, markPath = false) {
+graph.prototype.getNodesWhereRecurse = function (predicate, node, resultArray, nodeVisitFunc = null) {
 	resultArray.push(node);
 	node.visited = true;
-	if (markPath)
-		node.mark();
+	if (nodeVisitFunc)
+		nodeVisitFunc(node);
 	node.neighbours.forEach(function (n) {
 		if (n.visited === false && predicate(n) != false) {
-			this.getNodesWhereRecurse(predicate, n, resultArray, markPath);
+			this.getNodesWhereRecurse(predicate, n, resultArray, nodeVisitFunc);
 		}
 	}, this);
 };

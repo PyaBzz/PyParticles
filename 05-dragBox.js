@@ -12,8 +12,8 @@ dragBox = function (i, bazgrid) {
     this.touchedNodes = [];
 };
 
-dragBox.prototype.move = function (dragHor, dragVer, markPath = false) {
-    this.updateTouchedNodes(markPath);
+dragBox.prototype.move = function (dragHor, dragVer, nodeVisitFunc = null) {
+    this.updateTouchedNodes(nodeVisitFunc);
     this.dragNodes({ hor: dragHor, ver: dragVer });
 
     this.element.style.left = this.element.offsetLeft + dragHor + "px";
@@ -32,10 +32,10 @@ dragBox.prototype.getCentreNode = function () {
     return this.grid.graph.getClosestNodeToCoordinates(this.centreHor, this.centreVer, false);
 };
 
-dragBox.prototype.updateTouchedNodes = function (markPath = false) {
+dragBox.prototype.updateTouchedNodes = function (nodeVisitFunc = null) {
     this.clearTouchedNodes();
     let centreNode = this.getCentreNode();
-    this.touchedNodes = this.grid.graph.getNodesWhere(n => this.coversNode(n), centreNode, markPath);
+    this.touchedNodes = this.grid.graph.getNodesWhere(n => this.coversNode(n), centreNode, nodeVisitFunc);
     this.touchedNodes.forEach(n => n.heldByBox = true);
     return this.touchedNodes;
 };

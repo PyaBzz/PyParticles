@@ -10,7 +10,7 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.hor = mouseDownEvent.offsetX;
     this.ver = mouseDownEvent.offsetY;
     if (mouseDownEvent.target == this.grid.canvas) {
-        this.getNodesForCoordinates(this.hor, this.ver);
+        this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
         switch (this.key) {
             case this.buttonsEnum.left:
                 break;
@@ -43,12 +43,12 @@ slippyMouse.prototype.onMove = function (moveEvent) {
     if (this.hasDragBox) {
         switch (this.key) {
             case this.buttonsEnum.left:
-                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = false);
+                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = null);
                 break;
             case this.buttonsEnum.middle:
                 break;
             case this.buttonsEnum.right:
-                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, markPath = true);
+                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = null);
                 break;
             default:
                 break;
@@ -57,7 +57,7 @@ slippyMouse.prototype.onMove = function (moveEvent) {
         if (moveEvent.target !== this.grid.canvas)
             return;
         let dragVect = { hor: moveEvent.movementX, ver: moveEvent.movementY };
-        this.getNodesForCoordinates(this.hor, this.ver, false);
+        this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
         switch (this.key) {
             case this.buttonsEnum.left:
                 this.drag(dragVect);
@@ -78,9 +78,9 @@ slippyMouse.prototype.onMove = function (moveEvent) {
     }
 };
 
-slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, markPath = false) {
+slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, nodeVisitFunc = null) {
     this.clearNodes();
-    this.closestNode = this.grid.graph.getClosestNodeToCoordinates(hor, ver, false);
+    this.closestNode = this.grid.graph.getClosestNodeToCoordinates(hor, ver, nodeVisitFunc);
     this.touchedNodes = this.grid.graph.getNodesWhere(n => n.getDistanceToCoordinates(hor, ver) <= this.impactRadius, this.closestNode);
     return this.touchedNodes;
 };
