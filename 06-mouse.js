@@ -1,10 +1,13 @@
 mouse = function (impactRadius, cuttingRadius, slipFactor, bazgrid) {
     this.grid = bazgrid;
+    this.isOnGrid = true;
     this.impactRadius = impactRadius;
     this.cuttingRadius = cuttingRadius;
     this.slipFactor = slipFactor;
     this.clickHor = 0;
     this.clickVer = 0;
+    this.hor = null;
+    this.ver = null;
     this.key = 0;
     this.closestNode = null;
     this.closestNodeDistance = Number.MAX_VALUE;
@@ -39,4 +42,14 @@ mouse.prototype.bindHandlers = function (bazgrid) {
         bazgrid.mouse.clearNodes();
         bazgrid.mouse.dragBox = null;
     };
+
+    bazgrid.container.onmouseenter = function (enterEvent) {
+        this.isOnGrid = true;
+        console.log(this.isOnGrid);
+    }
+
+    bazgrid.container.onmouseleave = function (leaveEvent) {
+        this.isOnGrid = false;
+        console.log(this.isOnGrid);
+    }
 }

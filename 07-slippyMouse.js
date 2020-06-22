@@ -7,10 +7,10 @@ slippyMouse.prototype.constructor = slippyMouse;
 
 slippyMouse.prototype.onDown = function (mouseDownEvent) {
     this.key = mouseDownEvent.which;
-    let hor = mouseDownEvent.offsetX;
-    let ver = mouseDownEvent.offsetY;
+    this.hor = mouseDownEvent.offsetX;
+    this.ver = mouseDownEvent.offsetY;
     if (mouseDownEvent.target == this.grid.canvas) {
-        this.getNodesForCoordinates(hor, ver);
+        this.getNodesForCoordinates(this.hor, this.ver);
         switch (this.key) {
             case this.buttonsEnum.left:
                 break;
@@ -35,6 +35,8 @@ slippyMouse.prototype.onDown = function (mouseDownEvent) {
 };
 
 slippyMouse.prototype.onMove = function (moveEvent) {
+    this.hor = moveEvent.offsetX + moveEvent.movementX;
+    this.ver = moveEvent.offsetY + moveEvent.movementY;
     if (this.isUp)
         return;
 
@@ -54,10 +56,8 @@ slippyMouse.prototype.onMove = function (moveEvent) {
     } else {
         if (moveEvent.target !== this.grid.canvas)
             return;
-        let hor = moveEvent.offsetX + moveEvent.movementX;
-        let ver = moveEvent.offsetY + moveEvent.movementY;
         let dragVect = { hor: moveEvent.movementX, ver: moveEvent.movementY };
-        this.getNodesForCoordinates(hor, ver, false);
+        this.getNodesForCoordinates(this.hor, this.ver, false);
         switch (this.key) {
             case this.buttonsEnum.left:
                 this.drag(dragVect);
