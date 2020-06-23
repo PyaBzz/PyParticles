@@ -19,10 +19,7 @@ BazGrid = function (container, config) {
 	this.canvasCtx = this.canvas.getContext('2d');
 	this.referenceFrame = this.canvas.getBoundingClientRect();  // Required for comparison against node positions
 
-	if (this.pinchyMouse)
-		this.mouse = new pinchyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
-	else
-		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
+	this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
 
 	this.graph = new graph(this);
 
@@ -88,10 +85,27 @@ BazGrid.prototype.bindHandlers = function () {
 	let ctrl_pause = document.getElementById('ctrl-pause');
 
 	ctrl_pause.onchange = function (changeEvent) {
-		changeEvent.target.checked;
 		if (changeEvent.target.checked)
 			me.pause();
 		else
 			me.resume();
+	}
+
+	let ctrl_mouse_slippy = document.getElementById('ctrl-mouse-slippy');
+	ctrl_mouse_slippy.checked = true;
+	let ctrl_mouse_pinchy = document.getElementById('ctrl-mouse-pinchy');
+
+	ctrl_mouse_slippy.onchange = function (changeEvent) {
+		if (changeEvent.target.checked) {
+			me.mouse = new slippyMouse(me.mouseImpactRadius * me.restingLinkLength, me.mouseCuttingRadius * me.restingLinkLength, me.mouseSlipFactor, me);
+			me.mouse.bindHandlers();
+		}
+	}
+
+	ctrl_mouse_pinchy.onchange = function (changeEvent) {
+		if (changeEvent.target.checked) {
+			me.mouse = new pinchyMouse(me.mouseImpactRadius * me.restingLinkLength, me.mouseCuttingRadius * me.restingLinkLength, me.mouseSlipFactor, me);
+			me.mouse.bindHandlers();
+		}
 	}
 };
