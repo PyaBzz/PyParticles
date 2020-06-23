@@ -29,7 +29,7 @@ node = function (col, row, depUnits, bazgrid) {
 };
 
 node.prototype.updatePosition = function () {
-	if (!this.isFree)
+	if (!this.canMove || this.heldByMouse)
 		return;
 
 	let acceleration = {
@@ -94,7 +94,7 @@ node.prototype.attach = function (node) {
 };
 
 node.prototype.move = function (vector) {
-	if (this.isFree === false)
+	if (this.canMove === false)
 		return;
 
 	if (this.grid.enableMovementAxis.hor) this.hor += vector.hor;
@@ -141,6 +141,6 @@ Object.defineProperties(node.prototype, {
 			return allNeighbours.filter(function (n) { return n !== null });
 		}
 	},
-	isFree: { get: function () { return this.pinned === false && this.heldByMouse === false && this.isFrame === false; } },
+	canMove: { get: function () { return this.pinned === false && this.isFrame === false; } },
 	clientCoordinates: { get: () => this.grid.convertCoordinate(this.hor, this.ver, 0) },  // Coordinates within the canvas!
 });

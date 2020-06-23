@@ -9,7 +9,7 @@ link.prototype.applyForces = function () {
 	if (this.hasStretchedToTear)
 		this.p1.removeLink(this);  // 2D
 
-	if (this.p1.isFree === false && this.p2.isFree === false)
+	if (this.p1.canMove === false && this.p2.canMove === false)
 		return;
 
 	let force = {
@@ -18,10 +18,10 @@ link.prototype.applyForces = function () {
 		dep: Math.sign(this.diff.dep) * Math.pow(Math.abs(this.diff.dep), this.grid.elasticNonlinearity) * this.grid.elasticStiffness,
 	};
 
-	if (this.p2.isFree)
+	if (this.p2.canMove)
 		this.p2.applyForce({ hor: -force.hor, ver: -force.ver, dep: -force.dep });
 
-	if (this.p1.isFree)
+	if (this.p1.canMove)
 		this.p1.applyForce(force);
 };
 

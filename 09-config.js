@@ -28,6 +28,7 @@ waterConfig = {
     rightClickAction: 1, // 0 = cut, 1 = mark
     mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
     mouseSlipFactor: 0.6, // [0-1] 0 = maximum slip, 1 = no slip
+    pinchyMouse: false,
     boxedNodeBrakingFactor: 0.4, // [0-1] 0 = maximum braking, 1 = no braking
 };
 

@@ -10,95 +10,47 @@ slippyMouse.prototype.bindHandlers = function () {
 }
 
 slippyMouse.prototype.onDown = function (mouseDownEvent) {
-    this.key = mouseDownEvent.which;
-    this.hor = mouseDownEvent.offsetX;
-    this.ver = mouseDownEvent.offsetY;
-    if (mouseDownEvent.target == this.grid.canvas) {
-        this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
-        switch (this.key) {
-            case this.buttonsEnum.left:
-                break;
-            case this.buttonsEnum.middle:
-                this.closestNode.pin();
-                break;
-            case this.buttonsEnum.right:
-                if (this.grid.rightClickAction === this.actionsEnum.cut)
-                    this.cut();
-                else
-                    this.closestNode.mark();
-                break;
-            default:
-                break;
-        }
-    }
-    else if (mouseDownEvent.target.className == 'dragbox') {
-        let dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
-        this.dragBox = this.grid.dragBoxes[dragBoxIndex];
-        this.dragBox.updateBoundaries();
-    }
+    mouse.prototype.onDown.call(this, mouseDownEvent);
 };
 
 slippyMouse.prototype.onMove = function (moveEvent) {
-    this.hor = moveEvent.offsetX + moveEvent.movementX;
-    this.ver = moveEvent.offsetY + moveEvent.movementY;
-    if (this.isUp)
-        return;
+    mouse.prototype.onMove.call(this, moveEvent);
 
-    if (this.hasDragBox) {
-        switch (this.key) {
-            case this.buttonsEnum.left:
-                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = null);
-                break;
-            case this.buttonsEnum.middle:
-                break;
-            case this.buttonsEnum.right:
-                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = null);
-                break;
-            default:
-                break;
-        }
-    } else {
-        if (moveEvent.target !== this.grid.canvas)
-            return;
-        let dragVect = { hor: moveEvent.movementX, ver: moveEvent.movementY };
-        this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
-        switch (this.key) {
-            case this.buttonsEnum.left:
-                this.drag(dragVect);
-                break;
-            case this.buttonsEnum.middle:
-                this.closestNode.pin();
-                break;
-            case this.buttonsEnum.right:
-                if (this.grid.rightClickAction === this.actionsEnum.cut)
-                    this.cut();
-                else
-                    this.closestNode.mark();
-                break;
-            default:
-                break;
-        }
-        this.clearNodes();
+    if (this.hasDragBox)
+        return;
+    if (moveEvent.target !== this.grid.canvas)
+        return;
+    let dragVect = { hor: moveEvent.movementX, ver: moveEvent.movementY };
+    this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
+    switch (this.key) {
+        case this.buttonsEnum.left:
+            this.drag(dragVect);
+            break;
+        case this.buttonsEnum.middle:
+            this.closestNode.pin();
+            break;
+        case this.buttonsEnum.right:
+            if (this.grid.rightClickAction === this.actionsEnum.cut)
+                this.cut();
+            else
+                this.closestNode.mark();
+            break;
+        default:
+            break;
     }
+    this.clearNodes();
 };
 
 slippyMouse.prototype.getNodesForCoordinates = function (hor, ver, nodeVisitFunc = null) {
-    this.clearNodes();
-    this.closestNode = this.grid.graph.getClosestNodeToCoordinates(hor, ver, nodeVisitFunc);
-    this.touchedNodes = this.grid.graph.getNodesWhere(n => n.getDistanceToCoordinates(hor, ver) <= this.impactRadius, this.closestNode);
-    return this.touchedNodes;
+    mouse.prototype.getNodesForCoordinates.call(this, hor, ver, nodeVisitFunc);
 };
 
 slippyMouse.prototype.clearNodes = function () {
-    this.touchedNodes.forEach(function (n) { n.visited = false });
-    this.touchedNodes = [];
-    this.closestNode = null;
+    mouse.prototype.clearNodes.call(this);
 };
 
 slippyMouse.prototype.cut = function () {
-    this.touchedNodes.forEach(function (n) {
-        n.removeLinks();
-    });
+    mouse.prototype.cut.call(this);
 };
 
 slippyMouse.prototype.drag = function (dragVect) {

@@ -1,120 +1,68 @@
 pinchyMouse = function (impactRadius, cuttingRadius, slipFactor, bazgrid) {
-    console.error("Not implemented yet");
+    mouse.call(this, impactRadius, cuttingRadius, slipFactor, bazgrid);
 };
 
 pinchyMouse.prototype = new mouse();
 pinchyMouse.prototype.constructor = pinchyMouse;
 
+pinchyMouse.prototype.bindHandlers = function () {
+    mouse.prototype.bindHandlers.call(this);
+}
+
 pinchyMouse.prototype.onDown = function (mouseDownEvent) {
-    this.key = mouseDownEvent.which;
-    this.clickHor = mouseDownEvent.x;
-    this.clickVer = mouseDownEvent.y;
-    this.getNodesForCoordinates(this.clickHor, this.clickVer);
-    if (mouseDownEvent.target == bazGrid.canvas) {
-        switch (this.key) {
-            case 1:
-                if (this.isSlippy) {
-
-                } else {
-                    this.closestNode.heldByMouse = true;
-                };
-                break;
-            case 2:
-                if (this.isHoldingNodes)
-                    this.heldNodes.forEach(function (n) { n.pin() });
-                else
-                    this.closestNode.pin();
-                break;
-            case 3:
-                if (bazGrid.rightClickAction === 0)
-                    this.cut();
-                else
-                    this.closestNode.mark();
-                break;
-            default:
-                break;
-        }
-    }
-    else if (mouseDownEvent.target.className == 'dragbox') {
-        let dragBoxIndex = mouseDownEvent.target.getAttribute("dragbox-index");
-        this.dragBox = bazGrid.dragBoxes[dragBoxIndex];
-        this.dragBox.updateBoundaries();
-    }
+    mouse.prototype.onDown.call(this, mouseDownEvent);
 };
 
-pinchyMouse.prototype.onMove = function () {
-    if (this.key !== 1)
+pinchyMouse.prototype.onMove = function (moveEvent) {
+    mouse.prototype.onMove.call(this, moveEvent);
+
+    if (this.hasDragBox)
         return;
-
-    if (this.isSlippy) {
-        this.getNodesForCoordinates(this.hor, this.ver);
-        this.touchedNodes.forEach(function (n) {
-            n.move({ hor: bazGrid.mouse.dragVect.hor * bazGrid.mouse.slipFactor, ver: bazGrid.mouse.dragVect.ver * bazGrid.mouse.slipFactor })
-        });
-        this.clearNodes();
-    } else {
-
-        this.heldNodes.forEach(function (n) {
-            n.move({ hor: bazGrid.mouse.dragVect.hor, ver: bazGrid.mouse.dragVect.ver });
-        });
+    if (moveEvent.target !== this.grid.canvas)
+        return;
+    let dragVect = { hor: moveEvent.movementX, ver: moveEvent.movementY };
+    switch (this.key) {
+        case this.buttonsEnum.left:
+            this.drag(dragVect);
+            break;
+        case this.buttonsEnum.middle:
+            this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
+            this.closestNode.pin();
+            break;
+        case this.buttonsEnum.right:
+            this.getNodesForCoordinates(this.hor, this.ver, nodeVisitFunc = null);
+            if (this.grid.rightClickAction === this.actionsEnum.cut)
+                this.cut();
+            else
+                this.closestNode.mark();
+            break;
+        default:
+            break;
     }
-
-    this.hor += this.dragVect.hor;
-    this.ver += this.dragVect.ver;
 };
 
-pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver) {
-    let gridCoordinates = bazGrid.convertCoordinate(hor, ver, 0, 'dasoo');
-    this.closestNode = bazGrid.graph.getClosestNodeToCoordinates(gridCoordinates.hor, gridCoordinates.ver);
-    if (this.isSlippy)
-        this.touchedNodes.push(this.closestNode);
-    else
-        this.heldNodes.push(this.closestNode);
+pinchyMouse.prototype.getNodesForCoordinates = function (hor, ver, nodeVisitFunc = null) {
+    mouse.prototype.getNodesForCoordinates.call(this, hor, ver, nodeVisitFunc);
+    this.touchedNodes.forEach((n) => n.heldByMouse = true);
 };
 
 pinchyMouse.prototype.clearNodes = function () {
-    this.closestNode = null;
-    this.touchedNodes = [];
-    this.heldNodes = [];
+    this.touchedNodes.forEach(function (p) { p.heldByMouse = false });
+    mouse.prototype.clearNodes.call(this);
 };
-
-pinchyMouse.prototype.check = function (node) {
-    // let distance = this.cursorDistanceTo(node);
-    // if (distance < this.closestNodeDistance) {
-    //     this.closestNode = node;
-    //     this.closestNodeDistance = distance;
-    // }
-    // if (node.pinned) return;
-    // if (this.hasDragBox) {
-    //     if (this.dragBox.coversNode(node)) {
-    //         this.touchedNodes.push(node);
-    //     }
-    // } else {
-    //     if (distance <= this.cuttingRadius)
-    //         this.cutNodes.push(node);
-
-    //     if (distance <= this.impactRadius)
-    //         this.touchedNodes.push(node);
-    // }
-};
-
-pinchyMouse.prototype.cursorDistanceTo = function (node) {
-    node.getDistanceToCoordinates(this.hor, this.ver);
-}
-
-pinchyMouse.prototype.clickDistanceTo = function (node) {
-    node.getDistanceToCoordinates(this.clickHor, this.clickVer);
-}
 
 pinchyMouse.prototype.cut = function () {
-    this.cutNodes.forEach(function (n) {
-        n.removeLinks();
-    });
+    mouse.prototype.cut.call(this);
 };
 
-Object.defineProperties(pinchyMouse.prototype, {
-    isUp: { get: function () { return this.key === 0 } },
-    isSlippy: { get: function () { return this.slipFactor !== 1 } },
+pinchyMouse.prototype.drag = function (dragVect) {
+    this.touchedNodes.forEach(function (n) {
+        n.move({ hor: dragVect.hor, ver: dragVect.ver })
+    }, this);
+};
+
+Object.defineProperties(pinchyMouse.prototype, { //Todo: Move to parent class
+    isUp: { get: function () { return this.key === this.buttonsEnum.none } },
     hasDragBox: { get: function () { return this.dragBox !== null } },
     isHoldingNodes: { get: function () { return this.heldNodes.length !== 0 } },
 });

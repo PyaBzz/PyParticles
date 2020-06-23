@@ -19,7 +19,7 @@ BazGrid = function (container, config) {
 	this.canvasCtx = this.canvas.getContext('2d');
 	this.referenceFrame = this.canvas.getBoundingClientRect();  // Required for comparison against node positions
 
-	if (this.mouseSlipFactor === 1)
+	if (this.pinchyMouse)
 		this.mouse = new pinchyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
 	else
 		this.mouse = new slippyMouse(this.mouseImpactRadius * this.restingLinkLength, this.mouseCuttingRadius * this.restingLinkLength, this.mouseSlipFactor, this);
