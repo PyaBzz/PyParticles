@@ -29,6 +29,12 @@ waterConfig = {
     mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
     mouseSlipFactor: 0.6, // [0-1] 0 = maximum slip, 1 = no slip
     boxedNodeBrakingFactor: 0.4, // [0-1] 0 = maximum braking, 1 = no braking
+    frameDefiningStatements: [
+        'row == 0',  // The top row of the graph is frame
+        'row == this.grid.verticalCellCount',  // The bottom row of the graph is frame
+        'col == 0',  // The left column of the graph is frame
+        'col == this.grid.horizontalCellCount',  // The right column of the graph is frame
+    ]
 };
 
 clothConfig = {

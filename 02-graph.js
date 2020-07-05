@@ -7,41 +7,41 @@ graph = function (bazgrid) {
 		for (let col = 0; col <= this.grid.horizontalCellCount; col++) {
 			let p = new node(col, row, 0, this.grid);
 
-			if (row == 0)
-				p.frame();                   // The top edge of the graph is frame
-			else {  // Link upNeighbour
+			// Link up-neighbour
+			if (row != 0) {
 				p.upNeighbour = this.nodes[row - 1][col];
 				p.attach(p.upNeighbour);
 				p.upNeighbour.downNeighbour = p;
 			}
 
-			if (col == 0)
-				p.frame();                   // The left edge of the graph is frame
-			else {  // Link leftNeighbour
+			// Link left-neighbour
+			if (col != 0) {
 				p.leftNeighbour = this.nodes[row][col - 1];
 				p.attach(p.leftNeighbour);
 				p.leftNeighbour.rightNeighbour = p;
 			}
 
-			if (row != 0 && col != 0) {  // Link leftNeighbour
+			// Link up-left-neighbour
+			if (row != 0 && col != 0) {
 				p.upLeftNeighbour = this.nodes[row - 1][col - 1];
 				if (this.grid.drawDiagonalLinks)
 					p.attach(p.upLeftNeighbour);
 				p.upLeftNeighbour.downRightNeighbour = p;
 			}
 
-			if (row != 0 && col != this.grid.horizontalCellCount) {  // Link leftNeighbour
+			// Link up-right-neighbour
+			if (row != 0 && col != this.grid.horizontalCellCount) {
 				p.upRightNeighbour = this.nodes[row - 1][col + 1];
 				if (this.grid.drawDiagonalLinks)
 					p.attach(p.upRightNeighbour);
 				p.upRightNeighbour.downLeftNeighbour = p;
 			}
 
-			if (col == this.grid.horizontalCellCount)
-				p.frame();   // The right edge of the graph is frame
-
-			if (row == this.grid.verticalCellCount)
-				p.frame();  // The bottom edge of the graph is frame
+			this.grid.frameDefiningStatements.forEach(function (statement) {
+				if (eval(statement)) {
+					p.frame();
+				}
+			}, this);
 
 			this.nodes[row].push(p);
 		}
