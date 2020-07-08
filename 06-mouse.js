@@ -66,7 +66,10 @@ mouse.prototype.moveBox = function (moveEvent) {
         case this.buttonsEnum.middle:
             break;
         case this.buttonsEnum.right:
-            this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = null);
+            if (this.grid.rightClickAction === this.actionsEnum.cut)
+                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = n => n.cut());
+            else
+                this.dragBox.move(moveEvent.movementX, moveEvent.movementY, nodeVisitFunc = n => n.mark());
             break;
         default:
             break;
