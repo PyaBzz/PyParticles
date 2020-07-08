@@ -25,7 +25,6 @@ waterConfig = {
     markedNodeColour: "yellow",  // CSS colour names
     markedNodeRadius: 3,  // in pixels. 0 to disable marked node drawing
     mouseImpactRadius: 2, // diameter of mouse impact in number of cells
-    rightClickAction: 1, // 0 = cut, 1 = mark   Todo: Move to UI controls
     mouseCuttingRadius: 2, // diameter of mouse cutting in number of cells
     mouseSlipFactor: 0.6, // [0-1] 0 = maximum slip, 1 = no slip
     boxedNodeBrakingFactor: 0.4, // [0-1] 0 = maximum braking, 1 = no braking

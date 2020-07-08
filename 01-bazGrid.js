@@ -108,4 +108,20 @@ BazGrid.prototype.bindHandlers = function () {
 			me.mouse.bindHandlers();
 		}
 	}
+
+	let ctrl_rclick_mark = document.getElementById('ctrl-rclick-mark');
+	ctrl_rclick_mark.checked = true;
+	let ctrl_rclick_cut = document.getElementById('ctrl-rclick-cut');
+
+	ctrl_rclick_mark.onchange = function (changeEvent) {
+		if (changeEvent.target.checked) {
+			me.rightClickAction = me.mouse.actionsEnum.mark;
+		}
+	}
+
+	ctrl_rclick_cut.onchange = function (changeEvent) {
+		if (changeEvent.target.checked) {
+			me.rightClickAction = me.mouse.actionsEnum.cut;
+		}
+	}
 };
