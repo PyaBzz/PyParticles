@@ -87,7 +87,7 @@ mouse.prototype.clearNodes = function () {
 
 mouse.prototype.cut = function () {
     this.touchedNodes.forEach(function (n) {
-        n.removeLinks();
+        n.cut();
     });
 };
 

@@ -106,7 +106,7 @@ node.prototype.removeLink = function (link) {
 	this.links.splice(this.links.indexOf(link), 1);
 };
 
-node.prototype.removeLinks = function () {
+node.prototype.cut = function () {
 	this.links = [];
 };
 
