@@ -12,9 +12,10 @@ dragBox = function (i, bazgrid) {
     this.touchedNodes = [];
 };
 
-dragBox.prototype.move = function (dragHor, dragVer, nodeVisitFunc = null) {
+dragBox.prototype.move = function (dragHor, dragVer, moveNodes = false, nodeVisitFunc = null) {
     this.updateTouchedNodes(nodeVisitFunc);
-    this.dragNodes({ hor: dragHor, ver: dragVer });
+    if (moveNodes)
+        this.dragNodes({ hor: dragHor, ver: dragVer });
 
     this.element.style.left = this.element.offsetLeft + dragHor + "px";
     this.element.style.top = this.element.offsetTop + dragVer + "px";
